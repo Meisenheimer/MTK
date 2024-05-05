@@ -7,7 +7,6 @@ namespace mtk
 {
     class Prime;
 
-    Int gcd(const Int &x, const Int &y);
     Bool isPrime(const Int &x);
 
     class Prime
