@@ -103,6 +103,13 @@ namespace mtk
         return res;
     }
 
+    inline const Polynomial operator+(const Real &k, const Polynomial &p)
+    {
+        Polynomial res = p;
+        res += k;
+        return res;
+    }
+
     inline const Polynomial operator-(const Polynomial &p1, const Polynomial &p2)
     {
         Polynomial res = p1;

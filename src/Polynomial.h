@@ -13,6 +13,7 @@ namespace mtk
     const Polynomial operator+(const Polynomial &p);
     const Polynomial operator+(const Polynomial &p1, const Polynomial &p2);
     const Polynomial operator+(const Polynomial &p, const Real &k);
+    const Polynomial operator+(const Real &k, const Polynomial &p);
     const Polynomial operator-(const Polynomial &p1, const Polynomial &p2);
     const Polynomial operator-(const Polynomial &p, const Real &k);
     const Polynomial operator*(const Polynomial &p1, const Polynomial &p2);
