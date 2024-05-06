@@ -1,5 +1,5 @@
-#ifndef MTK_PRIME_HPP
-#define MTK_PRIME_HPP
+#ifndef MTK_NUMBER_HPP
+#define MTK_NUMBER_HPP
 
 #include "Number.h"
 #include "Random.h"

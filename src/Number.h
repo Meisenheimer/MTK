@@ -1,5 +1,5 @@
-#ifndef MTK_PRIME_H
-#define MTK_PRIME_H
+#ifndef MTK_NUMBER_H
+#define MTK_NUMBER_H
 
 #include "Config.hpp"
 
