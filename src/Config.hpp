@@ -45,37 +45,37 @@ namespace mtk
     }
 
     template <typename Type>
-    inline const Type Zero(const Type &x)
+    inline const Type zero(const Type &x)
     {
         return Type(0);
     }
 
     template <>
-    inline const Matrix Zero(const Matrix &x)
+    inline const Matrix zero(const Matrix &x)
     {
         return Matrix::Zero(x.rows(), x.cols());
     }
 
     template <>
-    inline const Vector Zero(const Vector &x)
+    inline const Vector zero(const Vector &x)
     {
         return Vector::Zero(x.rows(), x.cols());
     }
 
     template <typename Type>
-    inline const Type Identity(const Type &x)
+    inline const Type identity(const Type &x)
     {
         return Type(1);
     }
 
     template <>
-    inline const Matrix Identity(const Matrix &x)
+    inline const Matrix identity(const Matrix &x)
     {
         return Matrix::Identity(x.rows(), x.cols());
     }
 
     template <>
-    inline const Vector Identity(const Vector &x)
+    inline const Vector identity(const Vector &x)
     {
         return Vector::Identity(x.rows(), x.cols());
     }
@@ -85,7 +85,7 @@ namespace mtk
     {
         Int m = n;
         Type a = x;
-        Type res = Identity<Type>(x);
+        Type res = identity<Type>(x);
         while (m)
         {
             if (m & 1)
@@ -103,7 +103,7 @@ namespace mtk
     {
         Int m = n;
         Type a = x;
-        Type res = Identity<Type>(x);
+        Type res = identity<Type>(x);
         while (m)
         {
             if (m & 1)
@@ -134,7 +134,7 @@ namespace mtk
                 MTK_ERROR
             }
         }
-        if (x == Zero<Type>(x) || y == Zero<Type>(y))
+        if (x == zero<Type>(x) || y == zero<Type>(y))
         {
             MTK_ERROR
         }

@@ -55,22 +55,22 @@ namespace mtk
     }
 
     template <>
-    inline const Polynomial Zero<Polynomial>(const Polynomial &x)
+    inline const Polynomial zero<Polynomial>(const Polynomial &x)
     {
         return Polynomial(0);
     }
 
     template <>
-    inline const Polynomial Identity<Polynomial>(const Polynomial &x)
+    inline const Polynomial identity<Polynomial>(const Polynomial &x)
     {
         return Polynomial(List<Real>({1.0}));
     }
 
     template <>
-    const Polynomial Basis<Polynomial>(const Int &n)
+    const Polynomial basis<Polynomial>(const Int &n)
     {
         Polynomial p(n);
-        p[n] = Identity<Int>();
+        p[n] = identity<Int>();
         return p;
     }
 
@@ -421,7 +421,7 @@ namespace mtk
     inline Polynomial &Polynomial::operator+=(const Polynomial &p)
     {
         _degree = (std::max(degree, p.degree));
-        coefs.resize(degree, Zero<Real>());
+        coefs.resize(degree, zero<Real>());
         for (Int i = 0; i <= p.degree; i++)
         {
             coefs[i] += p[i];
@@ -438,7 +438,7 @@ namespace mtk
     inline Polynomial &Polynomial::operator-=(const Polynomial &p)
     {
         _degree = (std::max(degree, p.degree));
-        coefs.resize(degree, Zero<Real>());
+        coefs.resize(degree, zero<Real>());
         for (Int i = 0; i <= p.degree; i++)
         {
             coefs[i] -= p[i];
@@ -486,11 +486,11 @@ namespace mtk
 
     inline Polynomial &Polynomial::operator/=(const Polynomial &p)
     {
-        Polynomial res = Identity<Polynomial>();
+        Polynomial res = identity<Polynomial>();
         while (_degree >= p.degree)
         {
             Int i = _degree - p.degree;
-            Polynomial x = (coefs[_degree] / p[p.degree]) * Basis<Polynomial>(i);
+            Polynomial x = (coefs[_degree] / p[p.degree]) * basis<Polynomial>(i);
             res += x;
             (*this) -= (x * p);
             coefs.resize(_degree);
@@ -502,11 +502,11 @@ namespace mtk
 
     inline Polynomial &Polynomial::operator%=(const Polynomial &p)
     {
-        Polynomial res = Identity<Polynomial>();
+        Polynomial res = identity<Polynomial>();
         while (_degree >= p.degree)
         {
             Int i = _degree - p.degree;
-            Polynomial x = (coefs[_degree] / p[p.degree]) * Basis<Polynomial>(i);
+            Polynomial x = (coefs[_degree] / p[p.degree]) * basis<Polynomial>(i);
             res += x;
             (*this) -= (x * p);
             coefs.resize(_degree);

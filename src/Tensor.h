@@ -32,12 +32,13 @@ namespace mtk
 
     public:
         Tensor();
-        Tensor(const std::vector<Int> &new_size);
+        Tensor(const std::vector<Int> &shape);
         template <typename... IndexTypes>
         Tensor(Int firstIndex, IndexTypes... otherIndices);
         Tensor(const Tensor &t);
 
-        void reshape(const std::vector<Int> &new_size);
+        Int size() const;
+        void reshape(const std::vector<Int> &shape);
         template <typename... IndexTypes>
         void reshape(Int firstIndex, IndexTypes... otherIndices);
 
@@ -64,5 +65,7 @@ namespace mtk
         friend std::ostream &operator<<(std::ostream &stream, const Tensor &t);
     };
 };
+
+#include "Tensor.hpp"
 
 #endif

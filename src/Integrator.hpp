@@ -81,7 +81,7 @@ namespace mtk
         const Real k = (max - min) / step;
         const Real split = (max - min) / num_worker;
         ResType res[num_worker];
-        ResType s = Zero<ResType>();
+        ResType s = zero<ResType>();
 #pragma omp parallel for
         for (Int i = 0; i < num_worker; i++)
         {
@@ -114,7 +114,7 @@ namespace mtk
         const Real k = (max - min) / step;
         const Real split = (max - min) / num_worker;
         ResType res[num_worker];
-        ResType s = Zero<ResType>();
+        ResType s = zero<ResType>();
 #pragma omp parallel for
         for (Int i = 0; i < num_worker; i++)
         {
@@ -142,7 +142,7 @@ namespace mtk
         const Real k = (max - min) / step;
         const Real split = (max - min) / num_worker;
         ResType res[num_worker];
-        ResType s = Zero<ResType>();
+        ResType s = zero<ResType>();
 #pragma omp parallel for
         for (Int i = 0; i < num_worker; i++)
         {
@@ -198,7 +198,7 @@ namespace mtk
     template <typename ResType>
     const ResType GaussianIntegrator::operator()(const Func<ResType, Real> &f) const
     {
-        ResType res = Zero<ResType>();
+        ResType res = zero<ResType>();
         for (Int i = 0; i < (Int)coefs.size(); i++)
         {
             res += (coefs[i].first * f(coefs[i].second));

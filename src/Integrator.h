@@ -7,7 +7,7 @@
 namespace mtk
 {
     inline const Func<Real, Real> TRIVIAL_WEIGHT = [](const Real &x) -> Real
-    { return Identity<Real>(); };
+    { return identity<Real>(); };
 
     class NewtonCotesIntegrator;
     class GaussianIntegrator;
@@ -34,7 +34,7 @@ namespace mtk
         void check();
 
     public:
-        NewtonCotesIntegrator(const Real &min = -Identity<Real>(), const Real &max = Identity<Real>());
+        NewtonCotesIntegrator(const Real &min = -identity<Real>(), const Real &max = identity<Real>());
 
         void setRange(const Real &min, const Real &max);
         void setDelta(const Real &delta);

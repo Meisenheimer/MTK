@@ -55,11 +55,11 @@ namespace mtk
     Matrix makeMatrix(const List<List<Real>> &m);
 
     template <typename Type>
-    const Type Zero(const Type &x = 0);
+    const Type zero(const Type &x = 0);
     template <typename Type>
-    const Type Identity(const Type &x = 1);
+    const Type identity(const Type &x = 1);
     template <typename Type>
-    const Type Basis(const Int &n = 0);
+    const Type basis(const Int &n = 0);
 
     template <typename Type>
     const Type pow(const Type &x, const Int &n);
