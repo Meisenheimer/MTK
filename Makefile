@@ -7,6 +7,7 @@ run:
 	g++ test/Number.cpp -o Number.exe -O2 -fopenmp --std=c++17
 	g++ test/Random.cpp -o Random.exe -O2 -fopenmp --std=c++17
 	g++ test/Spline.cpp -o Spline.exe -O2 -fopenmp --std=c++17
+	g++ test/NeuralNetwork.cpp -o NeuralNetwork.exe -O2 -fopenmp --std=c++17
 	./Config.exe
 	./Integrator.exe
 	./IVP.exe
@@ -15,6 +16,7 @@ run:
 	./Number.exe
 	./Random.exe
 	./Spline.exe
+	./NeuralNetwork.exe
 	del *.exe
 
 Config:
@@ -48,6 +50,10 @@ Random:
 Spline:
 	g++ test/Spline.cpp -o Spline.exe -O2 -fopenmp --std=c++17
 	./Spline.exe
+
+NeuralNetwork:
+	g++ test/NeuralNetwork.cpp -o NeuralNetwork.exe -O2 -fopenmp --std=c++17
+	./NeuralNetwork.exe
 
 clean:
 	del *.exe

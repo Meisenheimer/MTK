@@ -200,7 +200,7 @@ namespace mtk
     template <typename... IndexTypes>
     const Real &Tensor::operator()(Int firstIndex, IndexTypes... otherIndices) const
     {
-        if (sizeof...(otherIndices) + 1 != size.size())
+        if (sizeof...(otherIndices) + 1 != shape.size())
         {
             printf("Error At: %s %d.\n", __FILE__, __LINE__);
             exit(0);
@@ -211,7 +211,7 @@ namespace mtk
     template <typename... IndexTypes>
     inline Real &Tensor::operator()(Int firstIndex, IndexTypes... otherIndices)
     {
-        if (sizeof...(otherIndices) + 1 != size.size())
+        if (sizeof...(otherIndices) + 1 != shape.size())
         {
             printf("Error At: %s %d.\n", __FILE__, __LINE__);
             exit(0);

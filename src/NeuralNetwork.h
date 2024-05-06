@@ -14,6 +14,8 @@ namespace mtk
 
     class Linear;
 
+    class NeuralNetwork;
+
     class AbstractLayer
     {
     public:
@@ -72,6 +74,21 @@ namespace mtk
         virtual void load(std::istream &stream) override;
 
         virtual Tensor operator()(const Tensor &t) const override;
+    };
+
+    class NeuralNetwork
+    {
+    protected:
+        std::vector<AbstractLayer *> layer;
+
+    public:
+        NeuralNetwork();
+        ~NeuralNetwork();
+
+        void load(const std::string &filename);
+        void push_back(AbstractLayer *p);
+
+        Tensor operator()(const Tensor &x) const;
     };
 };
 

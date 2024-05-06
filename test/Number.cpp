@@ -35,7 +35,7 @@ int main()
     {
         if (!p(list[i]) || !isPrime(list[i]))
         {
-            printf("%d: %d %d FAIL.\n", list[i], p(list[i]), isPrime(list[i]));
+            MTK_ALERT
             flag = FAIL;
         }
     }
@@ -51,7 +51,7 @@ int main()
     {
         if (p(list[i]) || isPrime(list[i]))
         {
-            printf("%d: %d %d FAIL.\n", list[i], p(list[i]), isPrime(list[i]));
+            MTK_ALERT
             flag = FAIL;
         }
     }

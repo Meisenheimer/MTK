@@ -1,6 +1,8 @@
 #ifndef MTK_NEURALNETWORK_HPP
 #define MTK_NEURALNETWORK_HPP
 
+#include <fstream>
+
 #include "NeuralNetwork.h"
 
 namespace mtk
@@ -38,7 +40,7 @@ namespace mtk
         return res;
     }
 
-    inline Linear::Linear(const Int &input, const Int &output, const bool &bias) : A(output, input), b(output, input)
+    inline Linear::Linear(const Int &input, const Int &output, const bool &bias) : A(output, input), b(output)
     {
         this->bias = bias;
     }
@@ -72,8 +74,6 @@ namespace mtk
         {
             stream >> b;
         }
-        std::cout << A << std::endl;
-        std::cout << b << std::endl;
         return;
     }
 
@@ -89,6 +89,46 @@ namespace mtk
             {
                 res(i) = res(i) + A(i, j) * t(j);
             }
+        }
+        return res;
+    }
+
+    NeuralNetwork::NeuralNetwork() {}
+
+    NeuralNetwork::~NeuralNetwork()
+    {
+        for (Int i = 0; i < (Int)layer.size(); i++)
+        {
+            delete layer[i];
+        }
+    }
+
+    void NeuralNetwork::load(const std::string &filename)
+    {
+        std::ifstream fp(filename, std::ios::in);
+        if (!fp.is_open())
+        {
+            MTK_ERROR
+        }
+        for (Int i = 0; i < (Int)layer.size(); i++)
+        {
+            layer[i]->load(fp);
+        }
+        return;
+    }
+
+    void NeuralNetwork::push_back(AbstractLayer *p)
+    {
+        layer.push_back(p);
+        return;
+    }
+
+    Tensor NeuralNetwork::operator()(const Tensor &x) const
+    {
+        Tensor res = x;
+        for (Int i = 0; i < (Int)layer.size(); i++)
+        {
+            res = layer[i]->operator()(res);
         }
         return res;
     }
