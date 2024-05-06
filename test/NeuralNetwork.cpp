@@ -14,7 +14,7 @@ int main()
 
     NeuralNetwork model;
     model.push_back(new Linear(2, 3));
-    model.load("model");
+    model.load("test/model");
     Tensor x(2);
     Tensor res(3);
 
