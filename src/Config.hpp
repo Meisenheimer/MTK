@@ -7,6 +7,13 @@
 
 namespace mtk
 {
+    Int setEigenNumWorker(const Int &n)
+    {
+        EIGEN_NUM_WORKER = n;
+        Eigen::setNbThreads(EIGEN_NUM_WORKER);
+        return n;
+    }
+
     template <typename Type1, typename Type2>
     inline Pair<Type1, Type2> makePair(const Type1 &first, const Type2 &second)
     {

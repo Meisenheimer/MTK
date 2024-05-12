@@ -59,6 +59,10 @@ namespace mtk
         {
             this->_num_worker = MIN_NUM_WORKER;
         }
+        if (this->_num_worker > MAX_NUM_WORKER)
+        {
+            this->_num_worker = MAX_NUM_WORKER;
+        }
         return;
     }
 
