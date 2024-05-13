@@ -4,7 +4,7 @@
 
 MTK(Math Tool Kit) is a header-only C++ math library providing useful classes and algorithms for scientific computing.
 
-Most of the codes are from the homework and projects of my undergraduate and postgraduate courses, and I've tried my best to make all interfaces clear and simple. There are some introductions for algorithms in *doc/* and the comments and documents for codes will be added in the future. 
+Most of the codes are from the homework and projects of my undergraduate and postgraduate courses, and I've tried my best to make all interfaces clear and simple. There are some introductions for algorithms in https://github.com/Meisenheimer/Notes and the comments and documents for codes will be added in the future. 
 
 Please feel free if you want to use them, **but these codes are not rigorously tested and there's no guarantee of correctness.**
 
