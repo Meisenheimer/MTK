@@ -22,7 +22,7 @@ namespace mtk
         return this->_opt;
     }
 
-    inline void IVP::setRHS(const Func<Vector, Vector, Real> &f)
+    inline void IVP::setRHS(const Func<const Vector, const Vector &, const Real &> &f)
     {
         this->_f = f;
         return;

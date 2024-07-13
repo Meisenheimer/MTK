@@ -35,9 +35,9 @@ namespace mtk
         LineSearch _line_search;
         Method _method;
 
-        Func<Real, Vector> _f;
-        Func<Vector, Vector> _g;
-        Func<Matrix, Vector> _G;
+        Func<const Real, const Vector &> _f;
+        Func<const Vector, const Vector &> _g;
+        Func<const Matrix, const Vector &> _G;
 
     public:
         const Int &max_loop_num;
@@ -48,9 +48,9 @@ namespace mtk
         const LineSearch &line_search;
         const Method &method;
 
-        const Func<Real, Vector> &f;
-        const Func<Vector, Vector> &g;
-        const Func<Matrix, Vector> &G;
+        const Func<const Real, const Vector &> &f;
+        const Func<const Vector, const Vector &> &g;
+        const Func<const Matrix, const Vector &> &G;
 
     private:
         const Pair<Real, Real> advanceAndRetreat(const Vector &x, const Vector &p) const;
@@ -72,9 +72,9 @@ namespace mtk
         void setStep(const Real &step);
         void setDelta(const Real &delta);
         void setTrivialStep(const Real &trivial_step);
-        void setFunction(const Func<Real, Vector> &f = nullptr,
-                         const Func<Vector, Vector> &g = nullptr,
-                         const Func<Matrix, Vector> &G = nullptr);
+        void setFunction(const Func<const Real, const Vector &> &f = nullptr,
+                         const Func<const Vector, const Vector &> &g = nullptr,
+                         const Func<const Matrix, const Vector &> &G = nullptr);
         void setLineSearch(const LineSearch &line_search);
         void setMethod(const Method &method);
         void setMethod(const Method &method, const LineSearch &line_search);

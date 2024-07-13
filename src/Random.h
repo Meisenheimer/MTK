@@ -37,8 +37,8 @@ namespace mtk
         const Int Poisson(const Real &lambda);
         template <typename OutputType>
         const OutputType DiscreteProbability(const List<Pair<OutputType, Real>> &p);
-        const Real ContinuousProbability(const Real &min, const Real &max, const Func<Real, Real> &p);
-        const Real ContinuousDistribution(const Real &min, const Real &max, const Func<Real, Real> &f);
+        const Real ContinuousProbability(const Real &min, const Real &max, const Func<const Real, const Real &> &p);
+        const Real ContinuousDistribution(const Real &min, const Real &max, const Func<const Real, const Real &> &f);
     };
 };
 

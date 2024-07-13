@@ -73,7 +73,7 @@ namespace mtk
         MTK_ERROR
     }
 
-    inline const Real Random::ContinuousProbability(const Real &min, const Real &max, const Func<Real, Real> &p)
+    inline const Real Random::ContinuousProbability(const Real &min, const Real &max, const Func<const Real, const Real &> &p)
     {
         Real s = 0.0;
         Real x = min;
@@ -90,7 +90,7 @@ namespace mtk
         MTK_ERROR
     }
 
-    inline const Real Random::ContinuousDistribution(const Real &min, const Real &max, const Func<Real, Real> &f)
+    inline const Real Random::ContinuousDistribution(const Real &min, const Real &max, const Func<const Real, const Real &> &f)
     {
         Real l = min;
         Real r = max;

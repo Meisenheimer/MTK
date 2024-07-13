@@ -274,9 +274,9 @@ namespace mtk
         return;
     }
 
-    inline void Optimizer::setFunction(const Func<Real, Vector> &f,
-                                       const Func<Vector, Vector> &g,
-                                       const Func<Matrix, Vector> &G)
+    inline void Optimizer::setFunction(const Func<const Real, const Vector &> &f,
+                                       const Func<const Vector, const Vector &> &g,
+                                       const Func<const Matrix, const Vector &> &G)
     {
         this->_f = f;
         if (g != nullptr)
