@@ -9,7 +9,7 @@
 namespace mtk
 {
     template <typename ResType>
-    const ResType trapezoidal(const Real &min, const Real &max, const Func<const ResType, const Real &> &f, const Int step)
+    const ResType trapezoidal(const Real &min, const Real &max, const Func<const ResType, const Real &> &f, const Int &step)
     {
         const Real k = (max - min) / (Real)step;
         ResType s = zero<ResType>();
@@ -24,7 +24,7 @@ namespace mtk
     }
 
     template <typename ResType>
-    const ResType midpoint(const Real &min, const Real &max, const Func<const ResType, const Real &> &f, const Int step)
+    const ResType midpoint(const Real &min, const Real &max, const Func<const ResType, const Real &> &f, const Int &step)
     {
         const Real k = (max - min) / (Real)step;
         ResType s = zero<ResType>();
@@ -36,7 +36,7 @@ namespace mtk
     }
 
     template <typename ResType>
-    const ResType simpson(const Real &min, const Real &max, const Func<const ResType, const Real &> &f, const Int step)
+    const ResType simpson(const Real &min, const Real &max, const Func<const ResType, const Real &> &f, const Int &step)
     {
         const Real k = (max - min) / step;
         ResType s = zero<ResType>();

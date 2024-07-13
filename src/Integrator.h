@@ -11,13 +11,13 @@ namespace mtk
 
     template <typename ResType>
     const ResType trapezoidal(const Real &min, const Real &max, const Func<const ResType, const Real &> &f,
-                              const Int step = MAX<Byte>);
+                              const Int &step = MAX<Byte>);
     template <typename ResType>
     const ResType midpoint(const Real &min, const Real &max, const Func<const ResType, const Real &> &f,
-                           const Int step = MAX<Byte>);
+                           const Int &step = MAX<Byte>);
     template <typename ResType>
     const ResType simpson(const Real &min, const Real &max, const Func<const ResType, const Real &> &f,
-                          const Int step = MAX<Byte>);
+                          const Int &step = MAX<Byte>);
 
     class NewtonCotesIntegrator;
     class GaussianIntegrator;
