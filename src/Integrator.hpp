@@ -177,7 +177,7 @@ namespace mtk
         return s;
     }
 
-    GaussianIntegrator::GaussianIntegrator(const OrthogonalPolynomial &op)
+    inline GaussianIntegrator::GaussianIntegrator(const OrthogonalPolynomial &op)
     {
         range = op.range;
         List<Real> root = op.poly.back().root();
@@ -200,7 +200,7 @@ namespace mtk
     }
 
     template <typename ResType>
-    const ResType GaussianIntegrator::operator()(const Func<ResType, Real> &f) const
+    inline const ResType GaussianIntegrator::operator()(const Func<ResType, Real> &f) const
     {
         ResType res = zero<ResType>();
         for (Int i = 0; i < (Int)coefs.size(); i++)

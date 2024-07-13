@@ -67,7 +67,7 @@ namespace mtk
     }
 
     template <>
-    const Polynomial basis<Polynomial>(const Int &n)
+    inline const Polynomial basis<Polynomial>(const Int &n)
     {
         Polynomial p(n);
         p[n] = identity<Int>();
@@ -166,7 +166,7 @@ namespace mtk
         return res;
     }
 
-    const Bool isEqual(const Polynomial &p1, const Polynomial &p2, const Real &delta)
+    inline const Bool isEqual(const Polynomial &p1, const Polynomial &p2, const Real &delta)
     {
         return p1.equal(p2, delta);
     }
@@ -376,7 +376,7 @@ namespace mtk
         return true;
     }
 
-    String Polynomial::print(const Real &precision) const
+    inline String Polynomial::print(const Real &precision) const
     {
         String s = "";
         Bool flag = true;

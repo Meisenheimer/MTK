@@ -16,6 +16,14 @@
     printf("Error at: %s %d\n", __FILE__, __LINE__); \
     exit(0);
 #define MTK_WARNING printf("Warning at: %s %d\n", __FILE__, __LINE__);
+#define MTK_ASSERT(flag, comment)                                                                 \
+    if (!(flag))                                                                                  \
+    {                                                                                             \
+        printf("Assertion failed: %s, file %s, line %d. %s", #flag, __FILE__, __LINE__, comment); \
+        exit(0);                                                                                  \
+    }
+
+static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
 {
@@ -47,16 +55,12 @@ namespace mtk
     template <typename Type>
     constexpr Type EPS = std::numeric_limits<Type>::epsilon();
 
-    Int setEigenNumWorker(const Int &n);
-
     constexpr Int MIN_NUM_WORKER = 1;
     constexpr Int MAX_NUM_WORKER = 12;
     static_assert(MIN_NUM_WORKER >= 1, "MIN_NUM_WORKER should equal or greater than 1.\n");
     static_assert(MAX_NUM_WORKER >= MIN_NUM_WORKER, "MAX_NUM_WORKER should equal or greater than MIN_NUM_WORKER.\n");
-    inline Int EIGEN_NUM_WORKER = setEigenNumWorker(MAX_NUM_WORKER);
 
-    inline const Int EIGEN_INIT_PARALLEL = []()
-    { Eigen::initParallel(); return 0; }();
+    Int setEigenNumWorker(const Int &n);
 
     template <typename Type1, typename Type2>
     Pair<Type1, Type2> makePair(const Type1 &first, const Type2 &second);

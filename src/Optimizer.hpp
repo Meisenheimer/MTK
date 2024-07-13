@@ -244,31 +244,31 @@ namespace mtk
         this->_method = Method::QuasiNewton;
     }
 
-    void Optimizer::setMaxLoopNum(const Int &max_loop_num)
+    inline void Optimizer::setMaxLoopNum(const Int &max_loop_num)
     {
         this->_max_loop_num = max_loop_num;
         return;
     }
 
-    void Optimizer::setEpsilon(const Real &epsilon)
+    inline void Optimizer::setEpsilon(const Real &epsilon)
     {
         this->_epsilon = epsilon;
         return;
     }
 
-    void Optimizer::setStep(const Real &step)
+    inline void Optimizer::setStep(const Real &step)
     {
         this->_step = step;
         return;
     }
 
-    void Optimizer::setDelta(const Real &delta)
+    inline void Optimizer::setDelta(const Real &delta)
     {
         this->_delta = delta;
         return;
     }
 
-    void Optimizer::setTrivialStep(const Real &trivial_step)
+    inline void Optimizer::setTrivialStep(const Real &trivial_step)
     {
         this->_trivial_step = trivial_step;
         return;

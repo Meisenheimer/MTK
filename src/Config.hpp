@@ -7,7 +7,13 @@
 
 namespace mtk
 {
-    Int setEigenNumWorker(const Int &n)
+    inline Int EIGEN_NUM_WORKER = []()
+    {
+        Eigen::initParallel();
+        return setEigenNumWorker(MAX_NUM_WORKER);
+    }();
+
+    inline Int setEigenNumWorker(const Int &n)
     {
         EIGEN_NUM_WORKER = n;
         Eigen::setNbThreads(EIGEN_NUM_WORKER);
@@ -132,7 +138,7 @@ namespace mtk
     }
 
     template <typename Type>
-    const Type gcd(const Type &x, const Type &y)
+    inline const Type gcd(const Type &x, const Type &y)
     {
         if constexpr (std::is_integral_v<Type>)
         {

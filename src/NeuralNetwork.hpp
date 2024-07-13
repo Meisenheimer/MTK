@@ -93,9 +93,9 @@ namespace mtk
         return res;
     }
 
-    NeuralNetwork::NeuralNetwork() {}
+    inline NeuralNetwork::NeuralNetwork() {}
 
-    NeuralNetwork::~NeuralNetwork()
+    inline NeuralNetwork::~NeuralNetwork()
     {
         for (Int i = 0; i < (Int)layer.size(); i++)
         {
@@ -103,7 +103,7 @@ namespace mtk
         }
     }
 
-    void NeuralNetwork::load(const std::string &filename)
+    inline void NeuralNetwork::load(const std::string &filename)
     {
         std::ifstream fp(filename, std::ios::in);
         if (!fp.is_open())
@@ -117,13 +117,13 @@ namespace mtk
         return;
     }
 
-    void NeuralNetwork::push_back(AbstractLayer *p)
+    inline void NeuralNetwork::push_back(AbstractLayer *p)
     {
         layer.push_back(p);
         return;
     }
 
-    Tensor NeuralNetwork::operator()(const Tensor &x) const
+    inline Tensor NeuralNetwork::operator()(const Tensor &x) const
     {
         Tensor res = x;
         for (Int i = 0; i < (Int)layer.size(); i++)

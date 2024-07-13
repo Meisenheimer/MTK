@@ -8,23 +8,16 @@
 
 namespace mtk
 {
-    const Int LMM::Method::ForwardEuler = 11;
-    const Int LMM::Method::BackwardEuler = 21;
-    const Int LMM::Method::Trapezoidal = 31;
-    const Int LMM::Method::Midpoint = 41;
-    const Int RK::Method::HeunThirdOrder = 12;
-    const Int RK::Method::ClassicalFourthOrder = 22;
-
     inline IVP::IVP() : f(_f), res(_res)
     {
     }
 
-    Optimizer &IVP::opt()
+    inline Optimizer &IVP::opt()
     {
         return this->_opt;
     }
 
-    const Optimizer &IVP::opt() const
+    inline const Optimizer &IVP::opt() const
     {
         return this->_opt;
     }

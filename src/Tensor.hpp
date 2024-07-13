@@ -198,7 +198,7 @@ namespace mtk
     }
 
     template <typename... IndexTypes>
-    const Real &Tensor::operator()(Int firstIndex, IndexTypes... otherIndices) const
+    inline const Real &Tensor::operator()(Int firstIndex, IndexTypes... otherIndices) const
     {
         if (sizeof...(otherIndices) + 1 != shape.size())
         {

@@ -42,10 +42,10 @@ namespace mtk
     public:
         struct Method : IVP::Method
         {
-            static const Int ForwardEuler;
-            static const Int BackwardEuler;
-            static const Int Trapezoidal;
-            static const Int Midpoint;
+            static constexpr Int ForwardEuler = 11;
+            static constexpr Int BackwardEuler = 21;
+            static constexpr Int Trapezoidal = 31;
+            static constexpr Int Midpoint = 41;
         };
 
     private:
@@ -63,8 +63,8 @@ namespace mtk
     public:
         struct Method : IVP::Method
         {
-            static const Int HeunThirdOrder;
-            static const Int ClassicalFourthOrder;
+            static constexpr Int HeunThirdOrder = 12;
+            static constexpr Int ClassicalFourthOrder = 22;
         };
 
     private:
