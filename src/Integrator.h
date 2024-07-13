@@ -6,7 +6,7 @@
 
 namespace mtk
 {
-    inline const Func<Real, Real> TRIVIAL_WEIGHT = [](const Real &x) -> Real
+    inline const Func<const Real, const Real &> TRIVIAL_WEIGHT = [](const Real &x) -> Real
     { return identity<Real>(); };
 
     class NewtonCotesIntegrator;
@@ -40,14 +40,14 @@ namespace mtk
         void setDelta(const Real &delta);
         void setStep(const Int &step);
         void setNumWorker(const Int &num_worker);
-        void setWeight(const Func<Real, Real> &weight);
+        void setWeight(const Func<const Real, const Real &> &weight);
 
         template <typename ResType>
-        const ResType trapezoidal(const Func<ResType, Real> &f) const;
+        const ResType trapezoidal(const Func<const ResType, const Real &> &f) const;
         template <typename ResType>
-        const ResType midpoint(const Func<ResType, Real> &f) const;
+        const ResType midpoint(const Func<const ResType, const Real &> &f) const;
         template <typename ResType>
-        const ResType simpson(const Func<ResType, Real> &f) const;
+        const ResType simpson(const Func<const ResType, const Real &> &f) const;
     };
 
     class GaussianIntegrator
@@ -60,7 +60,7 @@ namespace mtk
         GaussianIntegrator(const OrthogonalPolynomial &op);
 
         template <typename ResType>
-        const ResType operator()(const Func<ResType, Real> &f) const;
+        const ResType operator()(const Func<const ResType, const Real &> &f) const;
     };
 };
 
