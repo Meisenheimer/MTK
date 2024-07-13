@@ -43,11 +43,11 @@ namespace mtk
         void setWeight(const Func<Real, Real> &weight);
 
         template <typename ResType>
-        const ResType Trapezoidal(const Func<ResType, Real> &f) const;
+        const ResType trapezoidal(const Func<ResType, Real> &f) const;
         template <typename ResType>
-        const ResType Midpoint(const Func<ResType, Real> &f) const;
+        const ResType midpoint(const Func<ResType, Real> &f) const;
         template <typename ResType>
-        const ResType Simpson(const Func<ResType, Real> &f) const;
+        const ResType simpson(const Func<ResType, Real> &f) const;
     };
 
     class GaussianIntegrator

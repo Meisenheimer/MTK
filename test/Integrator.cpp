@@ -34,17 +34,17 @@ int main()
 
     timer();
     flag = PASS;
-    if (std::abs(nc.Trapezoidal<Real>(f) - (F(1) - F(-1))) > DELTA)
+    if (std::abs(nc.trapezoidal<Real>(f) - (F(1) - F(-1))) > DELTA)
     {
         MTK_ALERT
         flag = FAIL;
     }
-    if (std::abs(nc.Midpoint<Real>(f) - (F(1) - F(-1))) > DELTA)
+    if (std::abs(nc.midpoint<Real>(f) - (F(1) - F(-1))) > DELTA)
     {
         MTK_ALERT
         flag = FAIL;
     }
-    if (std::abs(nc.Simpson<Real>(f) - (F(1) - F(-1))) > DELTA)
+    if (std::abs(nc.simpson<Real>(f) - (F(1) - F(-1))) > DELTA)
     {
         MTK_ALERT
         flag = FAIL;
@@ -59,17 +59,17 @@ int main()
 
     timer();
     flag = PASS;
-    if (std::abs(nc.Trapezoidal<Real>(f) - (F(1) - F(-1))) > DELTA)
+    if (std::abs(nc.trapezoidal<Real>(f) - (F(1) - F(-1))) > DELTA)
     {
         MTK_ALERT
         flag = FAIL;
     }
-    if (std::abs(nc.Midpoint<Real>(f) - (F(1) - F(-1))) > DELTA)
+    if (std::abs(nc.midpoint<Real>(f) - (F(1) - F(-1))) > DELTA)
     {
         MTK_ALERT
         flag = FAIL;
     }
-    if (std::abs(nc.Simpson<Real>(f) - (F(1) - F(-1))) > DELTA)
+    if (std::abs(nc.simpson<Real>(f) - (F(1) - F(-1))) > DELTA)
     {
         MTK_ALERT
         flag = FAIL;

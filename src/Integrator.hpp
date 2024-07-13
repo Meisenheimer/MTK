@@ -80,7 +80,7 @@ namespace mtk
     }
 
     template <typename ResType>
-    inline const ResType NewtonCotesIntegrator::Trapezoidal(const Func<ResType, Real> &f) const
+    inline const ResType NewtonCotesIntegrator::trapezoidal(const Func<ResType, Real> &f) const
     {
         const Real k = (max - min) / step;
         const Real split = (max - min) / num_worker;
@@ -113,7 +113,7 @@ namespace mtk
     }
 
     template <typename ResType>
-    inline const ResType NewtonCotesIntegrator::Midpoint(const Func<ResType, Real> &f) const
+    inline const ResType NewtonCotesIntegrator::midpoint(const Func<ResType, Real> &f) const
     {
         const Real k = (max - min) / step;
         const Real split = (max - min) / num_worker;
@@ -141,7 +141,7 @@ namespace mtk
     }
 
     template <typename ResType>
-    inline const ResType NewtonCotesIntegrator::Simpson(const Func<ResType, Real> &f) const
+    inline const ResType NewtonCotesIntegrator::simpson(const Func<ResType, Real> &f) const
     {
         const Real k = (max - min) / step;
         const Real split = (max - min) / num_worker;
