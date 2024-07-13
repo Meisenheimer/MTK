@@ -11,7 +11,7 @@ Most of the codes are from the homework and projects of my undergraduate and pos
 你可以将这些代码用于其他用途，*但这些代码并没有经过严格测试，因此我不保证其正确性*。
 Please feel free if you want to use them, **but these codes are not rigorously tested and there's no guarantee of correctness.**
 
-如果你发现了任何错误或右任何建议，可以通过zeyu.wang.0117@outlook.com联系我。
+如果你发现了任何错误或有任何建议，可以通过zeyu.wang.0117@outlook.com联系我。
 Please let me know if there are bugs or suggestions, and my email is zeyu.wang.0117@outlook.com.
 
 ## 依赖/Dependencies
