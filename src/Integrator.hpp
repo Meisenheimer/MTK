@@ -8,6 +8,49 @@
 
 namespace mtk
 {
+    template <typename ResType>
+    const ResType trapezoidal(const Real &min, const Real &max, const Func<const ResType, const Real &> &f, const Int step)
+    {
+        const Real k = (max - min) / (Real)step;
+        ResType s = zero<ResType>();
+        ResType fr = f(min);
+        for (Int i = 1; i <= step; i++)
+        {
+            ResType fl = fr;
+            fr = f(min + i * k);
+            s += k * (fl + fr) / 2.0;
+        }
+        return s;
+    }
+
+    template <typename ResType>
+    const ResType midpoint(const Real &min, const Real &max, const Func<const ResType, const Real &> &f, const Int step)
+    {
+        const Real k = (max - min) / (Real)step;
+        ResType s = zero<ResType>();
+        for (Int i = 0; i < step; i++)
+        {
+            s += k * f(min + i * k + k / 2.0);
+        }
+        return s;
+    }
+
+    template <typename ResType>
+    const ResType simpson(const Real &min, const Real &max, const Func<const ResType, const Real &> &f, const Int step)
+    {
+        const Real k = (max - min) / step;
+        ResType s = zero<ResType>();
+        ResType fr = f(min);
+        for (Int i = 1; i <= step; i++)
+        {
+            ResType fl = fr;
+            ResType fm = f(min + i * k - k / 2.0);
+            fr = f(min + i * k);
+            s += k * (fl + 4.0 * fm + fr) / 6.0;
+        }
+        return s;
+    }
+
     inline void NewtonCotesIntegrator::check()
     {
         const Real k = std::abs((max - min) / step);

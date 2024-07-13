@@ -7,7 +7,7 @@
 
 namespace mtk
 {
-    inline Int EIGEN_NUM_WORKER = []()
+    inline Int NUM_WORKER = []()
     {
         Eigen::initParallel();
         return setEigenNumWorker(MAX_NUM_WORKER);
@@ -15,8 +15,8 @@ namespace mtk
 
     inline Int setEigenNumWorker(const Int &n)
     {
-        EIGEN_NUM_WORKER = n;
-        Eigen::setNbThreads(EIGEN_NUM_WORKER);
+        NUM_WORKER = n;
+        Eigen::setNbThreads(NUM_WORKER);
         return n;
     }
 

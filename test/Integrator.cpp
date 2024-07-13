@@ -34,6 +34,43 @@ int main()
 
     timer();
     flag = PASS;
+    if (std::abs(trapezoidal<Real>(-1.0, 1.0, f, 2000000) - (F(1) - F(-1))) > DELTA)
+    {
+        MTK_ALERT
+        flag = FAIL;
+    }
+    t = timer();
+    if (flag == PASS)
+    {
+        printf("PASS Time: %6d(ms). Integrator::trapezoidal.\n", t);
+    }
+    timer();
+    flag = PASS;
+    if (std::abs(midpoint<Real>(-1.0, 1.0, f, 2000000) - (F(1) - F(-1))) > DELTA)
+    {
+        MTK_ALERT
+        flag = FAIL;
+    }
+    t = timer();
+    if (flag == PASS)
+    {
+        printf("PASS Time: %6d(ms). Integrator::midpoint.\n", t);
+    }
+    timer();
+    flag = PASS;
+    if (std::abs(simpson<Real>(-1.0, 1.0, f, 2000000) - (F(1) - F(-1))) > DELTA)
+    {
+        MTK_ALERT
+        flag = FAIL;
+    }
+    t = timer();
+    if (flag == PASS)
+    {
+        printf("PASS Time: %6d(ms). Integrator::simpson.\n", t);
+    }
+
+    timer();
+    flag = PASS;
     if (std::abs(nc.trapezoidal<Real>(f) - (F(1) - F(-1))) > DELTA)
     {
         MTK_ALERT
