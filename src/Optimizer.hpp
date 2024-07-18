@@ -49,19 +49,22 @@ namespace mtk
         const Vector d = p.normalized();
         const Real rate = (std::sqrt(5.0) - 1.0) / 2.0;
         Pair<Real, Real> interval = advanceAndRetreat(x, d);
+        Int k = 0;
         Real l = interval.first;
         Real r = interval.second;
         Real a = r + rate * (l - r);
         Real b = l + rate * (r - l);
         Real fa = f(x + a * d);
         Real fb = f(x + b * d);
-        for (long int k = 0; k < max_loop_num; k++)
+        Vector res;
+        for (k = 0; k < max_loop_num; k++)
         {
             if (fa > fb)
             {
                 if ((r - a) < delta)
                 {
-                    return (x + b * d);
+                    res = (x + b * d);
+                    break;
                 }
                 l = a;
                 a = b;
@@ -73,7 +76,8 @@ namespace mtk
             {
                 if ((b - l) < delta)
                 {
-                    return (x + a * d);
+                    res = (x + a * d);
+                    break;
                 }
                 r = b;
                 b = a;
@@ -82,7 +86,8 @@ namespace mtk
                 fa = f(x + a * d);
             }
         }
-        MTK_ERROR
+        MTK_ASSERT(k != max_loop_num)
+        return res;
     }
 
     inline const Vector Optimizer::fibonacci(const Vector &x, const Vector &p) const
@@ -90,19 +95,22 @@ namespace mtk
         const Vector d = p.normalized();
         Real rate = 0.6;
         Pair<Real, Real> interval = advanceAndRetreat(x, d);
+        Int k = 0;
         Real l = interval.first;
         Real r = interval.second;
         Real a = r + rate * (l - r);
         Real b = l + rate * (r - l);
         Real fa = f(x + a * d);
         Real fb = f(x + b * d);
-        for (long int k = 0; k < max_loop_num; k++)
+        Vector res;
+        for (k = 0; k < max_loop_num; k++)
         {
             if (fa > fb)
             {
                 if ((r - a) < delta)
                 {
-                    return (x + b * d);
+                    res = (x + b * d);
+                    break;
                 }
                 l = a;
                 a = b;
@@ -114,7 +122,8 @@ namespace mtk
             {
                 if ((b - l) < delta)
                 {
-                    return (x + a * d);
+                    res = (x + a * d);
+                    break;
                 }
                 r = b;
                 b = a;
@@ -124,42 +133,50 @@ namespace mtk
             }
             rate = 1.0 / (1.0 + rate);
         }
-        MTK_ERROR
+        MTK_ASSERT(k != max_loop_num)
+        return res;
     }
 
     inline const Vector Optimizer::newton(const Vector &x, const Vector &p) const
     {
         const Vector d = p.normalized();
+        Int k = 0;
         Real t = 0.0;
-        for (long int k = 0; k < max_loop_num; k++)
+        Vector res;
+        for (k = 0; k < max_loop_num; k++)
         {
             Vector grad = g(x + t * d);
             Real gt = grad.dot(d);
             Real Gt = (G(x + t * d) * d).dot(d);
             if (std::abs(gt) < epsilon || grad.lpNorm<2>() < epsilon)
             {
-                return x + t * d;
+                res = x + t * d;
+                break;
             }
             t = t - (gt / Gt);
         }
-        MTK_ERROR
+        MTK_ASSERT(k != max_loop_num)
+        return res;
     }
 
     inline const Vector Optimizer::bisection(const Vector &x, const Vector &p) const
     {
         const Vector d = p.normalized();
         Pair<Real, Real> interval = advanceAndRetreat(x, d);
+        Int k = 0;
         Real l = interval.first;
         Real r = interval.second;
         Real m = (l + r) / 2.0;
         Real u = g(x + l * d).dot(d);
         Real w = g(x + m * d).dot(d);
-        for (long int k = 0; k < max_loop_num; k++)
+        Vector res;
+        for (k = 0; k < max_loop_num; k++)
         {
             w = f(x + m * d);
             if ((std::abs(r - l) < delta) || (std::abs(w) < epsilon))
             {
-                return x + m * d;
+                res = x + m * d;
+                break;
             }
             else if ((w > 0.0) != (u > 0.0))
             {
@@ -172,52 +189,58 @@ namespace mtk
             }
             m = ((l + r) / 2.0);
         }
-        MTK_ERROR
+        MTK_ASSERT(k != max_loop_num)
+        return res;
     }
 
     inline const Vector Optimizer::gradientDescent(const Vector &x, const LineSearch &line_search) const
     {
+        Int k;
         Vector t = x;
-        for (Int i = 0; i < max_loop_num; i++)
+        for (k = 0; k < max_loop_num; k++)
         {
             Vector grad(g(t));
             if (grad.lpNorm<2>() <= epsilon)
             {
-                return t;
+                break;
             }
             t = lineSearch(t, -grad);
         }
-        MTK_ERROR
+        MTK_ASSERT(k != max_loop_num)
+        return t;
     }
 
     inline const Vector Optimizer::newton(const Vector &x, const LineSearch &line_search) const
     {
         Vector t = x;
-        for (Int i = 0; i < max_loop_num; i++)
+        Int k = 0;
+        for (k = 0; k < max_loop_num; k++)
         {
             Vector grad(g(t));
             if (grad.lpNorm<2>() <= epsilon)
             {
-                return t;
+                break;
             }
             Matrix Grad = G(t);
             t = lineSearch(t, Grad.fullPivHouseholderQr().solve(-grad));
         }
-        MTK_ERROR
+        MTK_ASSERT(k != max_loop_num)
+        return t;
     }
 
     inline const Vector Optimizer::quasiNewton(const Vector &x, const LineSearch &line_search) const
     {
         const Int n = x.rows();
+        Int k = 0;
         Vector t(x);
         Vector new_grad(g(t));
         Matrix H(Matrix::Identity(n, n));
-        for (Int i = 0; i < max_loop_num; i++)
+        for (k = 0; k < max_loop_num; k++)
         {
             Vector grad(new_grad);
             if (grad.lpNorm<2>() <= epsilon)
             {
-                return t;
+                break;
             }
             Vector d = -H * grad;
             Vector nt = lineSearch(t, d);
@@ -228,7 +251,8 @@ namespace mtk
             H = A * H * A.transpose() + s * s.transpose() / s.dot(y);
             t = nt;
         }
-        MTK_ERROR
+        MTK_ASSERT(k != max_loop_num)
+        return t;
     }
 
     inline Optimizer::Optimizer() : max_loop_num(_max_loop_num), epsilon(_epsilon), step(_step), delta(_delta),
@@ -363,7 +387,8 @@ namespace mtk
         default:
             break;
         }
-        MTK_ERROR
+        MTK_ALERT
+        exit(0);
     }
 
     inline const Vector Optimizer::solve(const Vector &x)
@@ -379,7 +404,8 @@ namespace mtk
         default:
             break;
         }
-        MTK_ERROR
+        MTK_ALERT
+        exit(0);
     }
 };
 

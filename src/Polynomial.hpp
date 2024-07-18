@@ -47,11 +47,8 @@ namespace mtk
     inline const ConditionList::Condition &ConditionList::operator()(const Real &x) const
     {
         auto it = list.find(x);
-        if (it != list.end())
-        {
-            return it->second;
-        }
-        MTK_ERROR;
+        MTK_ASSERT(it != list.end())
+        return it->second;
     }
 
     template <>
@@ -216,10 +213,7 @@ namespace mtk
     inline const Polynomial newtonFormula(const List<Real> &x, const List<Real> &y)
     {
         const Int n = x.size();
-        if (n != y.size())
-        {
-            MTK_ERROR
-        }
+        MTK_ASSERT(n == y.size())
         List<List<Real>> table(n);
         for (Int i = 0; i < n; i++)
         {
@@ -287,10 +281,7 @@ namespace mtk
 
     inline Polynomial::Polynomial(const Int &n) : degree(_degree)
     {
-        if (n < 0)
-        {
-            MTK_ERROR
-        }
+        MTK_ASSERT(n >= 0)
         _degree = n;
         this->coefs.resize(n + 1);
         for (Int i = 0; i <= n; i++)
@@ -537,10 +528,7 @@ namespace mtk
 
     inline Real &Polynomial::operator[](const Int &n)
     {
-        if (n > degree || n < 0)
-        {
-            MTK_ERROR
-        }
+        MTK_ASSERT(n >= 0 && n <= degree)
         return this->coefs[n];
     }
 
@@ -610,7 +598,6 @@ namespace mtk
             _range = makePair(-INFINITY, INFINITY);
             break;
         default:
-            MTK_ERROR
             break;
         }
     }

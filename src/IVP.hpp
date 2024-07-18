@@ -37,16 +37,10 @@ namespace mtk
     inline const Vector IVP::operator()(const Real &t) const
     {
         Int n = res.size();
-        if (n == 0)
-        {
-            MTK_ERROR
-        }
+        MTK_ASSERT(n > 0)
         Real begin = res.front().second;
         Real end = res.back().second;
-        if (t < begin || t > end)
-        {
-            MTK_ERROR
-        }
+        MTK_ASSERT(t >= begin && t <= end)
         Pair<Vector, Real> l = res.front(), r = res.back();
         for (Int i = 0; i < n; i++)
         {
@@ -97,16 +91,10 @@ namespace mtk
     inline void LMM::solve(const Real &end, const Real &k)
     {
         Real t = res.back().second;
-        if (k <= 0.0 || res.size() == 0)
-        {
-            MTK_ERROR
-        }
+        MTK_ASSERT(k > 0.0 && res.size() > 0)
         for (Int i = 1; i < (Int)res.size(); i++)
         {
-            if (std::abs(k - (res[i].second - res[i - 1].second) > std::sqrt(EPS<float>)))
-            {
-                MTK_ERROR
-            }
+            MTK_ASSERT(std::abs(k - (res[i].second - res[i - 1].second) <= std::sqrt(EPS<float>)))
         }
         while (t < end)
         {
@@ -168,16 +156,10 @@ namespace mtk
     inline void RK::solve(const Real &end, const Real &k)
     {
         Real t = res.back().second;
-        if (k <= 0.0 || res.size() == 0)
-        {
-            MTK_ERROR
-        }
+        MTK_ASSERT(k > 0.0 && res.size() > 0)
         for (Int i = 1; i < (Int)res.size(); i++)
         {
-            if (std::abs(k - (res[i].second - res[i - 1].second) > std::sqrt(EPS<float>)))
-            {
-                MTK_ERROR
-            }
+            MTK_ASSERT((std::abs(k - (res[i].second - res[i - 1].second) <= std::sqrt(EPS<float>))));
         }
         Int n = b.rows();
         Int m = res.back().first.rows();

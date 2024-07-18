@@ -142,15 +142,9 @@ namespace mtk
     {
         if constexpr (std::is_integral_v<Type>)
         {
-            if (x < 0 || y < 0)
-            {
-                MTK_ERROR
-            }
+            MTK_ASSERT(x >= 0 && y >= 0)
         }
-        if (x == zero<Type>(x) || y == zero<Type>(y))
-        {
-            MTK_ERROR
-        }
+        MTK_ASSERT(x != zero<Type>(x) && y != zero<Type>(y))
         Type a = x;
         Type b = y;
         while ((a % b) != 0)

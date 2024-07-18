@@ -62,15 +62,18 @@ namespace mtk
     template <typename OutputType>
     inline const OutputType Random::DiscreteProbability(const List<Pair<OutputType, Real>> &p)
     {
-        for (Int i = 0; i < max_loop_num; i++)
+        Int k = 0;
+        Int res = 0;
+        for (k = 0; k < max_loop_num; k++)
         {
-            Int res = UniformInt(Int(0), Int(p.size() - 1));
+            res = UniformInt(Int(0), Int(p.size() - 1));
             if (UniformReal(Real(0.0), Real(1.0)) <= p.at(res).second)
             {
-                return p.at(res).first;
+                break;
             }
         }
-        MTK_ERROR
+        MTK_ASSERT(k != max_loop_num)
+        return p.at(res).first;
     }
 
     inline const Real Random::ContinuousProbability(const Real &min, const Real &max, const Func<const Real, const Real &> &p)
@@ -83,26 +86,29 @@ namespace mtk
             s = s + step * (p(x) + p(x + step)) / 2;
             if (s > y)
             {
-                return UniformReal(x, x + step);
+                break;
             }
             x += step;
         }
-        MTK_ERROR
+        MTK_ASSERT(x < max)
+        return UniformReal(x, x + step);
     }
 
     inline const Real Random::ContinuousDistribution(const Real &min, const Real &max, const Func<const Real, const Real &> &f)
     {
+        Int k = 0;
         Real l = min;
         Real r = max;
         Real h = (r - l) / 2;
         Real y = UniformReal(Real(0.0), Real(1.0));
-        for (Int i = 0; i < max_loop_num; i++)
+        Real m = l + h;
+        for (k = 0; k < max_loop_num; k++)
         {
-            Real m = l + h;
+            m = l + h;
             Real u = f(m);
             if ((r - l) <= delta || (std::abs(u - y) <= epsilon))
             {
-                return m;
+                break;
             }
             if (u > y)
             {
@@ -114,7 +120,8 @@ namespace mtk
             }
             h /= 2;
         }
-        MTK_ERROR
+        MTK_ASSERT(k != max_loop_num)
+        return m;
     }
 };
 

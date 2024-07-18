@@ -129,13 +129,10 @@ namespace mtk
     }
 
     inline const Real Spline::operator()(const Real &x) const
-    {
+    {   
         const Int i = find(x);
-        if (i >= 0)
-        {
-            return poly[i](x);
-        }
-        MTK_ERROR
+        MTK_ASSERT(i >= 0 && i < poly.size())
+        return poly[i](x);
     }
 };
 

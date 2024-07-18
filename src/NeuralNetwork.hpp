@@ -133,10 +133,7 @@ namespace mtk
         {
             n *= shape[i];
         }
-        if (n != size())
-        {
-            MTK_ERROR
-        }
+        MTK_ASSERT(n == size())
         this->_shape = shape;
         return;
     }
@@ -149,19 +146,13 @@ namespace mtk
 
     inline const Real &Tensor::operator[](const Int &index) const
     {
-        if (index < 0 || index >= data.size())
-        {
-            MTK_ERROR
-        }
+        MTK_ASSERT(index >= 0 && index < data.size())
         return data[index];
     }
 
     inline Real &Tensor::operator[](const Int &index)
     {
-        if (index < 0 || index >= data.size())
-        {
-            MTK_ERROR
-        }
+        MTK_ASSERT(index >= 0 && index < data.size())
         return data[index];
     }
 
@@ -230,10 +221,7 @@ namespace mtk
 
     inline Tensor &Tensor::operator+=(const Tensor &t)
     {
-        if (t.data.size() != data.size())
-        {
-            MTK_ERROR
-        }
+        MTK_ASSERT(t.data.size() == data.size())
         for (Int i = 0; i < data.size(); i++)
         {
             data[i] += t.data[i];
@@ -252,10 +240,7 @@ namespace mtk
 
     inline Tensor &Tensor::operator-=(const Tensor &t)
     {
-        if (t.data.size() != data.size())
-        {
-            MTK_ERROR
-        }
+        MTK_ASSERT(t.data.size() == data.size())
         for (Int i = 0; i < data.size(); i++)
         {
             data[i] -= t.data[i];
@@ -389,10 +374,7 @@ namespace mtk
     inline void NeuralNetwork::load(const std::string &filename)
     {
         std::ifstream fp(filename, std::ios::in);
-        if (!fp.is_open())
-        {
-            MTK_ERROR
-        }
+        MTK_ASSERT(fp.is_open())
         for (Int i = 0; i < (Int)layer.size(); i++)
         {
             layer[i]->load(fp);

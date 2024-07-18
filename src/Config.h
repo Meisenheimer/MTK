@@ -16,11 +16,11 @@
     printf("Error at: %s %d\n", __FILE__, __LINE__); \
     exit(0);
 #define MTK_WARNING printf("Warning at: %s %d\n", __FILE__, __LINE__);
-#define MTK_ASSERT(flag, comment)                                                                 \
-    if (!(flag))                                                                                  \
-    {                                                                                             \
-        printf("Assertion failed: %s, file %s, line %d. %s", #flag, __FILE__, __LINE__, comment); \
-        exit(0);                                                                                  \
+#define MTK_ASSERT(flag)                                                                 \
+    if (!(flag))                                                                         \
+    {                                                                                    \
+        printf("Assertion failed: %s, file %s, line %d. %s", #flag, __FILE__, __LINE__); \
+        exit(0);                                                                         \
     }
 
 static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
