@@ -1,11 +1,11 @@
 #ifndef MTK_NEURALNETWORK_H
 #define MTK_NEURALNETWORK_H
 
+#include "Array.h"
 #include "Config.h"
 
 namespace mtk
 {
-    class Tensor;
     class AbstractLayer;
     class Activation;
     class Layer;
@@ -17,71 +17,13 @@ namespace mtk
 
     class NeuralNetwork;
 
-    std::istream &operator>>(std::istream &stream, Tensor &t);
-    std::ostream &operator<<(std::ostream &stream, const Tensor &t);
-
-    const Tensor operator-(const Tensor &t);
-    const Tensor operator+(const Tensor &t);
-    const Tensor operator+(const Tensor &t1, const Tensor &t2);
-    const Tensor operator+(const Tensor &t, const Real &k);
-    const Tensor operator+(const Real &k, const Tensor &t);
-    const Tensor operator-(const Tensor &t1, const Tensor &t2);
-    const Tensor operator-(const Tensor &t, const Real &k);
-    const Tensor operator*(const Real &k, const Tensor &t);
-    const Tensor operator*(const Tensor &t, const Real &k);
-    const Tensor operator/(const Tensor &t, const Real &k);
-
-    class Tensor
-    {
-    private:
-        List<Real> data;
-        List<Int> _shape;
-
-    public:
-        const List<Int> &shape;
-
-    public:
-        Tensor();
-        Tensor(const std::vector<Int> &shape);
-        template <typename... IndexTypes>
-        Tensor(Int firstIndex, IndexTypes... otherIndices);
-        Tensor(const Tensor &t);
-
-        Int size() const;
-        void reshape(const std::vector<Int> &shape);
-        template <typename... IndexTypes>
-        void reshape(Int firstIndex, IndexTypes... otherIndices);
-
-        const Real &operator[](const Int &index) const;
-        Real &operator[](const Int &index);
-
-        const Real &operator()(const std::vector<Int> &index) const;
-        Real &operator()(const std::vector<Int> &index);
-
-        template <typename... IndexTypes>
-        const Real &operator()(Int firstIndex, IndexTypes... otherIndices) const;
-        template <typename... IndexTypes>
-        Real &operator()(Int firstIndex, IndexTypes... otherIndices);
-
-        Tensor &operator=(const Tensor &t);
-        Tensor &operator+=(const Tensor &t);
-        Tensor &operator+=(const Real &k);
-        Tensor &operator-=(const Tensor &t);
-        Tensor &operator-=(const Real &k);
-        Tensor &operator*=(const Real &k);
-        Tensor &operator/=(const Real &k);
-
-        friend std::istream &operator>>(std::istream &stream, Tensor &t);
-        friend std::ostream &operator<<(std::ostream &stream, const Tensor &t);
-    };
-
     class AbstractLayer
     {
     public:
         virtual ~AbstractLayer();
 
         virtual void load(std::istream &stream) = 0;
-        virtual Tensor operator()(const Tensor &x) const = 0;
+        virtual Array<Real> operator()(const Array<Real> &x) const = 0;
     };
 
     class Activation : public AbstractLayer
@@ -105,34 +47,34 @@ namespace mtk
     public:
         LeakyReLU(const Real &negative_slope = zero<Real>());
 
-        virtual Tensor operator()(const Tensor &t) const override;
+        virtual Array<Real> operator()(const Array<Real> &t) const override;
     };
 
     class Sigmoid : public Activation
     {
     public:
-        virtual Tensor operator()(const Tensor &t) const override;
+        virtual Array<Real> operator()(const Array<Real> &t) const override;
     };
 
     class Linear : public Layer
     {
     protected:
         bool bias;
-        Tensor A;
-        Tensor b;
+        Array<Real> A;
+        Array<Real> b;
 
     public:
         Linear(const Int &input, const Int &output, const bool &bias = true);
 
-        void setWeight(const Tensor &A);
-        void setBias(const Tensor &b);
+        void setWeight(const Array<Real> &A);
+        void setBias(const Array<Real> &b);
 
-        const Tensor getWeight() const;
-        const Tensor getBias() const;
+        const Array<Real> getWeight() const;
+        const Array<Real> getBias() const;
 
         virtual void load(std::istream &stream) override;
 
-        virtual Tensor operator()(const Tensor &t) const override;
+        virtual Array<Real> operator()(const Array<Real> &t) const override;
     };
 
     class NeuralNetwork
@@ -147,7 +89,7 @@ namespace mtk
         void load(const std::string &filename);
         void push_back(AbstractLayer *p);
 
-        Tensor operator()(const Tensor &x) const;
+        Array<Real> operator()(const Array<Real> &x) const;
     };
 };
 
