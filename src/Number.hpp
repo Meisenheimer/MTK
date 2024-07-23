@@ -1,12 +1,55 @@
 #ifndef MTK_NUMBER_HPP
 #define MTK_NUMBER_HPP
 
+#include <set>
+
 #include "Number.h"
 #include "Random.h"
+#include "Trait.h"
 
 namespace mtk
 {
-    inline Bool isPrime(const Int &x)
+    template <typename Type>
+    inline const Type pow(const Type &x, const size_t &n, const Type &mod)
+    {
+        size_t m = n;
+        Type a = x;
+        Type res = identity<Type>(x);
+        while (m)
+        {
+            if (m & 1)
+            {
+                res = res * a;
+                if (mod > 0)
+                {
+                    res = res % mod;
+                }
+            }
+            a *= a;
+            if (mod > 0)
+            {
+                a = a % mod;
+            }
+            m >>= 1;
+        }
+        return res % mod;
+    }
+
+    template <typename Type>
+    inline const Type gcd(const Type &x, const Type &y)
+    {
+        Type a = x;
+        Type b = y;
+        while ((a % b) != 0)
+        {
+            Type r = a % b;
+            a = b;
+            b = r;
+        }
+        return b;
+    }
+
+    inline bool isPrime(const size_t &x)
     {
         if (x == 2)
         {
@@ -17,12 +60,12 @@ namespace mtk
             return false;
         }
         static Random random;
-        Set<Int> list = {2, 7, 61, 325, 9375, 28178, 450775, 9780504, 1795265022};
+        std::set<size_t> list = {2, 7, 61, 325, 9375, 28178, 450775, 9780504, 1795265022};
         while (list.size() < 20)
         {
-            list.insert(random.UniformInt(3, INT_MAX));
+            list.insert(Random::Uniform<size_t>(3, INT_MAX));
         }
-        Int u = x - 1, t = 0;
+        size_t u = x - 1, t = 0;
         while (u % 2 == 0)
         {
             u /= 2;
@@ -30,15 +73,15 @@ namespace mtk
         }
         for (auto it = list.begin(); it != list.end(); it++)
         {
-            Int a = *it;
-            if (a >= x || (a <= x && gcd<Int>(a, x) != 1))
+            size_t a = *it;
+            if (a >= x || (a <= x && gcd<size_t>(a, x) != 1))
             {
                 continue;
             }
-            Int v = pow<Int>(a, u, x);
+            size_t v = pow<size_t>(a, u, x);
             if (v != 1)
             {
-                Int s;
+                size_t s;
                 for (s = 0; s < t; ++s)
                 {
                     if (v == (x - 1))
@@ -56,21 +99,21 @@ namespace mtk
         return true;
     }
 
-    inline Prime::Prime(const Int &m)
+    inline Prime::Prime(const size_t &m)
     {
-        this->max = (std::max<Int>(SHRT_MAX, m));
-        List<Bool> flag(max + 1, true);
+        this->max = (std::max<size_t>(SHRT_MAX, m));
+        std::vector<bool> flag(max + 1, true);
         num.push_back(2);
-        for (Int i = 4; i <= max; i += 2)
+        for (size_t i = 4; i <= max; i += 2)
         {
             flag[i] = false;
         }
-        for (Int i = 3; i <= max; i += 2)
+        for (size_t i = 3; i <= max; i += 2)
         {
             if (flag[i])
             {
                 num.push_back(i);
-                for (Int j = i * i; j <= max; j += (2 * i))
+                for (size_t j = i * i; j <= max; j += (2 * i))
                 {
                     flag[j] = false;
                 }
@@ -78,12 +121,12 @@ namespace mtk
         }
     }
 
-    inline Int Prime::index(const Int &x) const
+    inline size_t Prime::index(const size_t &x) const
     {
-        Int l = 0, r = num.size() - 1;
+        size_t l = 0, r = num.size() - 1;
         while (l <= r)
         {
-            Int m = l + ((r - l) / 2);
+            size_t m = l + ((r - l) / 2);
             if (num[m] < x)
             {
                 l = m + 1;
@@ -100,15 +143,15 @@ namespace mtk
         return -1;
     }
 
-    inline Bool Prime::operator()(const Int &n)
+    inline bool Prime::operator()(const size_t &n)
     {
         if (n <= max)
         {
             return index(n) != -1;
         }
-        else if (n <= std::min<Int>(max * max, INT_MAX))
+        else if (n <= std::min<size_t>(max * max, INT_MAX))
         {
-            for (Int i = 0; i < num.size(); i++)
+            for (size_t i = 0; i < num.size(); i++)
             {
                 if (n % num[i] == 0)
                 {
@@ -120,11 +163,11 @@ namespace mtk
         return isPrime(n);
     }
 
-    inline List<Real> Prime::factorization(const Int &x)
+    inline std::vector<size_t> Prime::factorization(const size_t &x)
     {
-        Int u = x;
-        List<Real> res;
-        for (Int i = 0; i < num.size(); i++)
+        size_t u = x;
+        std::vector<size_t> res;
+        for (size_t i = 0; i < num.size(); i++)
         {
             while (u % num[i] == 0)
             {
@@ -132,7 +175,7 @@ namespace mtk
                 res.push_back(i);
             }
         }
-        for (Int i = max; i <= (sqrt(u) + 1) && isPrime(u) && u > 1; i++)
+        for (size_t i = max; i <= (sqrt(u) + 1) && isPrime(u) && u > 1; i++)
         {
             if (this->operator()(i))
             {

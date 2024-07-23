@@ -1,86 +1,104 @@
 #ifndef MTK_RANDOM_HPP
 #define MTK_RANDOM_HPP
 
+#include <vector>
+
 #include "Random.h"
 
 namespace mtk
 {
-    inline Random::Random()
+    size_t Random::max_loop_num = std::numeric_limits<short>::max();
+    std::default_random_engine Random::random_engine((size_t)std::chrono::system_clock::now().time_since_epoch().count());
+
+    inline void Random::seed(const size_t &seed)
     {
-        Int max_loop_num = MAX<short>;
-        Real epsilon = EPS<double>;
-        Real step = EPS<float>;
-        Real delta = EPS<double>;
-        random_engine.seed((Int)std::chrono::system_clock::now().time_since_epoch().count());
+        random_engine.seed((size_t)seed);
     }
 
-    inline void Random::seed(const Int &seed)
+    template <typename Type>
+    inline const Type Random::Uniform(const Type &min, const Type &max)
     {
-        random_engine.seed((Int)seed);
+        static_assert(std::is_integral_v<Type> || std::is_floating_point_v<Type>);
+        if constexpr (std::is_integral_v<Type>)
+        {
+            return std::uniform_int_distribution<Type>(min, max)(random_engine);
+        }
+        if constexpr (std::is_floating_point_v<Type>)
+        {
+            return std::uniform_real_distribution<Type>(min, max)(random_engine);
+        }
     }
 
-    inline const Int Random::UniformInt(const Int &min, const Int &max)
-    {
-        return std::uniform_int_distribution<Int>(min, max)(random_engine);
-    }
-
-    inline const Real Random::UniformReal(const Real &min, const Real &max)
-    {
-        return std::uniform_real_distribution<Real>(min, max)(random_engine);
-    }
-
+    template <typename Real>
     inline const Real Random::Normal(const Real &expectation, const Real &variance)
     {
         return std::normal_distribution<Real>(expectation, variance)(random_engine);
     }
 
+    template <typename Real>
     inline const bool Random::Bernoulli(const Real &p)
     {
         return std::bernoulli_distribution((double)p)(random_engine);
     }
 
-    inline const Int Random::Binomial(const Int &n, const Real &p)
+    template <typename Real>
+    inline const size_t Random::Binomial(const size_t &n, const Real &p)
     {
-        return std::binomial_distribution<Int>(n, (double)p)(random_engine);
+        return std::binomial_distribution<size_t>(n, (double)p)(random_engine);
     }
 
-    inline const Int Random::Geometric(const Real &p)
+    template <typename Real>
+    inline const size_t Random::Geometric(const Real &p)
     {
-        return std::geometric_distribution<Int>((double)p)(random_engine);
+        return std::geometric_distribution<size_t>((double)p)(random_engine);
     }
 
+    template <typename Real>
     inline const Real Random::Exponential(const Real &lambda)
     {
         return std::exponential_distribution<Real>(lambda)(random_engine);
     }
 
-    inline const Int Random::Poisson(const Real &lambda)
+    template <typename Real>
+    inline const size_t Random::Poisson(const Real &lambda)
     {
-        return std::poisson_distribution<Int>((double)lambda)(random_engine);
+        return std::poisson_distribution<size_t>((double)lambda)(random_engine);
     }
 
-    template <typename OutputType>
-    inline const OutputType Random::DiscreteProbability(const List<Pair<OutputType, Real>> &p)
+    template <typename OutputType, typename Real>
+    inline const OutputType Random::DiscreteProbability(const std::vector<std::pair<OutputType, Real>> &p)
     {
-        Int k = 0;
-        Int res = 0;
+        size_t k = 0;
+        size_t res = 0;
+        if (p.size() == 0)
+        {
+            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            exit(0);
+        }
         for (k = 0; k < max_loop_num; k++)
         {
-            res = UniformInt(Int(0), Int(p.size() - 1));
-            if (UniformReal(Real(0.0), Real(1.0)) <= p.at(res).second)
+            res = Random::Uniform<size_t>(size_t(0), size_t(p.size() - 1));
+            if (Random::Uniform<Real>(Real(0.0), Real(1.0)) <= p.at(res).second)
             {
                 break;
             }
         }
-        MTK_ASSERT(k != max_loop_num)
+        if (k == max_loop_num)
+        {
+            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            exit(0);
+        }
         return p.at(res).first;
     }
 
-    inline const Real Random::ContinuousProbability(const Real &min, const Real &max, const Func<const Real, const Real &> &p)
+    template <typename Real>
+    inline const Real Random::ContinuousProbability(const Real &min, const Real &max,
+                                                    const std::function<const Real(const Real &)> &p,
+                                                    const Real &step)
     {
         Real s = 0.0;
         Real x = min;
-        Real y = UniformReal(Real(0.0), Real(1.0));
+        Real y = Random::Uniform<Real>(Real(0.0), Real(1.0));
         while (x < max)
         {
             s = s + step * (p(x) + p(x + step)) / 2;
@@ -90,17 +108,24 @@ namespace mtk
             }
             x += step;
         }
-        MTK_ASSERT(x < max)
-        return UniformReal(x, x + step);
+        if (x > max)
+        {
+            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            exit(0);
+        }
+        return Random::Uniform<Real>(x, x + step);
     }
 
-    inline const Real Random::ContinuousDistribution(const Real &min, const Real &max, const Func<const Real, const Real &> &f)
+    template <typename Real>
+    inline const Real Random::ContinuousDistribution(const Real &min, const Real &max,
+                                                     const std::function<const Real(const Real &)> &f,
+                                                     const Real &epsilon, const Real &delta)
     {
-        Int k = 0;
+        size_t k = 0;
         Real l = min;
         Real r = max;
         Real h = (r - l) / 2;
-        Real y = UniformReal(Real(0.0), Real(1.0));
+        Real y = Random::Uniform<Real>(Real(0.0), Real(1.0));
         Real m = l + h;
         for (k = 0; k < max_loop_num; k++)
         {
@@ -120,7 +145,11 @@ namespace mtk
             }
             h /= 2;
         }
-        MTK_ASSERT(k != max_loop_num)
+        if (k == max_loop_num)
+        {
+            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            exit(0);
+        }
         return m;
     }
 };

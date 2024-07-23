@@ -8,18 +8,18 @@ constexpr bool FAIL = !PASS;
 
 int main()
 {
-    Int t;
+    size_t t;
     bool flag = PASS;
     Prime p(25);
-    List<Int> list;
+    std::vector<size_t> list;
 
     timer();
     list = {2, 3, 5, 7, 11, 13, 17, 19, 23};
-    for (Int i = 0; i < list.size(); i++)
+    for (size_t i = 0; i < list.size(); i++)
     {
         if (!p(list[i]) || p.index(list[i]) != i || !isPrime(list[i]))
         {
-            MTK_ALERT
+            printf("Error at: file %s line %d.", __FILE__, __LINE__);
             flag = FAIL;
         }
     }
@@ -31,11 +31,11 @@ int main()
 
     timer();
     list = {29, 31, 37, 577, 997};
-    for (Int i = 0; i < list.size(); i++)
+    for (size_t i = 0; i < list.size(); i++)
     {
         if (!p(list[i]) || !isPrime(list[i]))
         {
-            MTK_ALERT
+            printf("Error at: file %s line %d.", __FILE__, __LINE__);
             flag = FAIL;
         }
     }
@@ -47,11 +47,11 @@ int main()
 
     timer();
     list = {4, 6, 8, 9, 10, 12, 30, 49, 700, 800, 900};
-    for (Int i = 0; i < list.size(); i++)
+    for (size_t i = 0; i < list.size(); i++)
     {
         if (p(list[i]) || isPrime(list[i]))
         {
-            MTK_ALERT
+            printf("Error at: file %s line %d.", __FILE__, __LINE__);
             flag = FAIL;
         }
     }

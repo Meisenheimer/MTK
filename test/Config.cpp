@@ -10,7 +10,6 @@ constexpr Real DELTA = 1e-4;
 
 int main()
 {
-    Random random;
     bool flag = PASS;
     int t;
 
@@ -18,8 +17,8 @@ int main()
     flag = PASS;
     for (Int i = 0; i < MAX<unsigned short>; i++)
     {
-        Real x = random.UniformReal(0, 8);
-        Int n = random.UniformInt(0, 8);
+        Real x = Random::Uniform<Real>(0, 8);
+        Int n = Random::Uniform<size_t>(0, 8);
         if (std::pow(x, n) != pow(x, n))
         {
             MTK_ALERT
@@ -36,9 +35,9 @@ int main()
     flag = PASS;
     for (Int i = 0; i < MAX<unsigned short>; i++)
     {
-        Int x = random.UniformInt(0, 8);
-        Int n = random.UniformInt(0, 8);
-        Int m = random.UniformInt(1, 128);
+        Int x = Random::Uniform<size_t>(0, 8);
+        Int n = Random::Uniform<size_t>(0, 8);
+        Int m = Random::Uniform<size_t>(1, 128);
         if (((Int)std::pow(x, n) % m) != pow(x, n, m))
         {
             MTK_ALERT
@@ -55,8 +54,8 @@ int main()
     flag = PASS;
     for (Int i = 0; i < MAX<unsigned short>; i++)
     {
-        Int x = random.UniformInt(0, MAX<Int>);
-        Int y = random.UniformInt(0, MAX<Int>);
+        Int x = Random::Uniform<size_t>(0, MAX<Int>);
+        Int y = Random::Uniform<size_t>(0, MAX<Int>);
         if (std::gcd(x, y) != gcd(x, y))
         {
             MTK_ALERT

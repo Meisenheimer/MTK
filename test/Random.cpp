@@ -10,12 +10,12 @@ using namespace mtk;
 
 constexpr bool PASS = true;
 constexpr bool FAIL = !PASS;
-constexpr Real DELTA = std::numeric_limits<float>::epsilon();
+constexpr double DELTA = std::numeric_limits<float>::epsilon();
 
 int main()
 {
-    Int t;
-    Bool flag = PASS;
+    size_t t;
+    bool flag = PASS;
     timer();
     Random random_num;
     t = timer();
