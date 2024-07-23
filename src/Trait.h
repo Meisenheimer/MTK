@@ -26,18 +26,16 @@ namespace mtk
     class Trait<Matrix<Real>>
     {
     public:
-        static const Matrix<Real> zero(const Matrix<Real> &x = 0);
-        static const Matrix<Real> identity(const Matrix<Real> &x = 1);
-        static const Matrix<Real> basis(const size_t &n = 0);
+        static const Matrix<Real> zero(const Matrix<Real> &x);
+        static const Matrix<Real> identity(const Matrix<Real> &x);
     };
 
     template <typename Real>
     class Trait<Vector<Real>>
     {
     public:
-        static const Vector<Real> zero(const Vector<Real> &x = 0);
-        static const Vector<Real> identity(const Vector<Real> &x = 1);
-        static const Vector<Real> basis(const size_t &n = 0);
+        static const Vector<Real> zero(const Vector<Real> &x);
+        static const Vector<Real> identity(const Vector<Real> &x);
     };
 };
 
