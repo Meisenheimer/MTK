@@ -14,7 +14,7 @@ namespace mtk
     {
         size_t m = n;
         Type a = x;
-        Type res = identity<Type>(x);
+        Type res = Trait<Type>::identity(x);
         while (m)
         {
             if (m & 1)
