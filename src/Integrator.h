@@ -6,17 +6,17 @@
 
 namespace mtk
 {
-    inline const Func<const Real, const Real &> TRIVIAL_WEIGHT = [](const Real &x) -> Real
+    inline const std::function<const Real(const Real &)> TRIVIAL_WEIGHT = [](const Real &x) -> Real
     { return identity<Real>(); };
 
     template <typename ResType>
-    const ResType trapezoidal(const Real &min, const Real &max, const Func<const ResType, const Real &> &f,
+    const ResType trapezoidal(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f,
                               const Int &step = MAX<Byte>);
     template <typename ResType>
-    const ResType midpoint(const Real &min, const Real &max, const Func<const ResType, const Real &> &f,
+    const ResType midpoint(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f,
                            const Int &step = MAX<Byte>);
     template <typename ResType>
-    const ResType simpson(const Real &min, const Real &max, const Func<const ResType, const Real &> &f,
+    const ResType simpson(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f,
                           const Int &step = MAX<Byte>);
 
     class NewtonCotesIntegrator;
@@ -30,7 +30,7 @@ namespace mtk
         Real _delta;
         Int _step;
         Int _num_worker;
-        Func<Real, Real> _weight;
+        std::function<const Real(const Real &)> _weight;
 
     public:
         const Real &min;
@@ -38,7 +38,7 @@ namespace mtk
         const Real &delta;
         const Int &step;
         const Int &num_worker;
-        const Func<Real, Real> &weight;
+        const std::function<const Real(const Real &)> &weight;
 
     private:
         void check();
@@ -50,14 +50,14 @@ namespace mtk
         void setDelta(const Real &delta);
         void setStep(const Int &step);
         void setNumWorker(const Int &num_worker);
-        void setWeight(const Func<const Real, const Real &> &weight);
+        void setWeight(const std::function<const Real(const Real &)> &weight);
 
         template <typename ResType>
-        const ResType trapezoidal(const Func<const ResType, const Real &> &f) const;
+        const ResType trapezoidal(const std::function<const ResType(const Real &)> &f) const;
         template <typename ResType>
-        const ResType midpoint(const Func<const ResType, const Real &> &f) const;
+        const ResType midpoint(const std::function<const ResType(const Real &)> &f) const;
         template <typename ResType>
-        const ResType simpson(const Func<const ResType, const Real &> &f) const;
+        const ResType simpson(const std::function<const ResType(const Real &)> &f) const;
     };
 
     class GaussianIntegrator
@@ -70,7 +70,7 @@ namespace mtk
         GaussianIntegrator(const OrthogonalPolynomial &op);
 
         template <typename ResType>
-        const ResType operator()(const Func<const ResType, const Real &> &f) const;
+        const ResType operator()(const std::function<const ResType(const Real &)> &f) const;
     };
 };
 

@@ -13,12 +13,12 @@ const Real F(const Real &x);
 
 const Real f(const Real &x)
 {
-    return (pow(x, 3) + 2.0 * pow(x, 2) + exp(x)) + cos(x) + 1 / (x + 10);
+    return (std::pow(x, 3) + 2.0 * std::pow(x, 2) + std::exp(x)) + std::cos(x) + 1 / (x + 10);
 }
 
 const Real F(const Real &x)
 {
-    return pow(x, 4) / 4.0 + 2.0 * pow(x, 3) / 3.0 + exp(x) + sin(x) + log(x + 10);
+    return std::pow(x, 4) / 4.0 + 2.0 * std::pow(x, 3) / 3.0 + std::exp(x) + std::sin(x) + std::log(x + 10);
 }
 
 int main()

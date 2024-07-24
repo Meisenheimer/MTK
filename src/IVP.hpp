@@ -22,7 +22,7 @@ namespace mtk
         return this->_opt;
     }
 
-    inline void IVP::setRHS(const Func<const Vector, const Vector &, const Real &> &f)
+    inline void IVP::setRHS(const std::function<const Vector(const Vector &, const Real &)> &f)
     {
         this->_f = f;
         return;
@@ -98,7 +98,8 @@ namespace mtk
         }
         while (t < end)
         {
-            Func<Real, Vector> F = [&res = res, &k, &t, &alpha = alpha, &beta = beta, &f = f](const Vector &u) -> Real
+            std::function<const Real(const Vector &)> F =
+                [&res = res, &k, &t, &alpha = alpha, &beta = beta, &f = f](const Vector &u) -> Real
             {
                 Int n = res.size();
                 Vector e = u;
@@ -167,7 +168,8 @@ namespace mtk
         {
             Vector u = Vector::Zero((n + 1) * m);
             u.tail(m) = res.back().first;
-            Func<Real, Vector> F = [&v = res.back().first, &t, &a = a, &b = b, &c = c, &f = f, &k, &n, &m](const Vector &u) -> Real
+            std::function<const Real(const Vector &)> F =
+                [&v = res.back().first, &t, &a = a, &b = b, &c = c, &f = f, &k, &n, &m](const Vector &u) -> Real
             {
                 Real error = 0.0;
                 Vector y = u.tail(m);

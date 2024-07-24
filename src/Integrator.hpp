@@ -9,7 +9,7 @@
 namespace mtk
 {
     template <typename ResType>
-    const ResType trapezoidal(const Real &min, const Real &max, const Func<const ResType, const Real &> &f, const Int &step)
+    const ResType trapezoidal(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f, const Int &step)
     {
         const Real k = (max - min) / (Real)step;
         ResType s = zero<ResType>();
@@ -24,7 +24,7 @@ namespace mtk
     }
 
     template <typename ResType>
-    const ResType midpoint(const Real &min, const Real &max, const Func<const ResType, const Real &> &f, const Int &step)
+    const ResType midpoint(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f, const Int &step)
     {
         const Real k = (max - min) / (Real)step;
         ResType s = zero<ResType>();
@@ -36,7 +36,7 @@ namespace mtk
     }
 
     template <typename ResType>
-    const ResType simpson(const Real &min, const Real &max, const Func<const ResType, const Real &> &f, const Int &step)
+    const ResType simpson(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f, const Int &step)
     {
         const Real k = (max - min) / step;
         ResType s = zero<ResType>();
@@ -109,7 +109,7 @@ namespace mtk
         return;
     }
 
-    inline void NewtonCotesIntegrator::setWeight(const Func<const Real, const Real &> &weight)
+    inline void NewtonCotesIntegrator::setWeight(const std::function<const Real(const Real &)> &weight)
     {
         if (weight == nullptr)
         {
@@ -123,7 +123,7 @@ namespace mtk
     }
 
     template <typename ResType>
-    inline const ResType NewtonCotesIntegrator::trapezoidal(const Func<const ResType, const Real &> &f) const
+    inline const ResType NewtonCotesIntegrator::trapezoidal(const std::function<const ResType(const Real &)> &f) const
     {
         const Real k = (max - min) / step;
         const Real split = (max - min) / num_worker;
@@ -156,7 +156,7 @@ namespace mtk
     }
 
     template <typename ResType>
-    inline const ResType NewtonCotesIntegrator::midpoint(const Func<const ResType, const Real &> &f) const
+    inline const ResType NewtonCotesIntegrator::midpoint(const std::function<const ResType(const Real &)> &f) const
     {
         const Real k = (max - min) / step;
         const Real split = (max - min) / num_worker;
@@ -184,7 +184,7 @@ namespace mtk
     }
 
     template <typename ResType>
-    inline const ResType NewtonCotesIntegrator::simpson(const Func<const ResType, const Real &> &f) const
+    inline const ResType NewtonCotesIntegrator::simpson(const std::function<const ResType(const Real &)> &f) const
     {
         const Real k = (max - min) / step;
         const Real split = (max - min) / num_worker;
@@ -243,7 +243,7 @@ namespace mtk
     }
 
     template <typename ResType>
-    inline const ResType GaussianIntegrator::operator()(const Func<const ResType, const Real &> &f) const
+    inline const ResType GaussianIntegrator::operator()(const std::function<const ResType(const Real &)> &f) const
     {
         ResType res = zero<ResType>();
         for (Int i = 0; i < (Int)coefs.size(); i++)
