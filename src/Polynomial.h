@@ -1,12 +1,19 @@
 #ifndef MTK_POLYNOMIAL_H
 #define MTK_POLYNOMIAL_H
 
-#include "Config.hpp"
+#include "Trait.h"
+
+static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
 {
+    using Int = long long int;
+    using Real = long double;
+
     class ConditionList;
     class Polynomial;
+    template <>
+    class Trait<Polynomial>;
     class OrthonormalPolynomial;
 
     const Polynomial operator-(const Polynomial &p);
@@ -23,7 +30,7 @@ namespace mtk
     const Polynomial operator/(const Polynomial &p1, const Polynomial &p2);
     const Polynomial operator%(const Polynomial &p1, const Polynomial &p2);
 
-    const bool isEqual(const Polynomial &p1, const Polynomial &p2, const Real &delta = EPS<Real>);
+    const bool isEqual(const Polynomial &p1, const Polynomial &p2, const Real &delta = Trait<Real>::epsilon());
 
     const bool operator==(const Polynomial &p1, const Polynomial &p2);
     const bool operator!=(const Polynomial &p1, const Polynomial &p2);
@@ -84,12 +91,12 @@ namespace mtk
 
         const Polynomial differential() const;
         const Polynomial integral(const Real &x) const;
-        const std::vector<Real> root(const Real &delta = EPS<float>) const;
-        const bool isRoot(const Real &x, const Real &delta = EPS<float>) const;
+        const std::vector<Real> root(const Real &delta = Trait<float>::epsilon()) const;
+        const bool isRoot(const Real &x, const Real &delta = Trait<float>::epsilon()) const;
 
-        const bool equal(const Polynomial &p, const Real &delta = EPS<Real>) const;
+        const bool equal(const Polynomial &p, const Real &delta = Trait<Real>::epsilon()) const;
 
-        std::string print(const Real &precision = EPS<float>) const;
+        std::string print(const Real &precision = Trait<float>::epsilon()) const;
 
         Polynomial &operator=(const Polynomial &p);
         Polynomial &operator=(const Real &p);
@@ -106,6 +113,15 @@ namespace mtk
         const Real operator()(const Real &x) const;
         const Real operator[](const Int &degree) const;
         Real &operator[](const Int &degree);
+    };
+
+    template <>
+    class Trait<Polynomial>
+    {
+    public:
+        static const Polynomial zero();
+        static const Polynomial identity();
+        static const Polynomial basis(const size_t &n);
     };
 
     class OrthogonalPolynomial

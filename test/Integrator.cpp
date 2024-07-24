@@ -30,13 +30,12 @@ int main()
     NewtonCotesIntegrator nc;
     nc.setRange(-1, 1);
     nc.setStep(2000000);
-    nc.setNumWorker(1);
 
     timer();
     flag = PASS;
     if (std::abs(trapezoidal<Real>(-1.0, 1.0, f, 2000000) - (F(1) - F(-1))) > DELTA)
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
     t = timer();
@@ -48,7 +47,7 @@ int main()
     flag = PASS;
     if (std::abs(midpoint<Real>(-1.0, 1.0, f, 2000000) - (F(1) - F(-1))) > DELTA)
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
     t = timer();
@@ -60,7 +59,7 @@ int main()
     flag = PASS;
     if (std::abs(simpson<Real>(-1.0, 1.0, f, 2000000) - (F(1) - F(-1))) > DELTA)
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
     t = timer();
@@ -73,42 +72,17 @@ int main()
     flag = PASS;
     if (std::abs(nc.trapezoidal<Real>(f) - (F(1) - F(-1))) > DELTA)
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
     if (std::abs(nc.midpoint<Real>(f) - (F(1) - F(-1))) > DELTA)
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
     if (std::abs(nc.simpson<Real>(f) - (F(1) - F(-1))) > DELTA)
     {
-        MTK_ALERT
-        flag = FAIL;
-    }
-    t = timer();
-    if (flag == PASS)
-    {
-        printf("PASS Time: %6d(ms). Integrator::NewtonCotesIntegrator.\n", t);
-    }
-
-    nc.setNumWorker(8);
-
-    timer();
-    flag = PASS;
-    if (std::abs(nc.trapezoidal<Real>(f) - (F(1) - F(-1))) > DELTA)
-    {
-        MTK_ALERT
-        flag = FAIL;
-    }
-    if (std::abs(nc.midpoint<Real>(f) - (F(1) - F(-1))) > DELTA)
-    {
-        MTK_ALERT
-        flag = FAIL;
-    }
-    if (std::abs(nc.simpson<Real>(f) - (F(1) - F(-1))) > DELTA)
-    {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
     t = timer();

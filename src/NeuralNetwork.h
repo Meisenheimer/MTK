@@ -1,11 +1,16 @@
 #ifndef MTK_NEURALNETWORK_H
 #define MTK_NEURALNETWORK_H
 
+#include "Trait.h"
 #include "Array.h"
-#include "Config.h"
+
+static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
 {
+    using Int = long long int;
+    using Real = long double;
+
     class AbstractLayer;
     class Activation;
     class Layer;
@@ -45,7 +50,7 @@ namespace mtk
         Real negative_slope;
 
     public:
-        LeakyReLU(const Real &negative_slope = zero<Real>());
+        LeakyReLU(const Real &negative_slope = Trait<Real>::zero());
 
         virtual Array<Real> operator()(const Array<Real> &t) const override;
     };

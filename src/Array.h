@@ -6,6 +6,8 @@
 
 // #define MTK_NO_CHECK
 
+static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
+
 namespace mtk
 {
     template <typename Type>

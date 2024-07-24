@@ -1,11 +1,15 @@
 #ifndef MTK_IVP_H
 #define MTK_IVP_H
 
-#include "Config.h"
 #include "Optimizer.h"
+
+static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
 {
+    using Int = long long int;
+    using Real = long double;
+
     class IVP;
 
     class IVP
@@ -16,23 +20,23 @@ namespace mtk
         };
 
     protected:
-        std::function<const Vector(const Vector &, const Real &)> _f;
-        std::vector<std::pair<Vector, Real>> _res;
+        std::function<const Vector<Real>(const Vector<Real> &, const Real &)> _f;
+        std::vector<std::pair<Vector<Real>, Real>> _res;
         Optimizer _opt;
 
     public:
-        const std::function<const Vector(const Vector &, const Real &)> &f;
-        const std::vector<std::pair<Vector, Real>> &res;
+        const std::function<const Vector<Real>(const Vector<Real> &, const Real &)> &f;
+        const std::vector<std::pair<Vector<Real>, Real>> &res;
 
     public:
         IVP();
 
         Optimizer &opt();
         const Optimizer &opt() const;
-        void setRHS(const std::function<const Vector(const Vector &, const Real &)> &f);
-        void setInitValue(const std::vector<std::pair<Vector, Real>> &init_value);
+        void setRHS(const std::function<const Vector<Real>(const Vector<Real> &, const Real &)> &f);
+        void setInitValue(const std::vector<std::pair<Vector<Real>, Real>> &init_value);
 
-        const Vector operator()(const Real &t) const;
+        const Vector<Real> operator()(const Real &t) const;
 
         virtual void solve(const Real &end, const Real &k = 0.0) = 0;
     };
@@ -68,13 +72,13 @@ namespace mtk
         };
 
     private:
-        Matrix a;
-        Vector b;
-        Vector c;
+        Matrix<Real> a;
+        Vector<Real> b;
+        Vector<Real> c;
 
     public:
         void setMethod(const Int &name);
-        void setMethod(const Matrix &a, const Vector &b, const Vector &c);
+        void setMethod(const Matrix<Real> &a, const Vector<Real> &b, const Vector<Real> &c);
         void solve(const Real &end, const Real &k);
     };
 };

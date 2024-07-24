@@ -1,7 +1,9 @@
-#ifndef MTK_TYPE_H
-#define MTK_TYPE_H
+#ifndef MTK_TRAIT_H
+#define MTK_TRAIT_H
 
 #include <Eigen/Eigen>
+
+static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
 {
@@ -31,6 +33,7 @@ namespace mtk
     public:
         static const Matrix<Real> zero(const Matrix<Real> &x);
         static const Matrix<Real> identity(const Matrix<Real> &x);
+        static const Matrix<Real> make(const std::vector<std::vector<Real>> &m);
     };
 
     template <typename Real>
@@ -39,6 +42,7 @@ namespace mtk
     public:
         static const Vector<Real> zero(const Vector<Real> &x);
         static const Vector<Real> identity(const Vector<Real> &x);
+        static const Vector<Real> make(const std::vector<Real> &v);
     };
 };
 

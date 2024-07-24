@@ -1,11 +1,15 @@
 #ifndef MTK_SPLINE_H
 #define MTK_SPLINE_H
 
-#include "Config.h"
 #include "Polynomial.h"
+
+static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
 {
+    using Int = long long int;
+    using Real = long double;
+
     class Spline;
 
     Spline fitSpline(const Int &degree, const ConditionList &c, const bool &periodic = false);

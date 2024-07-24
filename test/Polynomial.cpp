@@ -19,21 +19,21 @@ int main()
     Polynomial p5({-1.0, 0.0, -2.0, 2.0, 1.0});
     if (p3 != -p4 || p1 + p2 != p3 || p3 - p1 != p2 || -1 * p4 != p3 || p4 / -1 != p3)
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
     Polynomial p = p1 * p2;
-    auto root = p.root(std::sqrt(EPS<float>));
+    auto root = p.root(std::sqrt(Trait<float>::epsilon()));
     if (root.size() != 4 || !p.isRoot(root[0]) || !p.isRoot(root[1]) || !p.isRoot(root[2]) || !p.isRoot(root[3]))
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
     p += 10.0;
-    root = p.root(std::sqrt(EPS<float>));
+    root = p.root(std::sqrt(Trait<float>::epsilon()));
     if (root.size() != 0)
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
 
@@ -41,11 +41,11 @@ int main()
                      {1.0, ConditionList::Condition({{0, p1(1)}})},
                      {2.0, ConditionList::Condition({{0, p1(2)}})}});
     Polynomial tmp = fitPolynomial(2, c);
-    if (std::abs(tmp(0) - p1(0)) > EPS<float> ||
-        std::abs(tmp(1) - p1(1)) > EPS<float> ||
-        std::abs(tmp(2) - p1(2)) > EPS<float>)
+    if (std::abs(tmp(0) - p1(0)) > Trait<float>::epsilon() ||
+        std::abs(tmp(1) - p1(1)) > Trait<float>::epsilon() ||
+        std::abs(tmp(2) - p1(2)) > Trait<float>::epsilon())
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
 

@@ -25,7 +25,7 @@ namespace mtk
         Array<Real> res(t);
         for (Int i = 0; i < res.size(); i++)
         {
-            res[i] = res[i] >= zero<Real>() ? res[i] : negative_slope * res[i];
+            res[i] = res[i] >= Trait<Real>::zero() ? res[i] : negative_slope * res[i];
         }
         return res;
     }
@@ -35,7 +35,7 @@ namespace mtk
         Array<Real> res(t);
         for (Int i = 0; i < t.size(); i++)
         {
-            res[i] = identity<Real>() / (identity<Real>() + std::exp(-res[i]));
+            res[i] = Trait<Real>::identity() / (Trait<Real>::identity() + std::exp(-res[i]));
         }
         return res;
     }
@@ -84,7 +84,7 @@ namespace mtk
         Array<Real> res(h);
         for (Int i = 0; i < h; i++)
         {
-            res(i) = bias ? b(i) : zero<Real>();
+            res(i) = bias ? b(i) : Trait<Real>::zero();
             for (Int j = 0; j < w; j++)
             {
                 res(i) = res(i) + A(i, j) * t(j);
@@ -106,7 +106,11 @@ namespace mtk
     inline void NeuralNetwork::load(const std::string &filename)
     {
         std::ifstream fp(filename, std::ios::in);
-        MTK_ASSERT(fp.is_open())
+        if (!fp.is_open())
+        {
+            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            exit(0);
+        }
         for (Int i = 0; i < (Int)layer.size(); i++)
         {
             layer[i]->load(fp);

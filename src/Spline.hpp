@@ -1,6 +1,8 @@
 #ifndef MTK_SPLINE_HPP
 #define MTK_SPLINE_HPP
 
+#include <set>
+
 #include "Spline.h"
 
 namespace mtk
@@ -40,8 +42,8 @@ namespace mtk
             poly.push_back(Polynomial(degree));
         }
         const Int N = c.list.size() + (knot.size() - 2) * degree + (periodic ? degree : 0) + smooth.size();
-        Matrix A = Matrix::Zero(N, (degree + 1) * poly.size());
-        Vector b = Vector::Zero(N);
+        Matrix<Real> A = Matrix<Real>::Zero(N, (degree + 1) * poly.size());
+        Vector<Real> b = Vector<Real>::Zero(N);
         Int k = 0, i = 0;
         for (auto it = c.list.begin(); it != c.list.end(); it++, i++, k++)
         {
@@ -95,7 +97,7 @@ namespace mtk
                 k++;
             }
         }
-        Vector x = A.fullPivHouseholderQr().solve(b);
+        Vector<Real> x = A.fullPivHouseholderQr().solve(b);
         for (Int i = 0; i < poly.size(); i++)
         {
             for (Int j = 0; j <= degree; j++)
@@ -116,8 +118,8 @@ namespace mtk
                 return i;
             }
         }
-        MTK_ALERT
-        return -1;
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
+        exit(0);
     }
 
     inline Spline::Spline(const Int &degree) : degree(degree), poly(_poly), knot(_knot) {}
@@ -131,7 +133,11 @@ namespace mtk
     inline const Real Spline::operator()(const Real &x) const
     {
         const Int i = find(x);
-        MTK_ASSERT(i >= 0 && i < poly.size())
+        if (i < 0 || i >= poly.size())
+        {
+            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            exit(0);
+        }
         return poly[i](x);
     }
 };

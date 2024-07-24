@@ -47,28 +47,12 @@ namespace mtk
     inline const ConditionList::Condition &ConditionList::operator()(const Real &x) const
     {
         auto it = list.find(x);
-        MTK_ASSERT(it != list.end())
+        if (it == list.end())
+        {
+            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            exit(0);
+        }
         return it->second;
-    }
-
-    template <>
-    inline const Polynomial zero<Polynomial>(const Polynomial &x)
-    {
-        return Polynomial(0);
-    }
-
-    template <>
-    inline const Polynomial identity<Polynomial>(const Polynomial &x)
-    {
-        return Polynomial(std::vector<Real>({1.0}));
-    }
-
-    template <>
-    inline const Polynomial basis<Polynomial>(const Int &n)
-    {
-        Polynomial p(n);
-        p[n] = identity<Int>();
-        return p;
     }
 
     inline const Polynomial operator-(const Polynomial &p)
@@ -174,7 +158,7 @@ namespace mtk
         for (Int i = 0; i <= n; i++)
         {
             Real tmp = std::max(std::abs(p1[i]), std::abs(p2[i]));
-            if (std::abs(p1[i] - p2[i]) > tmp * EPS<float>)
+            if (std::abs(p1[i] - p2[i]) > tmp * Trait<float>::epsilon())
             {
                 return false;
             }
@@ -189,7 +173,7 @@ namespace mtk
 
     inline std::ostream &operator<<(std::ostream &stream, const Polynomial &p)
     {
-        stream << p.print(MIN<float>);
+        stream << p.print(Trait<float>::min());
         return stream;
     }
 
@@ -213,7 +197,11 @@ namespace mtk
     inline const Polynomial newtonFormula(const std::vector<Real> &x, const std::vector<Real> &y)
     {
         const Int n = x.size();
-        MTK_ASSERT(n == y.size())
+        if (n != y.size())
+        {
+            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            exit(0);
+        }
         std::vector<std::vector<Real>> table(n);
         for (Int i = 0; i < n; i++)
         {
@@ -237,8 +225,8 @@ namespace mtk
     inline const Polynomial fitPolynomial(const Int &degree, const ConditionList &condition)
     {
         const Int n = condition.list.size();
-        Matrix A = Matrix::Zero(n, degree + 1);
-        Vector b = Vector::Zero(n);
+        Matrix<Real> A = Matrix<Real>::Zero(n, degree + 1);
+        Vector<Real> b = Vector<Real>::Zero(n);
         Int i = 0;
         for (auto it = condition.list.begin(); it != condition.list.end(); it++)
         {
@@ -260,7 +248,7 @@ namespace mtk
                 b(i) = cond->second;
             }
         }
-        Vector x = A.fullPivHouseholderQr().solve(b);
+        Vector<Real> x = A.fullPivHouseholderQr().solve(b);
         Polynomial p(degree);
         for (Int i = 0; i <= degree; i++)
         {
@@ -281,7 +269,11 @@ namespace mtk
 
     inline Polynomial::Polynomial(const Int &n) : degree(_degree)
     {
-        MTK_ASSERT(n >= 0)
+        if (n < 0)
+        {
+            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            exit(0);
+        }
         _degree = n;
         this->coefs.resize(n + 1);
         for (Int i = 0; i <= n; i++)
@@ -326,7 +318,7 @@ namespace mtk
     inline const std::vector<Real> Polynomial::root(const Real &delta) const
     {
         Int n = degree;
-        Matrix A = Matrix::Zero(n, n);
+        Matrix<Real> A = Matrix<Real>::Zero(n, n);
         for (Int i = 1; i < n; i++)
         {
             A(i, i - 1) = 1.0;
@@ -336,8 +328,8 @@ namespace mtk
             A(0, i) = -coefs[n - i - 1] / coefs[n];
         }
         std::vector<Real> res;
-        Eigen::EigenSolver<Matrix> re(A);
-        Matrix D = re.pseudoEigenvalueMatrix();
+        Eigen::EigenSolver<Matrix<Real>> re(A);
+        Matrix<Real> D = re.pseudoEigenvalueMatrix();
         for (Int i = 0; i < n; i++)
         {
             if (std::abs(operator()(D(i, i))) < delta)
@@ -412,7 +404,7 @@ namespace mtk
     inline Polynomial &Polynomial::operator+=(const Polynomial &p)
     {
         _degree = (std::max(degree, p.degree));
-        coefs.resize(degree, zero<Real>());
+        coefs.resize(degree, Trait<Real>::zero());
         for (Int i = 0; i <= p.degree; i++)
         {
             coefs[i] += p[i];
@@ -429,7 +421,7 @@ namespace mtk
     inline Polynomial &Polynomial::operator-=(const Polynomial &p)
     {
         _degree = (std::max(degree, p.degree));
-        coefs.resize(degree, zero<Real>());
+        coefs.resize(degree, Trait<Real>::zero());
         for (Int i = 0; i <= p.degree; i++)
         {
             coefs[i] -= p[i];
@@ -477,11 +469,11 @@ namespace mtk
 
     inline Polynomial &Polynomial::operator/=(const Polynomial &p)
     {
-        Polynomial res = identity<Polynomial>();
+        Polynomial res = Trait<Polynomial>::identity();
         while (_degree >= p.degree)
         {
             Int i = _degree - p.degree;
-            Polynomial x = (coefs[_degree] / p[p.degree]) * basis<Polynomial>(i);
+            Polynomial x = (coefs[_degree] / p[p.degree]) * Trait<Polynomial>::basis(i);
             res += x;
             (*this) -= (x * p);
             coefs.resize(_degree);
@@ -493,11 +485,11 @@ namespace mtk
 
     inline Polynomial &Polynomial::operator%=(const Polynomial &p)
     {
-        Polynomial res = identity<Polynomial>();
+        Polynomial res = Trait<Polynomial>::identity();
         while (_degree >= p.degree)
         {
             Int i = _degree - p.degree;
-            Polynomial x = (coefs[_degree] / p[p.degree]) * basis<Polynomial>(i);
+            Polynomial x = (coefs[_degree] / p[p.degree]) * Trait<Polynomial>::basis(i);
             res += x;
             (*this) -= (x * p);
             coefs.resize(_degree);
@@ -528,8 +520,29 @@ namespace mtk
 
     inline Real &Polynomial::operator[](const Int &n)
     {
-        MTK_ASSERT(n >= 0 && n <= degree)
+        if (n < 0 || n > degree)
+        {
+            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            exit(0);
+        }
         return this->coefs[n];
+    }
+
+    inline const Polynomial Trait<Polynomial>::zero()
+    {
+        return Polynomial(Trait<Real>::zero());
+    }
+
+    inline const Polynomial Trait<Polynomial>::identity()
+    {
+        return Polynomial(std::vector<Real>({Trait<Real>::identity()}));
+    }
+
+    inline const Polynomial Trait<Polynomial>::basis(const size_t &n)
+    {
+        Polynomial p(n);
+        p[n] = Trait<Real>::identity();
+        return p;
     }
 
     inline OrthogonalPolynomial::OrthogonalPolynomial(const Type &type) : weight(_weight), poly(_poly), range(_range)
@@ -547,7 +560,7 @@ namespace mtk
                 const Int n = list.size() - 1;
                 return ((2 * n + 1) * X * list[n] - n * list[n - 1]) / (n + 1);
             };
-            _range = makePair(-1.0, 1.0);
+            _range = std::make_pair(-1.0, 1.0);
             break;
         case Type::ChebyshevOfFirstClass:
             _weight = [](const Real &x) -> Real
@@ -559,7 +572,7 @@ namespace mtk
                 const Int n = list.size() - 1;
                 return 2 * X * list[n] - list[n - 1];
             };
-            _range = makePair(-1.0, 1.0);
+            _range = std::make_pair(-1.0, 1.0);
             break;
         case Type::ChebyshevOfSecondClass:
             _weight = [](const Real &x) -> Real
@@ -571,7 +584,7 @@ namespace mtk
                 const Int n = list.size() - 1;
                 return 2 * X * list[n] - list[n - 1];
             };
-            _range = makePair(-1.0, 1.0);
+            _range = std::make_pair(-1.0, 1.0);
             break;
         case Type::Laguerre:
             _weight = [](const Real &x) -> Real
@@ -583,11 +596,11 @@ namespace mtk
                 const Int n = list.size() - 1;
                 return ((2 * n + 1 - X) * list[n] - n * list[n - 1]) / (n + 1);
             };
-            _range = makePair(0.0, INFINITY);
+            _range = std::make_pair(0.0, INFINITY);
             break;
         case Type::Hermite:
             _weight = [](const Real &x) -> Real
-            { return std::exp(-x * x / 2) / std::sqrt(2 * M_PI); };
+            { return std::exp(-x * x / 2) / std::sqrt(2 * std::numbers::pi); };
             _poly.push_back(Polynomial(std::vector<Real>({1.0})));
             _poly.push_back(Polynomial(std::vector<Real>({0.0, 1.0})));
             next = [&X = std::as_const(X)](const std::vector<Polynomial> &list) -> Polynomial
@@ -595,7 +608,7 @@ namespace mtk
                 const Int n = list.size() - 1;
                 return X * list[n] - n * list[n - 1];
             };
-            _range = makePair(-INFINITY, INFINITY);
+            _range = std::make_pair(-INFINITY, INFINITY);
             break;
         default:
             break;

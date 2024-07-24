@@ -26,7 +26,7 @@ int main()
         std::abs(res[1] + 0.6427672505378723) >= DELTA ||
         std::abs(res[2] - 0.9013500213623047) >= DELTA)
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
     x(0) = 0.0;
@@ -36,7 +36,7 @@ int main()
         std::abs(res[1] + 0.6869048476219177) >= DELTA ||
         std::abs(res[2] - 0.7919000387191772) >= DELTA)
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
     t = timer();

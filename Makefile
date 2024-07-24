@@ -1,5 +1,4 @@
 run:
-	g++ test/Config.cpp -o Config.exe -O2 -fopenmp --std=c++20
 	g++ test/Integrator.cpp -o Integrator.exe -O2 -fopenmp --std=c++20
 	g++ test/IVP.cpp -o IVP.exe -O2 -fopenmp --std=c++20
 	g++ test/Optimizer.cpp -o Optimizer.exe -O2 -fopenmp --std=c++20
@@ -8,7 +7,6 @@ run:
 	g++ test/Random.cpp -o Random.exe -O2 -fopenmp --std=c++20
 	g++ test/Spline.cpp -o Spline.exe -O2 -fopenmp --std=c++20
 	g++ test/NeuralNetwork.cpp -o NeuralNetwork.exe -O2 -fopenmp --std=c++20
-	./Config.exe
 	./Integrator.exe
 	./IVP.exe
 	./Optimizer.exe
@@ -18,10 +16,6 @@ run:
 	./Spline.exe
 	./NeuralNetwork.exe
 	del *.exe
-
-Config:
-	g++ test/Config.cpp -o Config.exe -O2 -fopenmp --std=c++20
-	./Config.exe
 
 Integrator:
 	g++ test/Integrator.cpp -o Integrator.exe -O2 -fopenmp --std=c++20

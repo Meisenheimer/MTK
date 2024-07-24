@@ -14,6 +14,64 @@ int main()
     std::vector<size_t> list;
 
     timer();
+    flag = PASS;
+    for (size_t i = 0; i < Trait<unsigned short>::max(); i++)
+    {
+        double x = Random::Uniform<double>(0, 8);
+        size_t n = Random::Uniform<size_t>(0, 8);
+        if (std::pow(x, n) != pow(x, n))
+        {
+
+            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            flag = FAIL;
+        }
+    }
+    t = timer();
+    if (flag == PASS)
+    {
+        printf("PASS Time: %6d(ms). Number::pow.\n", t);
+    }
+
+    timer();
+    flag = PASS;
+    for (size_t i = 0; i < Trait<unsigned short>::max(); i++)
+    {
+        size_t x = Random::Uniform<size_t>(0, 8);
+        size_t n = Random::Uniform<size_t>(0, 8);
+        size_t m = Random::Uniform<size_t>(1, 128);
+        if (((size_t)std::pow(x, n) % m) != pow(x, n, m))
+        {
+
+            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            flag = FAIL;
+        }
+    }
+    t = timer();
+    if (flag == PASS)
+    {
+        printf("PASS Time: %6d(ms). Number::pow(mod).\n", t);
+    }
+
+    timer();
+    flag = PASS;
+    for (size_t i = 0; i < Trait<unsigned short>::max(); i++)
+    {
+        size_t x = Random::Uniform<size_t>(0, Trait<size_t>::max());
+        size_t y = Random::Uniform<size_t>(0, Trait<size_t>::max());
+        if (std::gcd(x, y) != gcd(x, y))
+        {
+
+            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            flag = FAIL;
+        }
+    }
+    t = timer();
+    if (flag == PASS)
+    {
+        printf("PASS Time: %6d(ms). Number::gcd.\n", t);
+    }
+
+    timer();
     list = {2, 3, 5, 7, 11, 13, 17, 19, 23};
     for (size_t i = 0; i < list.size(); i++)
     {

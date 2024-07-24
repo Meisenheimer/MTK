@@ -1,23 +1,28 @@
 #ifndef MTK_INTEGRAL_H
 #define MTK_INTEGRAL_H
 
-#include "Config.h"
+#include "Trait.h"
 #include "Polynomial.h"
+
+static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
 {
+    using Int = long long int;
+    using Real = long double;
+
     inline const std::function<const Real(const Real &)> TRIVIAL_WEIGHT = [](const Real &x) -> Real
-    { return identity<Real>(); };
+    { return Trait<Real>::identity(); };
 
     template <typename ResType>
     const ResType trapezoidal(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f,
-                              const Int &step = MAX<Byte>);
+                              const Int &step = Trait<char>::max());
     template <typename ResType>
     const ResType midpoint(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f,
-                           const Int &step = MAX<Byte>);
+                           const Int &step = Trait<char>::max());
     template <typename ResType>
     const ResType simpson(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f,
-                          const Int &step = MAX<Byte>);
+                          const Int &step = Trait<char>::max());
 
     class NewtonCotesIntegrator;
     class GaussianIntegrator;
@@ -29,7 +34,6 @@ namespace mtk
         Real _max;
         Real _delta;
         Int _step;
-        Int _num_worker;
         std::function<const Real(const Real &)> _weight;
 
     public:
@@ -37,19 +41,17 @@ namespace mtk
         const Real &max;
         const Real &delta;
         const Int &step;
-        const Int &num_worker;
         const std::function<const Real(const Real &)> &weight;
 
     private:
         void check();
 
     public:
-        NewtonCotesIntegrator(const Real &min = -identity<Real>(), const Real &max = identity<Real>());
+        NewtonCotesIntegrator(const Real &min = -Trait<Real>::identity(), const Real &max = Trait<Real>::identity());
 
         void setRange(const Real &min, const Real &max);
         void setDelta(const Real &delta);
         void setStep(const Int &step);
-        void setNumWorker(const Int &num_worker);
         void setWeight(const std::function<const Real(const Real &)> &weight);
 
         template <typename ResType>

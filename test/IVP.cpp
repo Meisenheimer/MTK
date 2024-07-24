@@ -7,14 +7,14 @@ constexpr bool PASS = true;
 constexpr bool FAIL = !PASS;
 constexpr Real DELTA = 1e-4;
 
-Vector u(const Real &t)
+Vector<Real> u(const Real &t)
 {
-    return Vector::Ones(1) * (-t - 1);
+    return Vector<Real>::Ones(1) * (-t - 1);
 }
 
-Vector f(const Vector &u, const Real &t)
+Vector<Real> f(const Vector<Real> &u, const Real &t)
 {
-    return u + Vector::Ones(u.rows()) * t;
+    return u + Vector<Real>::Ones(u.rows()) * t;
 }
 
 int main()
@@ -25,7 +25,7 @@ int main()
     RK rk;
     lmm.setRHS(f);
     rk.setRHS(f);
-    std::vector<std::pair<Vector, Real>> init = {{u(0), 0.0}, {u(0.005), 0.005}};
+    std::vector<std::pair<Vector<Real>, Real>> init = {{u(0), 0.0}, {u(0.005), 0.005}};
 
     timer();
     flag = PASS;
@@ -34,7 +34,7 @@ int main()
     lmm.solve(0.5, 0.005);
     if ((lmm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
     t = timer();
@@ -49,7 +49,7 @@ int main()
     lmm.solve(0.5, 0.005);
     if ((lmm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
     t = timer();
@@ -64,7 +64,7 @@ int main()
     lmm.solve(0.5, 0.005);
     if ((lmm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
     t = timer();
@@ -79,7 +79,7 @@ int main()
     lmm.solve(0.5, 0.005);
     if ((lmm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
     t = timer();
@@ -94,7 +94,7 @@ int main()
     rk.solve(0.5, 0.005);
     if ((rk(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
     t = timer();
@@ -109,7 +109,7 @@ int main()
     rk.solve(0.5, 0.005);
     if ((rk(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
-        MTK_ALERT
+        printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
     }
     t = timer();

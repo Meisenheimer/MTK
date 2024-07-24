@@ -1,5 +1,5 @@
-#ifndef MTK_TYPE_HPP
-#define MTK_TYPE_HPP
+#ifndef MTK_TRAIT_HPP
+#define MTK_TRAIT_HPP
 
 #include "Trait.h"
 
@@ -48,6 +48,27 @@ namespace mtk
     }
 
     template <typename Real>
+    inline const Matrix<Real> Trait<Matrix<Real>>::make(const std::vector<std::vector<Real>> &m)
+    {
+        size_t row = m.size();
+        size_t col = 0;
+        for (size_t i = 0; i < row; i++)
+        {
+            col = std::max<size_t>(col, m[i].size());
+        }
+        Matrix<Real> res = Matrix<Real>::Zero(row, col);
+        for (size_t i = 0; i < row; i++)
+        {
+            col = m[i].size();
+            for (size_t j = 0; j < col; j++)
+            {
+                res(i, j) = m[i][j];
+            }
+        }
+        return res;
+    }
+
+    template <typename Real>
     inline const Vector<Real> Trait<Vector<Real>>::zero(const Vector<Real> &x)
     {
         return Vector<Real>::Zero(x.rows(), x.cols());
@@ -57,6 +78,18 @@ namespace mtk
     inline const Vector<Real> Trait<Vector<Real>>::identity(const Vector<Real> &x)
     {
         return Vector<Real>::Identity(x.rows(), x.cols());
+    }
+
+    template <typename Real>
+    inline const Vector<Real> Trait<Vector<Real>>::make(const std::vector<Real> &v)
+    {
+        size_t n = v.size();
+        Vector<Real> res(n);
+        for (size_t i = 0; i < n; i++)
+        {
+            res(i) = v.at(i);
+        }
+        return res;
     }
 };
 
