@@ -17,9 +17,12 @@ namespace mtk
     class Trait
     {
     public:
-        static const Type zero(const Type &x = 0);
-        static const Type identity(const Type &x = 1);
-        static const Type basis(const size_t &n = 0);
+        static constexpr Type zero(const Type &x = 0);
+        static constexpr Type identity(const Type &x = 1);
+        static constexpr Type basis(const size_t &n = 0);
+        static constexpr Type max();
+        static constexpr Type min();
+        static constexpr Type epsilon();
     };
 
     template <typename Real>

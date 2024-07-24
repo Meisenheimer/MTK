@@ -6,15 +6,33 @@
 namespace mtk
 {
     template <typename Type>
-    inline const Type Trait<Type>::zero(const Type &x)
+    inline constexpr Type Trait<Type>::zero(const Type &x)
     {
         return Type(0);
     }
 
     template <typename Type>
-    inline const Type Trait<Type>::identity(const Type &x)
+    inline constexpr Type Trait<Type>::identity(const Type &x)
     {
         return Type(1);
+    }
+
+    template <typename Type>
+    inline constexpr Type Trait<Type>::max()
+    {
+        return std::numeric_limits<Type>::max();
+    }
+
+    template <typename Type>
+    inline constexpr Type Trait<Type>::min()
+    {
+        return std::numeric_limits<Type>::min();
+    }
+
+    template <typename Type>
+    inline constexpr Type Trait<Type>::epsilon()
+    {
+        return std::numeric_limits<Type>::epsilon();
     }
 
     template <typename Real>
