@@ -38,6 +38,11 @@ namespace mtk
     template <typename Type>
     inline const Type gcd(const Type &x, const Type &y)
     {
+        if (x == Trait<Type>::zero(x) || Trait<Type>::zero(y))
+        {
+            printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
+            exit(0);
+        }
         Type a = x;
         Type b = y;
         while ((a % b) != 0)
