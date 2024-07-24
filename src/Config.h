@@ -34,9 +34,6 @@ namespace mtk
     using Matrix = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>;
     using Vector = Eigen::Vector<Real, Eigen::Dynamic>;
 
-    template <typename ResType, typename... Type>
-    using Func = std::function<ResType(Type...)>;
-
     template <typename Type>
     constexpr Type MAX = std::numeric_limits<Type>::max();
     template <typename Type>

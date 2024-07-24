@@ -16,12 +16,12 @@ namespace mtk
         };
 
     protected:
-        Func<const Vector, const Vector &, const Real &> _f;
+        std::function<const Vector(const Vector &, const Real &)> _f;
         std::vector<std::pair<Vector, Real>> _res;
         Optimizer _opt;
 
     public:
-        const Func<const Vector, const Vector &, const Real &> &f;
+        const std::function<const Vector(const Vector &, const Real &)> &f;
         const std::vector<std::pair<Vector, Real>> &res;
 
     public:
@@ -29,7 +29,7 @@ namespace mtk
 
         Optimizer &opt();
         const Optimizer &opt() const;
-        void setRHS(const Func<const Vector, const Vector &, const Real &> &f);
+        void setRHS(const std::function<const Vector(const Vector &, const Real &)> &f);
         void setInitValue(const std::vector<std::pair<Vector, Real>> &init_value);
 
         const Vector operator()(const Real &t) const;

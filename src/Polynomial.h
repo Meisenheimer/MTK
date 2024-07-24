@@ -121,13 +121,13 @@ namespace mtk
         };
 
     private:
-        Func<const Real, const Real &> _weight;
+        std::function<const Real(const Real &)> _weight;
         std::vector<Polynomial> _poly;
-        Func<const Polynomial, const std::vector<Polynomial> &> next;
+        std::function<const Polynomial(const std::vector<Polynomial> &)> next;
         std::pair<Real, Real> _range;
 
     public:
-        const Func<const Real, const Real &> &weight;
+        const std::function<const Real(const Real &)> &weight;
         const std::vector<Polynomial> &poly;
         const std::pair<Real, Real> &range;
 
