@@ -15,7 +15,7 @@ constexpr Real DELTA = std::numeric_limits<float>::epsilon();
 int main()
 {
     Int t;
-    Bool flag = PASS;
+    bool flag = PASS;
     timer();
     Spline s = fitSpline(3,
                          ConditionList({{-2.0, ConditionList::Condition({{0, -1.0}})},

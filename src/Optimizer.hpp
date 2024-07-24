@@ -5,7 +5,7 @@
 
 namespace mtk
 {
-    inline const Pair<Real, Real> Optimizer::advanceAndRetreat(const Vector &x, const Vector &p) const
+    inline const std::pair<Real, Real> Optimizer::advanceAndRetreat(const Vector &x, const Vector &p) const
     {
         const Real t = 2.0;
         Real r = 0.0;
@@ -48,7 +48,7 @@ namespace mtk
     {
         const Vector d = p.normalized();
         const Real rate = (std::sqrt(5.0) - 1.0) / 2.0;
-        Pair<Real, Real> interval = advanceAndRetreat(x, d);
+        std::pair<Real, Real> interval = advanceAndRetreat(x, d);
         Int k = 0;
         Real l = interval.first;
         Real r = interval.second;
@@ -94,7 +94,7 @@ namespace mtk
     {
         const Vector d = p.normalized();
         Real rate = 0.6;
-        Pair<Real, Real> interval = advanceAndRetreat(x, d);
+        std::pair<Real, Real> interval = advanceAndRetreat(x, d);
         Int k = 0;
         Real l = interval.first;
         Real r = interval.second;
@@ -162,7 +162,7 @@ namespace mtk
     inline const Vector Optimizer::bisection(const Vector &x, const Vector &p) const
     {
         const Vector d = p.normalized();
-        Pair<Real, Real> interval = advanceAndRetreat(x, d);
+        std::pair<Real, Real> interval = advanceAndRetreat(x, d);
         Int k = 0;
         Real l = interval.first;
         Real r = interval.second;

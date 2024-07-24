@@ -8,18 +8,18 @@ namespace mtk
 {
     class Spline;
 
-    Spline fitSpline(const Int &degree, const ConditionList &c, const Bool &periodic = false);
+    Spline fitSpline(const Int &degree, const ConditionList &c, const bool &periodic = false);
 
     class Spline
     {
     private:
-        List<Polynomial> _poly;
-        List<Real> _knot;
+        std::vector<Polynomial> _poly;
+        std::vector<Real> _knot;
 
     public:
         const Int degree;
-        const List<Polynomial> &poly;
-        const List<Real> &knot;
+        const std::vector<Polynomial> &poly;
+        const std::vector<Real> &knot;
 
     private:
         const Int find(const Real &x) const;
@@ -30,7 +30,7 @@ namespace mtk
 
         const Real operator()(const Real &x) const;
 
-        friend Spline fitSpline(const Int &degree, const ConditionList &c, const Bool &periodic);
+        friend Spline fitSpline(const Int &degree, const ConditionList &c, const bool &periodic);
     };
 };
 

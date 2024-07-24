@@ -28,7 +28,7 @@ namespace mtk
         return;
     }
 
-    inline void IVP::setInitValue(const List<Pair<Vector, Real>> &init_value)
+    inline void IVP::setInitValue(const std::vector<std::pair<Vector, Real>> &init_value)
     {
         this->_res.assign(init_value.begin(), init_value.end());
         return;
@@ -41,7 +41,7 @@ namespace mtk
         Real begin = res.front().second;
         Real end = res.back().second;
         MTK_ASSERT(t >= begin && t <= end)
-        Pair<Vector, Real> l = res.front(), r = res.back();
+        std::pair<Vector, Real> l = res.front(), r = res.back();
         for (Int i = 0; i < n; i++)
         {
             if (res[i].second <= t && res[i + 1].second >= t)
@@ -81,7 +81,7 @@ namespace mtk
         return;
     }
 
-    inline void LMM::setMethod(const List<Real> &alpha, const List<Real> &beta)
+    inline void LMM::setMethod(const std::vector<Real> &alpha, const std::vector<Real> &beta)
     {
         this->alpha = alpha;
         this->beta = beta;

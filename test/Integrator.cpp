@@ -26,7 +26,7 @@ int main()
     Random random;
     bool flag = PASS;
     int t;
-    List<Real> res;
+    std::vector<Real> res;
     NewtonCotesIntegrator nc;
     nc.setRange(-1, 1);
     nc.setStep(2000000);

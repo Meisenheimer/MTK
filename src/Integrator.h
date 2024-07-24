@@ -63,8 +63,8 @@ namespace mtk
     class GaussianIntegrator
     {
     private:
-        Pair<Real, Real> range;
-        List<Pair<Real, Real>> coefs;
+        std::pair<Real, Real> range;
+        std::vector<std::pair<Real, Real>> coefs;
 
     public:
         GaussianIntegrator(const OrthogonalPolynomial &op);

@@ -23,15 +23,15 @@ namespace mtk
     const Polynomial operator/(const Polynomial &p1, const Polynomial &p2);
     const Polynomial operator%(const Polynomial &p1, const Polynomial &p2);
 
-    const Bool isEqual(const Polynomial &p1, const Polynomial &p2, const Real &delta = EPS<Real>);
+    const bool isEqual(const Polynomial &p1, const Polynomial &p2, const Real &delta = EPS<Real>);
 
-    const Bool operator==(const Polynomial &p1, const Polynomial &p2);
-    const Bool operator!=(const Polynomial &p1, const Polynomial &p2);
+    const bool operator==(const Polynomial &p1, const Polynomial &p2);
+    const bool operator!=(const Polynomial &p1, const Polynomial &p2);
 
     std::ostream &operator<<(std::ostream &stream, const Polynomial &p);
 
-    const List<Polynomial> fundamentalPolynomial(const List<Real> &x);
-    const Polynomial newtonFormula(const List<Real> &x, const List<Real> &y);
+    const std::vector<Polynomial> fundamentalPolynomial(const std::vector<Real> &x);
+    const Polynomial newtonFormula(const std::vector<Real> &x, const std::vector<Real> &y);
     const Polynomial fitPolynomial(const Int &degree, const ConditionList &cond);
     const Polynomial differential(const Polynomial &p);
     const Polynomial integral(const Polynomial &p, const Real &x);
@@ -41,29 +41,29 @@ namespace mtk
     public:
         struct Condition
         {
-            Map<Int, Real> y;
-            Bool knot;
-            Bool smooth;
+            std::map<Int, Real> y;
+            bool knot;
+            bool smooth;
 
             Condition();
             // Condition(const Condition &c);
-            Condition(const Bool &is_knot, const Bool &is_smooth);
-            Condition(const Map<Int, Real> &y, const Bool &is_knot = true, const Bool &is_smooth = false);
+            Condition(const bool &is_knot, const bool &is_smooth);
+            Condition(const std::map<Int, Real> &y, const bool &is_knot = true, const bool &is_smooth = false);
         };
 
     private:
-        Map<Real, Condition> _list;
+        std::map<Real, Condition> _list;
 
     public:
-        const Map<Real, Condition> &list;
+        const std::map<Real, Condition> &list;
 
     public:
         ConditionList();
-        ConditionList(const Map<Real, Condition> &init_list);
+        ConditionList(const std::map<Real, Condition> &init_list);
 
         void setCondition(const Real &x, const Real &y, const Int &order = 0);
-        void setKnot(const Real &x, const Bool &is_knot = true);
-        void setSmooth(const Real &x, const Bool &is_smooth = true);
+        void setKnot(const Real &x, const bool &is_knot = true);
+        void setSmooth(const Real &x, const bool &is_smooth = true);
 
         const Condition &operator()(const Real &x) const;
     };
@@ -71,7 +71,7 @@ namespace mtk
     class Polynomial
     {
     private:
-        List<Real> coefs;
+        std::vector<Real> coefs;
         Int _degree;
 
     public:
@@ -80,16 +80,16 @@ namespace mtk
     public:
         Polynomial(const Int &n = 0);
         Polynomial(const Polynomial &p);
-        Polynomial(const List<Real> &coefs);
+        Polynomial(const std::vector<Real> &coefs);
 
         const Polynomial differential() const;
         const Polynomial integral(const Real &x) const;
-        const List<Real> root(const Real &delta = EPS<float>) const;
-        const Bool isRoot(const Real &x, const Real &delta = EPS<float>) const;
+        const std::vector<Real> root(const Real &delta = EPS<float>) const;
+        const bool isRoot(const Real &x, const Real &delta = EPS<float>) const;
 
-        const Bool equal(const Polynomial &p, const Real &delta = EPS<Real>) const;
+        const bool equal(const Polynomial &p, const Real &delta = EPS<Real>) const;
 
-        String print(const Real &precision = EPS<float>) const;
+        std::string print(const Real &precision = EPS<float>) const;
 
         Polynomial &operator=(const Polynomial &p);
         Polynomial &operator=(const Real &p);
@@ -122,13 +122,13 @@ namespace mtk
 
     private:
         Func<const Real, const Real &> _weight;
-        List<Polynomial> _poly;
-        Func<const Polynomial, const List<Polynomial> &> next;
+        std::vector<Polynomial> _poly;
+        Func<const Polynomial, const std::vector<Polynomial> &> next;
         std::pair<Real, Real> _range;
 
     public:
         const Func<const Real, const Real &> &weight;
-        const List<Polynomial> &poly;
+        const std::vector<Polynomial> &poly;
         const std::pair<Real, Real> &range;
 
         OrthogonalPolynomial(const Type &type);

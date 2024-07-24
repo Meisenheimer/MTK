@@ -19,13 +19,13 @@ Vector f(const Vector &u, const Real &t)
 
 int main()
 {
-    Bool flag;
+    bool flag;
     Int t;
     LMM lmm;
     RK rk;
     lmm.setRHS(f);
     rk.setRHS(f);
-    std::vector<Pair<Vector, Real>> init = {{u(0), 0.0}, {u(0.005), 0.005}};
+    std::vector<std::pair<Vector, Real>> init = {{u(0), 0.0}, {u(0.005), 0.005}};
 
     timer();
     flag = PASS;

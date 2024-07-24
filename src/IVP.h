@@ -17,12 +17,12 @@ namespace mtk
 
     protected:
         Func<const Vector, const Vector &, const Real &> _f;
-        List<Pair<Vector, Real>> _res;
+        std::vector<std::pair<Vector, Real>> _res;
         Optimizer _opt;
 
     public:
         const Func<const Vector, const Vector &, const Real &> &f;
-        const List<Pair<Vector, Real>> &res;
+        const std::vector<std::pair<Vector, Real>> &res;
 
     public:
         IVP();
@@ -30,7 +30,7 @@ namespace mtk
         Optimizer &opt();
         const Optimizer &opt() const;
         void setRHS(const Func<const Vector, const Vector &, const Real &> &f);
-        void setInitValue(const List<Pair<Vector, Real>> &init_value);
+        void setInitValue(const std::vector<std::pair<Vector, Real>> &init_value);
 
         const Vector operator()(const Real &t) const;
 
@@ -49,12 +49,12 @@ namespace mtk
         };
 
     private:
-        List<Real> alpha;
-        List<Real> beta;
+        std::vector<Real> alpha;
+        std::vector<Real> beta;
 
     public:
         void setMethod(const Int &name);
-        void setMethod(const List<Real> &alpha, const List<Real> &beta);
+        void setMethod(const std::vector<Real> &alpha, const std::vector<Real> &beta);
         void solve(const Real &end, const Real &k);
     };
 

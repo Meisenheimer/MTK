@@ -223,7 +223,7 @@ namespace mtk
     inline GaussianIntegrator::GaussianIntegrator(const OrthogonalPolynomial &op)
     {
         range = op.range;
-        List<Real> root = op.poly.back().root();
+        std::vector<Real> root = op.poly.back().root();
         const Int n = root.size();
         Matrix A = Matrix::Zero(n, n);
         Vector b = Vector::Zero(n);

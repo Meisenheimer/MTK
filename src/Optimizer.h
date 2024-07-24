@@ -53,7 +53,7 @@ namespace mtk
         const Func<const Matrix, const Vector &> &G;
 
     private:
-        const Pair<Real, Real> advanceAndRetreat(const Vector &x, const Vector &p) const;
+        const std::pair<Real, Real> advanceAndRetreat(const Vector &x, const Vector &p) const;
         const Vector trivial(const Vector &x, const Vector &p) const;
         const Vector goldenSection(const Vector &x, const Vector &p) const;
         const Vector fibonacci(const Vector &x, const Vector &p) const;

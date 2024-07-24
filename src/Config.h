@@ -27,20 +27,9 @@ static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
 {
-    using Bool = bool;
     using Byte = unsigned char;
     using Int = long long int;
     using Real = long double;
-    using String = std::string;
-
-    template <typename Type>
-    using List = std::vector<Type>;
-    template <typename Type>
-    using Set = std::set<Type>;
-    template <typename Type1, typename Type2>
-    using Pair = std::pair<Type1, Type2>;
-    template <typename Type1, typename Type2>
-    using Map = std::map<Type1, Type2>;
 
     using Matrix = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>;
     using Vector = Eigen::Vector<Real, Eigen::Dynamic>;
@@ -63,9 +52,9 @@ namespace mtk
     Int setEigenNumWorker(const Int &n);
 
     template <typename Type1, typename Type2>
-    Pair<Type1, Type2> makePair(const Type1 &first, const Type2 &second);
-    Vector makeVector(const List<Real> &v);
-    Matrix makeMatrix(const List<List<Real>> &m);
+    std::pair<Type1, Type2> makePair(const Type1 &first, const Type2 &second);
+    Vector makeVector(const std::vector<Real> &v);
+    Matrix makeMatrix(const std::vector<std::vector<Real>> &m);
 
     template <typename Type>
     const Type zero(const Type &x = 0);

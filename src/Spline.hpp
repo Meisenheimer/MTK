@@ -5,18 +5,18 @@
 
 namespace mtk
 {
-    inline Spline fitSpline(const Int &degree, const ConditionList &c, const Bool &periodic)
+    inline Spline fitSpline(const Int &degree, const ConditionList &c, const bool &periodic)
     {
-        List<Real> factor = {1.0, 1.0};
+        std::vector<Real> factor = {1.0, 1.0};
         for (Int i = 2; i <= degree; i++)
         {
             factor.push_back(factor.back() * i);
         }
         Spline s(degree);
-        List<Polynomial> &poly = s._poly;
-        List<Real> &knot = s._knot;
+        std::vector<Polynomial> &poly = s._poly;
+        std::vector<Real> &knot = s._knot;
         Real M = -INFINITY, m = INFINITY;
-        Set<Real> smooth;
+        std::set<Real> smooth;
         for (auto it = c.list.begin(); it != c.list.end(); it++)
         {
             Real x = it->first;
@@ -46,7 +46,7 @@ namespace mtk
         for (auto it = c.list.begin(); it != c.list.end(); it++, i++, k++)
         {
             const Real x = it->first;
-            const Map<Int, Real> y = it->second.y;
+            const std::map<Int, Real> y = it->second.y;
             const Int index = s.find(x);
             for (auto jt = y.begin(); jt != y.end(); jt++)
             {
@@ -129,7 +129,7 @@ namespace mtk
     }
 
     inline const Real Spline::operator()(const Real &x) const
-    {   
+    {
         const Int i = find(x);
         MTK_ASSERT(i >= 0 && i < poly.size())
         return poly[i](x);

@@ -21,12 +21,12 @@ namespace mtk
     }
 
     template <typename Type1, typename Type2>
-    inline Pair<Type1, Type2> makePair(const Type1 &first, const Type2 &second)
+    inline std::pair<Type1, Type2> makePair(const Type1 &first, const Type2 &second)
     {
         return std::make_pair(first, second);
     }
 
-    inline Vector makeVector(const List<Real> &v)
+    inline Vector makeVector(const std::vector<Real> &v)
     {
         Int n = v.size();
         Vector res(n);
@@ -37,7 +37,7 @@ namespace mtk
         return res;
     }
 
-    inline Matrix makeMatrix(const List<List<Real>> &m)
+    inline Matrix makeMatrix(const std::vector<std::vector<Real>> &m)
     {
         Int row = m.size();
         Int col = m[0].size();

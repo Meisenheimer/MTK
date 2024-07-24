@@ -3,13 +3,13 @@
 
 using namespace mtk;
 
-constexpr Bool PASS = true;
-constexpr Bool FAIL = !PASS;
+constexpr bool PASS = true;
+constexpr bool FAIL = !PASS;
 constexpr Real DELTA = std::numeric_limits<float>::epsilon();
 
 int main()
 {
-    Bool flag = PASS;
+    bool flag = PASS;
     Int t;
     timer();
     Polynomial p1({1.0, 2.0, 1.0});

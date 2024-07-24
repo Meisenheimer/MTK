@@ -5,15 +5,15 @@
 
 namespace mtk
 {
-    inline ConditionList::Condition::Condition() : Condition(true, false){};
+    inline ConditionList::Condition::Condition() : Condition(true, false) {};
 
-    inline ConditionList::Condition::Condition(const Bool &is_knot, const Bool &is_smooth)
+    inline ConditionList::Condition::Condition(const bool &is_knot, const bool &is_smooth)
     {
         this->knot = is_knot;
         this->smooth = is_smooth;
     };
 
-    inline ConditionList::Condition::Condition(const Map<Int, Real> &y, const Bool &is_knot, const Bool &is_smooth)
+    inline ConditionList::Condition::Condition(const std::map<Int, Real> &y, const bool &is_knot, const bool &is_smooth)
         : Condition(is_knot, is_smooth)
     {
         this->y = y;
@@ -21,7 +21,7 @@ namespace mtk
 
     inline ConditionList::ConditionList() : list(_list) {}
 
-    inline ConditionList::ConditionList(const Map<Real, ConditionList::Condition> &init_list) : ConditionList()
+    inline ConditionList::ConditionList(const std::map<Real, ConditionList::Condition> &init_list) : ConditionList()
     {
         this->_list = init_list;
     }
@@ -32,13 +32,13 @@ namespace mtk
         return;
     }
 
-    inline void ConditionList::setKnot(const Real &x, const Bool &is_knot)
+    inline void ConditionList::setKnot(const Real &x, const bool &is_knot)
     {
         _list[x].knot = is_knot;
         return;
     }
 
-    inline void ConditionList::setSmooth(const Real &x, const Bool &is_smooth)
+    inline void ConditionList::setSmooth(const Real &x, const bool &is_smooth)
     {
         _list[x].smooth = is_smooth;
         return;
@@ -60,7 +60,7 @@ namespace mtk
     template <>
     inline const Polynomial identity<Polynomial>(const Polynomial &x)
     {
-        return Polynomial(List<Real>({1.0}));
+        return Polynomial(std::vector<Real>({1.0}));
     }
 
     template <>
@@ -163,12 +163,12 @@ namespace mtk
         return res;
     }
 
-    inline const Bool isEqual(const Polynomial &p1, const Polynomial &p2, const Real &delta)
+    inline const bool isEqual(const Polynomial &p1, const Polynomial &p2, const Real &delta)
     {
         return p1.equal(p2, delta);
     }
 
-    inline const Bool operator==(const Polynomial &p1, const Polynomial &p2)
+    inline const bool operator==(const Polynomial &p1, const Polynomial &p2)
     {
         Int n = std::max(p1.degree, p2.degree);
         for (Int i = 0; i <= n; i++)
@@ -182,7 +182,7 @@ namespace mtk
         return true;
     }
 
-    inline const Bool operator!=(const Polynomial &p1, const Polynomial &p2)
+    inline const bool operator!=(const Polynomial &p1, const Polynomial &p2)
     {
         return !(p1 == p2);
     }
@@ -193,9 +193,9 @@ namespace mtk
         return stream;
     }
 
-    inline const List<Polynomial> fundamentalPolynomial(const List<Real> &x)
+    inline const std::vector<Polynomial> fundamentalPolynomial(const std::vector<Real> &x)
     {
-        List<Polynomial> res;
+        std::vector<Polynomial> res;
         for (Int k = 0; k < x.size(); k++)
         {
             Polynomial p({1});
@@ -210,11 +210,11 @@ namespace mtk
         return res;
     }
 
-    inline const Polynomial newtonFormula(const List<Real> &x, const List<Real> &y)
+    inline const Polynomial newtonFormula(const std::vector<Real> &x, const std::vector<Real> &y)
     {
         const Int n = x.size();
         MTK_ASSERT(n == y.size())
-        List<List<Real>> table(n);
+        std::vector<std::vector<Real>> table(n);
         for (Int i = 0; i < n; i++)
         {
             table[i].resize(i + 1);
@@ -296,7 +296,7 @@ namespace mtk
         this->coefs.assign(p.coefs.begin(), p.coefs.end());
     }
 
-    inline Polynomial::Polynomial(const List<Real> &coefs) : degree(_degree)
+    inline Polynomial::Polynomial(const std::vector<Real> &coefs) : degree(_degree)
     {
         _degree = coefs.size() - 1;
         this->coefs.assign(coefs.begin(), coefs.end());
@@ -323,7 +323,7 @@ namespace mtk
         return res;
     }
 
-    inline const List<Real> Polynomial::root(const Real &delta) const
+    inline const std::vector<Real> Polynomial::root(const Real &delta) const
     {
         Int n = degree;
         Matrix A = Matrix::Zero(n, n);
@@ -335,7 +335,7 @@ namespace mtk
         {
             A(0, i) = -coefs[n - i - 1] / coefs[n];
         }
-        List<Real> res;
+        std::vector<Real> res;
         Eigen::EigenSolver<Matrix> re(A);
         Matrix D = re.pseudoEigenvalueMatrix();
         for (Int i = 0; i < n; i++)
@@ -349,12 +349,12 @@ namespace mtk
         return res;
     }
 
-    inline const Bool Polynomial::isRoot(const Real &x, const Real &delta) const
+    inline const bool Polynomial::isRoot(const Real &x, const Real &delta) const
     {
         return std::abs(operator()(x)) < delta;
     }
 
-    inline const Bool Polynomial::equal(const Polynomial &p, const Real &delta) const
+    inline const bool Polynomial::equal(const Polynomial &p, const Real &delta) const
     {
         int n = std::max(p.degree, degree);
         for (Int i = 0; i <= n; i++)
@@ -367,10 +367,10 @@ namespace mtk
         return true;
     }
 
-    inline String Polynomial::print(const Real &precision) const
+    inline std::string Polynomial::print(const Real &precision) const
     {
-        String s = "";
-        Bool flag = true;
+        std::string s = "";
+        bool flag = true;
         for (Int i = degree; i > 0; i--)
         {
             if (std::abs(coefs[i]) > precision)
@@ -534,15 +534,15 @@ namespace mtk
 
     inline OrthogonalPolynomial::OrthogonalPolynomial(const Type &type) : weight(_weight), poly(_poly), range(_range)
     {
-        const Polynomial X = Polynomial(List<Real>({0.0, 1.0}));
+        const Polynomial X = Polynomial(std::vector<Real>({0.0, 1.0}));
         switch (type)
         {
         case Type::Legendre:
             _weight = [](const Real &x) -> Real
             { return 1.0; };
-            _poly.push_back(Polynomial(List<Real>({1.0})));
-            _poly.push_back(Polynomial(List<Real>({0.0, 1.0})));
-            next = [&X = std::as_const(X)](const List<Polynomial> &list) -> Polynomial
+            _poly.push_back(Polynomial(std::vector<Real>({1.0})));
+            _poly.push_back(Polynomial(std::vector<Real>({0.0, 1.0})));
+            next = [&X = std::as_const(X)](const std::vector<Polynomial> &list) -> Polynomial
             {
                 const Int n = list.size() - 1;
                 return ((2 * n + 1) * X * list[n] - n * list[n - 1]) / (n + 1);
@@ -552,9 +552,9 @@ namespace mtk
         case Type::ChebyshevOfFirstClass:
             _weight = [](const Real &x) -> Real
             { return 1.0 / std::sqrt(1 - x * x); };
-            _poly.push_back(Polynomial(List<Real>({1.0})));
-            _poly.push_back(Polynomial(List<Real>({0.0, 1.0})));
-            next = [&X = std::as_const(X)](const List<Polynomial> &list) -> Polynomial
+            _poly.push_back(Polynomial(std::vector<Real>({1.0})));
+            _poly.push_back(Polynomial(std::vector<Real>({0.0, 1.0})));
+            next = [&X = std::as_const(X)](const std::vector<Polynomial> &list) -> Polynomial
             {
                 const Int n = list.size() - 1;
                 return 2 * X * list[n] - list[n - 1];
@@ -564,9 +564,9 @@ namespace mtk
         case Type::ChebyshevOfSecondClass:
             _weight = [](const Real &x) -> Real
             { return std::sqrt(1 - x * x); };
-            _poly.push_back(Polynomial(List<Real>({1.0})));
-            _poly.push_back(Polynomial(List<Real>({0.0, 2.0})));
-            next = [&X = std::as_const(X)](const List<Polynomial> &list) -> Polynomial
+            _poly.push_back(Polynomial(std::vector<Real>({1.0})));
+            _poly.push_back(Polynomial(std::vector<Real>({0.0, 2.0})));
+            next = [&X = std::as_const(X)](const std::vector<Polynomial> &list) -> Polynomial
             {
                 const Int n = list.size() - 1;
                 return 2 * X * list[n] - list[n - 1];
@@ -576,9 +576,9 @@ namespace mtk
         case Type::Laguerre:
             _weight = [](const Real &x) -> Real
             { return std::exp(-x); };
-            _poly.push_back(Polynomial(List<Real>({1.0})));
-            _poly.push_back(Polynomial(List<Real>({1.0, -1.0})));
-            next = [&X = std::as_const(X)](const List<Polynomial> &list) -> Polynomial
+            _poly.push_back(Polynomial(std::vector<Real>({1.0})));
+            _poly.push_back(Polynomial(std::vector<Real>({1.0, -1.0})));
+            next = [&X = std::as_const(X)](const std::vector<Polynomial> &list) -> Polynomial
             {
                 const Int n = list.size() - 1;
                 return ((2 * n + 1 - X) * list[n] - n * list[n - 1]) / (n + 1);
@@ -588,9 +588,9 @@ namespace mtk
         case Type::Hermite:
             _weight = [](const Real &x) -> Real
             { return std::exp(-x * x / 2) / std::sqrt(2 * M_PI); };
-            _poly.push_back(Polynomial(List<Real>({1.0})));
-            _poly.push_back(Polynomial(List<Real>({0.0, 1.0})));
-            next = [&X = std::as_const(X)](const List<Polynomial> &list) -> Polynomial
+            _poly.push_back(Polynomial(std::vector<Real>({1.0})));
+            _poly.push_back(Polynomial(std::vector<Real>({0.0, 1.0})));
+            next = [&X = std::as_const(X)](const std::vector<Polynomial> &list) -> Polynomial
             {
                 const Int n = list.size() - 1;
                 return X * list[n] - n * list[n - 1];

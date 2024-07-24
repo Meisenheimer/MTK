@@ -23,7 +23,7 @@ const Matrix G(const Vector &x)
                        {0, 4}});
 }
 
-const List<Pair<Optimizer::Method, Optimizer::LineSearch>> method =
+const std::vector<std::pair<Optimizer::Method, Optimizer::LineSearch>> method =
     {
         {Optimizer::Method::GradientDescent, Optimizer::LineSearch::Bisection},
         {Optimizer::Method::GradientDescent, Optimizer::LineSearch::Fibonacci},
@@ -42,11 +42,11 @@ const List<Pair<Optimizer::Method, Optimizer::LineSearch>> method =
 int main()
 {
     Int t;
-    Bool flag = PASS;
+    bool flag = PASS;
     Vector x0 = makeVector({1, -1});
     Optimizer solver;
     solver.setFunction(f, g, G);
-    List<Vector> res;
+    std::vector<Vector> res;
 
     timer();
     for (Int i = 0; i < (Int)method.size(); i++)
