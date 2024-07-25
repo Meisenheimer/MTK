@@ -68,7 +68,7 @@ namespace mtk
         std::set<size_t> list = {2, 7, 61, 325, 9375, 28178, 450775, 9780504, 1795265022};
         while (list.size() < 20)
         {
-            list.insert(Random::Uniform<size_t>(3, INT_MAX));
+            list.insert(Random::uniform<size_t>(3, INT_MAX));
         }
         size_t u = x - 1, t = 0;
         while (u % 2 == 0)
