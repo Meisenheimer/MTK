@@ -7,8 +7,8 @@
 
 namespace mtk
 {
-    size_t Random::max_loop_num = std::numeric_limits<short>::max();
-    std::default_random_engine Random::random_engine((size_t)std::chrono::system_clock::now().time_since_epoch().count());
+    inline size_t Random::max_loop_num = std::numeric_limits<short>::max();
+    inline std::default_random_engine Random::random_engine((size_t)std::chrono::system_clock::now().time_since_epoch().count());
 
     inline void Random::seed(const size_t &seed)
     {
