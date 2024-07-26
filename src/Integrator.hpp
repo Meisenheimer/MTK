@@ -6,7 +6,7 @@
 
 namespace mtk
 {
-    template <typename ResType>
+    template <typename ResType, typename Real>
     const ResType trapezoidal(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f, const Int &step)
     {
         const Real k = (max - min) / (Real)step;
@@ -21,7 +21,7 @@ namespace mtk
         return s;
     }
 
-    template <typename ResType>
+    template <typename ResType, typename Real>
     const ResType midpoint(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f, const Int &step)
     {
         const Real k = (max - min) / (Real)step;
@@ -33,7 +33,7 @@ namespace mtk
         return s;
     }
 
-    template <typename ResType>
+    template <typename ResType, typename Real>
     const ResType simpson(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f, const Int &step)
     {
         const Real k = (max - min) / step;
@@ -66,7 +66,7 @@ namespace mtk
         this->_max = max;
         this->_step = Trait<short>::max();
         this->_delta = Trait<float>::epsilon();
-        this->_weight = TRIVIAL_WEIGHT;
+        this->_weight = TRIVIAL_WEIGHT<Real>;
         check();
     }
 
@@ -96,7 +96,7 @@ namespace mtk
     {
         if (weight == nullptr)
         {
-            this->_weight = TRIVIAL_WEIGHT;
+            this->_weight = TRIVIAL_WEIGHT<Real>;
         }
         else
         {

@@ -33,7 +33,7 @@ int main()
 
     timer();
     flag = PASS;
-    if (std::abs(trapezoidal<Real>(-1.0, 1.0, f, 2000000) - (F(1) - F(-1))) > DELTA)
+    if (std::abs(trapezoidal<Real, Real>(-1.0, 1.0, f, 2000000) - (F(1) - F(-1))) > DELTA)
     {
         printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
@@ -45,7 +45,7 @@ int main()
     }
     timer();
     flag = PASS;
-    if (std::abs(midpoint<Real>(-1.0, 1.0, f, 2000000) - (F(1) - F(-1))) > DELTA)
+    if (std::abs(midpoint<Real, Real>(-1.0, 1.0, f, 2000000) - (F(1) - F(-1))) > DELTA)
     {
         printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
@@ -57,7 +57,7 @@ int main()
     }
     timer();
     flag = PASS;
-    if (std::abs(simpson<Real>(-1.0, 1.0, f, 2000000) - (F(1) - F(-1))) > DELTA)
+    if (std::abs(simpson<Real, Real>(-1.0, 1.0, f, 2000000) - (F(1) - F(-1))) > DELTA)
     {
         printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;

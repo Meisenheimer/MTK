@@ -8,19 +8,17 @@ static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
 {
-    using Int = long long int;
-    using Real = long double;
-
+    template <typename Real>
     inline const std::function<const Real(const Real &)> TRIVIAL_WEIGHT = [](const Real &x) -> Real
     { return Trait<Real>::identity(); };
 
-    template <typename ResType>
+    template <typename ResType, typename Real>
     const ResType trapezoidal(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f,
                               const Int &step = Trait<char>::max());
-    template <typename ResType>
+    template <typename ResType, typename Real>
     const ResType midpoint(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f,
                            const Int &step = Trait<char>::max());
-    template <typename ResType>
+    template <typename ResType, typename Real>
     const ResType simpson(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f,
                           const Int &step = Trait<char>::max());
 
