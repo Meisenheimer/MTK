@@ -30,7 +30,7 @@ int main()
     timer();
     flag = PASS;
     lmm.setInitValue(init);
-    lmm.setMethod(LMM::Method::ForwardEuler);
+    lmm.setMethod(LMM::ForwardEuler);
     lmm.solve(0.5, 0.005);
     if ((lmm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
@@ -45,7 +45,7 @@ int main()
 
     timer();
     lmm.setInitValue(init);
-    lmm.setMethod(LMM::Method::Trapezoidal);
+    lmm.setMethod(LMM::Trapezoidal);
     lmm.solve(0.5, 0.005);
     if ((lmm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
@@ -60,7 +60,7 @@ int main()
 
     timer();
     lmm.setInitValue(init);
-    lmm.setMethod(LMM::Method::BackwardEuler);
+    lmm.setMethod(LMM::BackwardEuler);
     lmm.solve(0.5, 0.005);
     if ((lmm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
@@ -75,7 +75,7 @@ int main()
 
     timer();
     lmm.setInitValue(init);
-    lmm.setMethod(LMM::Method::Midpoint);
+    lmm.setMethod(LMM::Midpoint);
     lmm.solve(0.5, 0.005);
     if ((lmm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
@@ -90,7 +90,7 @@ int main()
 
     timer();
     rk.setInitValue(init);
-    rk.setMethod(RK::Method::HeunThirdOrder);
+    rk.setMethod(RK::HeunThirdOrder);
     rk.solve(0.5, 0.005);
     if ((rk(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
@@ -105,7 +105,7 @@ int main()
 
     timer();
     rk.setInitValue(init);
-    rk.setMethod(RK::Method::ClassicalFourthOrder);
+    rk.setMethod(RK::ClassicalFourthOrder);
     rk.solve(0.5, 0.005);
     if ((rk(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {

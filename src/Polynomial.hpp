@@ -272,7 +272,7 @@ namespace mtk
         return p.integral(x);
     }
 
-    inline Polynomial::Polynomial(const size_t &n) : degree(_degree)
+    inline Polynomial::Polynomial(const size_t &n) : coefs(_coefs), degree(_degree)
     {
         if (n < 0)
         {
@@ -280,23 +280,23 @@ namespace mtk
             exit(0);
         }
         _degree = n;
-        this->coefs.resize(n + 1);
+        this->_coefs.resize(n + 1);
         for (size_t i = 0; i <= n; i++)
         {
-            this->coefs[i] = 0;
+            this->_coefs[i] = 0;
         }
     }
 
-    inline Polynomial::Polynomial(const Polynomial &p) : degree(_degree)
+    inline Polynomial::Polynomial(const Polynomial &p) : coefs(_coefs), degree(_degree)
     {
         _degree = p.degree;
-        this->coefs.assign(p.coefs.begin(), p.coefs.end());
+        this->_coefs.assign(p.coefs.begin(), p.coefs.end());
     }
 
-    inline Polynomial::Polynomial(const std::vector<Real> &coefs) : degree(_degree)
+    inline Polynomial::Polynomial(const std::vector<Real> &coefs) : coefs(_coefs), degree(_degree)
     {
         _degree = coefs.size() - 1;
-        this->coefs.assign(coefs.begin(), coefs.end());
+        this->_coefs.assign(coefs.begin(), coefs.end());
     }
 
     inline const Polynomial Polynomial::differential() const
@@ -304,7 +304,7 @@ namespace mtk
         Polynomial res(degree - 1);
         for (size_t i = 1; i <= degree; i++)
         {
-            res[i - 1] = (i * coefs[i]);
+            res[i - 1] = (i * _coefs[i]);
         }
         return res;
     }
@@ -314,7 +314,7 @@ namespace mtk
         Polynomial res(degree + 1);
         for (size_t i = 1; i <= degree; i++)
         {
-            res[i + 1] = (coefs[i] / (i + 1.0));
+            res[i + 1] = (_coefs[i] / (i + 1.0));
         }
         res[0] = res[0] - res(x);
         return res;
@@ -330,7 +330,7 @@ namespace mtk
         }
         for (size_t i = 0; i < n; i++)
         {
-            A(0, i) = -coefs[n - i - 1] / coefs[n];
+            A(0, i) = -_coefs[n - i - 1] / _coefs[n];
         }
         std::vector<Real> res;
         Eigen::EigenSolver<Matrix<Real>> re(A);
@@ -356,7 +356,7 @@ namespace mtk
         int n = std::max(p.degree, degree);
         for (size_t i = 0; i <= n; i++)
         {
-            if (std::abs(p[i] - this->coefs[i]) > delta)
+            if (std::abs(p[i] - this->_coefs[i]) > delta)
             {
                 return false;
             }
@@ -370,20 +370,20 @@ namespace mtk
         bool flag = true;
         for (size_t i = degree; i > 0; i--)
         {
-            if (std::abs(coefs[i]) > precision)
+            if (std::abs(_coefs[i]) > precision)
             {
-                s += ((coefs[i] > 0 ? (i == degree ? "" : "+ ") : "- ") + std::to_string(std::abs(coefs[i])));
+                s += ((_coefs[i] > 0 ? (i == degree ? "" : "+ ") : "- ") + std::to_string(std::abs(_coefs[i])));
                 s += (" x^" + std::to_string(i) + " ");
                 flag = false;
             }
         }
         if (flag)
         {
-            s += std::to_string(coefs[0]);
+            s += std::to_string(_coefs[0]);
         }
-        else if (std::abs(coefs[0]) > precision)
+        else if (std::abs(_coefs[0]) > precision)
         {
-            s += ((coefs[0] > 0 ? "+ " : "- ") + std::to_string(std::abs(coefs[0])));
+            s += ((_coefs[0] > 0 ? "+ " : "- ") + std::to_string(std::abs(_coefs[0])));
         }
         return s;
     }
@@ -393,7 +393,7 @@ namespace mtk
         if (&p != this)
         {
             this->_degree = p.degree;
-            this->coefs.assign(p.coefs.begin(), p.coefs.end());
+            this->_coefs = p.coefs;
         }
         return (*this);
     }
@@ -401,42 +401,42 @@ namespace mtk
     inline Polynomial &Polynomial::operator=(const Real &k)
     {
         this->_degree = 0;
-        this->coefs.resize(1);
-        this->coefs[0] = k;
+        this->_coefs.resize(1);
+        this->_coefs[0] = k;
         return (*this);
     }
 
     inline Polynomial &Polynomial::operator+=(const Polynomial &p)
     {
         _degree = (std::max(degree, p.degree));
-        coefs.resize(degree, Trait<Real>::zero());
+        _coefs.resize(degree, Trait<Real>::zero());
         for (size_t i = 0; i <= p.degree; i++)
         {
-            coefs[i] += p[i];
+            _coefs[i] += p[i];
         }
         return (*this);
     }
 
     inline Polynomial &Polynomial::operator+=(const Real &k)
     {
-        coefs[0] += k;
+        _coefs[0] += k;
         return (*this);
     }
 
     inline Polynomial &Polynomial::operator-=(const Polynomial &p)
     {
         _degree = (std::max(degree, p.degree));
-        coefs.resize(degree, Trait<Real>::zero());
+        _coefs.resize(degree, Trait<Real>::zero());
         for (size_t i = 0; i <= p.degree; i++)
         {
-            coefs[i] -= p[i];
+            _coefs[i] -= p[i];
         }
         return (*this);
     }
 
     inline Polynomial &Polynomial::operator-=(const Real &k)
     {
-        coefs[0] -= k;
+        _coefs[0] -= k;
         return (*this);
     }
 
@@ -447,7 +447,7 @@ namespace mtk
         {
             for (size_t j = 0; j <= p.degree; j++)
             {
-                tmp[i + j] += (coefs[i] * p[j]);
+                tmp[i + j] += (_coefs[i] * p[j]);
             }
         }
         (*this) = tmp;
@@ -458,7 +458,7 @@ namespace mtk
     {
         for (size_t i = 0; i <= degree; i++)
         {
-            coefs[i] *= k;
+            _coefs[i] *= k;
         }
         return (*this);
     }
@@ -467,7 +467,7 @@ namespace mtk
     {
         for (size_t i = 0; i <= degree; i++)
         {
-            coefs[i] /= k;
+            _coefs[i] /= k;
         }
         return (*this);
     }
@@ -478,10 +478,10 @@ namespace mtk
         while (_degree >= p.degree)
         {
             size_t i = _degree - p.degree;
-            Polynomial x = (coefs[_degree] / p[p.degree]) * Trait<Polynomial>::basis(i);
+            Polynomial x = (_coefs[_degree] / p[p.degree]) * Trait<Polynomial>::basis(i);
             res += x;
             (*this) -= (x * p);
-            coefs.resize(_degree);
+            _coefs.resize(_degree);
             _degree--;
         }
         (*this) = res;
@@ -494,10 +494,10 @@ namespace mtk
         while (_degree >= p.degree)
         {
             size_t i = _degree - p.degree;
-            Polynomial x = (coefs[_degree] / p[p.degree]) * Trait<Polynomial>::basis(i);
+            Polynomial x = (_coefs[_degree] / p[p.degree]) * Trait<Polynomial>::basis(i);
             res += x;
             (*this) -= (x * p);
-            coefs.resize(_degree);
+            _coefs.resize(_degree);
             _degree--;
         }
         return (*this);
@@ -509,7 +509,7 @@ namespace mtk
         Real k = 1.0;
         for (size_t i = 0; i <= degree; i++, k *= x)
         {
-            res += (k * this->coefs[i]);
+            res += (k * this->_coefs[i]);
         }
         return res;
     }
@@ -520,7 +520,7 @@ namespace mtk
         {
             return 0.0;
         }
-        return this->coefs[n];
+        return this->_coefs[n];
     }
 
     inline Real &Polynomial::operator[](const size_t &n)
@@ -530,7 +530,7 @@ namespace mtk
             printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
             exit(0);
         }
-        return this->coefs[n];
+        return this->_coefs[n];
     }
 
     inline const Polynomial Trait<Polynomial>::zero()
@@ -620,6 +620,9 @@ namespace mtk
         }
     }
 
+    inline OrthogonalPolynomial::OrthogonalPolynomial(const OrthogonalPolynomial &op)
+        : weight(_weight), poly(_poly), range(_range), _weight(op.weight), _poly(op.poly), _range(op.range), next(op.next) {}
+
     inline const Polynomial &OrthogonalPolynomial::operator()(const size_t &index)
     {
         for (size_t i = poly.size(); i <= index; i++)
@@ -627,6 +630,18 @@ namespace mtk
             _poly.push_back(next(poly));
         }
         return poly[index];
+    }
+
+    inline OrthogonalPolynomial &OrthogonalPolynomial::operator=(const OrthogonalPolynomial &op)
+    {
+        if (this != &op)
+        {
+            this->next = op.next;
+            this->_weight = op.weight;
+            this->_poly = op.poly;
+            this->_range = op.range;
+        }
+        return (*this);
     }
 };
 

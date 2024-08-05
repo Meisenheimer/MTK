@@ -77,10 +77,11 @@ namespace mtk
     class Polynomial
     {
     private:
-        std::vector<Real> coefs;
+        std::vector<Real> _coefs;
         size_t _degree;
 
     public:
+        const std::vector<Real> &coefs;
         const size_t &degree;
 
     public:
@@ -118,6 +119,8 @@ namespace mtk
     class Trait<Polynomial>
     {
     public:
+        Trait() = delete;
+
         static const Polynomial zero();
         static const Polynomial identity();
         static const Polynomial basis(const size_t &n);
@@ -136,9 +139,11 @@ namespace mtk
         };
 
     private:
+        std::function<const Polynomial(const std::vector<Polynomial> &)> next;
+
+    private:
         std::function<const Real(const Real &)> _weight;
         std::vector<Polynomial> _poly;
-        std::function<const Polynomial(const std::vector<Polynomial> &)> next;
         std::pair<Real, Real> _range;
 
     public:
@@ -146,9 +151,13 @@ namespace mtk
         const std::vector<Polynomial> &poly;
         const std::pair<Real, Real> &range;
 
+    public:
         OrthogonalPolynomial(const Type &type);
+        OrthogonalPolynomial(const OrthogonalPolynomial &op);
 
         const Polynomial &operator()(const size_t &index);
+
+        OrthogonalPolynomial &operator=(const OrthogonalPolynomial &op);
     };
 };
 

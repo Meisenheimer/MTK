@@ -104,21 +104,21 @@ namespace mtk
         return true;
     }
 
-    inline Prime::Prime(const size_t &m)
+    inline Prime::Prime(const size_t &m) : max(_max), num(_num)
     {
-        this->max = (std::max<size_t>(SHRT_MAX, m));
-        std::vector<bool> flag(max + 1, true);
-        num.push_back(2);
-        for (size_t i = 4; i <= max; i += 2)
+        this->_max = (std::max<size_t>(SHRT_MAX, m));
+        std::vector<bool> flag(_max + 1, true);
+        _num.push_back(2);
+        for (size_t i = 4; i <= _max; i += 2)
         {
             flag[i] = false;
         }
-        for (size_t i = 3; i <= max; i += 2)
+        for (size_t i = 3; i <= _max; i += 2)
         {
             if (flag[i])
             {
-                num.push_back(i);
-                for (size_t j = i * i; j <= max; j += (2 * i))
+                _num.push_back(i);
+                for (size_t j = i * i; j <= _max; j += (2 * i))
                 {
                     flag[j] = false;
                 }
@@ -126,17 +126,19 @@ namespace mtk
         }
     }
 
+    inline Prime::Prime(const Prime &p) : max(_max), num(_num), _max(p.max), _num(p.num) {}
+
     inline const size_t Prime::index(const size_t &x) const
     {
-        size_t l = 0, r = num.size() - 1;
+        size_t l = 0, r = _num.size() - 1;
         while (l <= r)
         {
             size_t m = l + ((r - l) / 2);
-            if (num[m] < x)
+            if (_num[m] < x)
             {
                 l = m + 1;
             }
-            else if (num[m] > x)
+            else if (_num[m] > x)
             {
                 r = m - 1;
             }
@@ -150,15 +152,15 @@ namespace mtk
 
     inline const bool Prime::operator()(const size_t &n)
     {
-        if (n <= max)
+        if (n <= _max)
         {
             return index(n) != -1;
         }
-        else if (n <= std::min<size_t>(max * max, INT_MAX))
+        else if (n <= std::min<size_t>(_max * _max, INT_MAX))
         {
-            for (size_t i = 0; i < num.size(); i++)
+            for (size_t i = 0; i < _num.size(); i++)
             {
-                if (n % num[i] == 0)
+                if (n % _num[i] == 0)
                 {
                     return false;
                 }
@@ -172,26 +174,36 @@ namespace mtk
     {
         size_t u = x;
         std::vector<size_t> res;
-        for (size_t i = 0; i < num.size(); i++)
+        for (size_t i = 0; i < _num.size(); i++)
         {
-            while (u % num[i] == 0)
+            while (u % _num[i] == 0)
             {
-                u /= num[i];
+                u /= _num[i];
                 res.push_back(i);
             }
         }
-        for (size_t i = max; i <= (sqrt(u) + 1) && isPrime(u) && u > 1; i++)
+        for (size_t i = _max; i <= (sqrt(u) + 1) && isPrime(u) && u > 1; i++)
         {
             if (this->operator()(i))
             {
-                while (u % num[i] == 0)
+                while (u % _num[i] == 0)
                 {
-                    u /= num[i];
+                    u /= _num[i];
                     res.push_back(i);
                 }
             }
         }
         return res;
+    }
+
+    inline Prime &Prime::operator=(const Prime &p)
+    {
+        if (this != &p)
+        {
+            this->_max = p.max;
+            this->_num = p.num;
+        }
+        return (*this);
     }
 };
 

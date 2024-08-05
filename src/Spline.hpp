@@ -122,13 +122,10 @@ namespace mtk
         exit(0);
     }
 
-    inline Spline::Spline(const size_t &degree) : degree(degree), poly(_poly), knot(_knot) {}
+    inline Spline::Spline(const size_t &degree) : degree(_degree), poly(_poly), knot(_knot), _degree(degree) {}
 
-    inline Spline::Spline(const Spline &s) : degree(s.degree), poly(_poly), knot(_knot)
-    {
-        _poly.assign(s.poly.begin(), s.poly.end());
-        _knot.assign(s.knot.begin(), s.knot.end());
-    }
+    inline Spline::Spline(const Spline &s)
+        : degree(_degree), poly(_poly), knot(_knot), _degree(s.degree), _poly(s.poly), _knot(s.knot) {}
 
     inline const Real Spline::operator()(const Real &x) const
     {
@@ -139,6 +136,17 @@ namespace mtk
             exit(0);
         }
         return poly[i](x);
+    }
+
+    inline Spline &Spline::operator=(const Spline &s)
+    {
+        if (this != &s)
+        {
+            this->_degree = s.degree;
+            this->_poly = s.poly;
+            this->_knot = s.knot;
+        }
+        return (*this);
     }
 };
 

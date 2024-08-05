@@ -51,14 +51,21 @@ namespace mtk
     class GaussianIntegrator
     {
     private:
-        std::pair<Real, Real> range;
-        std::vector<std::pair<Real, Real>> coefs;
+        std::pair<Real, Real> _range;
+        std::vector<std::pair<Real, Real>> _coefs;
+
+    public:
+        const std::pair<Real, Real> &range;
+        const std::vector<std::pair<Real, Real>> &coefs;
 
     public:
         GaussianIntegrator(const OrthogonalPolynomial &op);
+        GaussianIntegrator(const GaussianIntegrator &integrator);
 
         template <typename ResType>
         const ResType operator()(const std::function<const ResType(const Real &)> &f) const;
+
+        GaussianIntegrator &operator=(const GaussianIntegrator &integrator);
     };
 };
 

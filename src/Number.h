@@ -20,15 +20,22 @@ namespace mtk
     class Prime
     {
     private:
-        size_t max;
-        std::vector<size_t> num;
+        size_t _max;
+        std::vector<size_t> _num;
+
+    public:
+        const size_t &max;
+        const std::vector<size_t> &num;
 
     public:
         Prime(const size_t &m);
+        Prime(const Prime &p);
 
         const size_t index(const size_t &x) const;
         const bool operator()(const size_t &n);
         const std::vector<size_t> factorization(const size_t &x);
+
+        Prime &operator=(const Prime &p);
     };
 };
 

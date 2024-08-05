@@ -141,7 +141,7 @@ namespace mtk
     }
 
     template <typename Type>
-    inline Array<Type>::Array() : shape(_shape)
+    inline Array<Type>::Array() : data(_data), shape(_shape)
     {
         _shape = {0};
     }
@@ -150,7 +150,7 @@ namespace mtk
     inline Array<Type>::Array(const std::vector<size_t> &shape) : Array()
     {
         this->_shape = shape;
-        data.resize(size(), 0);
+        _data.resize(size(), 0);
     }
 
     template <typename Type>
@@ -161,7 +161,7 @@ namespace mtk
     template <typename Type>
     inline Array<Type>::Array(const Array &array) : Array(array.shape)
     {
-        data = array.data;
+        _data = array.data;
     }
 
     template <typename Type>
@@ -169,7 +169,7 @@ namespace mtk
     {
         for (size_t i = 0; i < data.size; i++)
         {
-            data[i] = value;
+            _data[i] = value;
         }
         return;
     }
@@ -229,7 +229,7 @@ namespace mtk
             printf("Error At: %s %d.\n", __FILE__, __LINE__);
             exit(0);
         }
-        return data[index];
+        return _data[index];
     }
 
     template <typename Type>
@@ -247,7 +247,12 @@ namespace mtk
             n += (m * index[i - 1]);
             m *= shape.at(i - 1);
         }
-        return data.at(n);
+        if (n >= data.size())
+        {
+            printf("Error At: %s %d.\n", __FILE__, __LINE__);
+            exit(0);
+        }
+        return data[n];
     }
 
     template <typename Type>
@@ -277,7 +282,12 @@ namespace mtk
             n += (m * index[i - 1]);
             m *= shape[i - 1];
         }
-        return data.at(n);
+        if (n >= data.size())
+        {
+            printf("Error At: %s %d.\n", __FILE__, __LINE__);
+            exit(0);
+        }
+        return _data[n];
     }
 
     template <typename Type>
@@ -296,7 +306,7 @@ namespace mtk
     inline Array<Type> &Array<Type>::operator=(const Array<Type> &array)
     {
         _shape = array.shape;
-        data = array.data;
+        _data = array.data;
         return (*this);
     }
 
@@ -310,7 +320,7 @@ namespace mtk
         }
         for (size_t i = 0; i < data.size(); i++)
         {
-            data.at(i) += array.data.at(i);
+            _data.at(i) += array.data.at(i);
         }
         return (*this);
     }
@@ -320,7 +330,7 @@ namespace mtk
     {
         for (size_t i = 0; i < data.size(); i++)
         {
-            data.at(i) += k;
+            _data.at(i) += k;
         }
         return (*this);
     }
@@ -335,7 +345,7 @@ namespace mtk
         }
         for (size_t i = 0; i < data.size(); i++)
         {
-            data[i] -= array.data[i];
+            _data[i] -= array.data[i];
         }
         return (*this);
     }
@@ -345,7 +355,7 @@ namespace mtk
     {
         for (size_t i = 0; i < data.size(); i++)
         {
-            data[i] -= k;
+            _data[i] -= k;
         }
         return (*this);
     }
@@ -360,7 +370,7 @@ namespace mtk
         }
         for (size_t i = 0; i < data.size(); i++)
         {
-            data[i] *= array.data[i];
+            _data[i] *= array.data[i];
         }
         return (*this);
     }
@@ -370,7 +380,7 @@ namespace mtk
     {
         for (size_t i = 0; i < data.size(); i++)
         {
-            data[i] *= k;
+            _data[i] *= k;
         }
         return (*this);
     }
@@ -385,7 +395,7 @@ namespace mtk
         }
         for (size_t i = 0; i < data.size(); i++)
         {
-            data[i] /= array.data[i];
+            _data[i] /= array.data[i];
         }
         return (*this);
     }
@@ -395,7 +405,7 @@ namespace mtk
     {
         for (size_t i = 0; i < data.size(); i++)
         {
-            data[i] /= k;
+            _data[i] /= k;
         }
         return (*this);
     }

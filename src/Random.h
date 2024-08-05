@@ -14,8 +14,11 @@ namespace mtk
 
     class Random
     {
+    private:
+        std::default_random_engine _random_engine;
+
     public:
-        std::default_random_engine random_engine;
+        const std::default_random_engine &random_engine;
 
     public:
         Random();
@@ -52,6 +55,8 @@ namespace mtk
                                           const Real &epsilon = std::numeric_limits<float>::epsilon(),
                                           const Real &delta = std::numeric_limits<float>::epsilon(),
                                           const size_t &max_loop_num = std::numeric_limits<short>::max());
+
+        Random &operator=(const Random &random);
     };
 };
 

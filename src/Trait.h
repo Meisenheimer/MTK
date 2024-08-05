@@ -19,6 +19,8 @@ namespace mtk
     class Trait
     {
     public:
+        Trait() = delete;
+
         static constexpr Type zero(const Type &x = 0);
         static constexpr Type identity(const Type &x = 1);
         static constexpr Type basis(const size_t &n = 0);
@@ -31,6 +33,8 @@ namespace mtk
     class Trait<Matrix<Real>>
     {
     public:
+        Trait() = delete;
+
         static const Matrix<Real> zero(const Matrix<Real> &x);
         static const Matrix<Real> identity(const Matrix<Real> &x);
         static const Matrix<Real> make(const std::vector<std::vector<Real>> &m);
@@ -40,6 +44,8 @@ namespace mtk
     class Trait<Vector<Real>>
     {
     public:
+        Trait() = delete;
+
         static const Vector<Real> zero(const Vector<Real> &x);
         static const Vector<Real> identity(const Vector<Real> &x);
         static const Vector<Real> make(const std::vector<Real> &v);

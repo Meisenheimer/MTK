@@ -5,19 +5,9 @@
 
 namespace mtk
 {
-    inline IVP::IVP() : f(_f), res(_res)
-    {
-    }
+    inline IVP::IVP() : f(_f), res(_res), opt(_opt) {}
 
-    inline Optimizer<Real> &IVP::opt()
-    {
-        return this->_opt;
-    }
-
-    inline const Optimizer<Real> &IVP::opt() const
-    {
-        return this->_opt;
-    }
+    inline IVP::IVP(const IVP &ivp) : f(_f), res(_res), opt(_opt), _f(ivp.f), _res(ivp.res), _opt(ivp.opt) {}
 
     inline void IVP::setRHS(const std::function<const Vector<Real>(const Vector<Real> &, const Real &)> &f)
     {
@@ -60,25 +50,40 @@ namespace mtk
         return (k * l.first + ((Real)1.0 - k) * r.first);
     }
 
+    inline IVP &IVP::operator=(const IVP &ivp)
+    {
+        if (this != &ivp)
+        {
+            this->_f = ivp.f;
+            this->_res = ivp.res;
+            this->_opt = ivp.opt;
+        }
+        return (*this);
+    }
+
+    inline LMM::LMM() : IVP(), alpha(_alpha), beta(_beta) {}
+
+    inline LMM::LMM(const LMM &lmm) : IVP(lmm), alpha(_alpha), beta(_beta), _alpha(lmm.alpha), _beta(lmm.beta) {}
+
     inline void LMM::setMethod(const size_t &name)
     {
         switch (name)
         {
-        case Method::ForwardEuler:
-            alpha = {0.0, 1.0};
-            beta = {0.0, 1.0};
+        case ForwardEuler:
+            _alpha = {0.0, 1.0};
+            _beta = {0.0, 1.0};
             break;
-        case Method::BackwardEuler:
-            alpha = {0.0, 1.0};
-            beta = {1.0};
+        case BackwardEuler:
+            _alpha = {0.0, 1.0};
+            _beta = {1.0};
             break;
-        case Method::Trapezoidal:
-            alpha = {0.0, 1.0};
-            beta = {0.5, 0.5};
+        case Trapezoidal:
+            _alpha = {0.0, 1.0};
+            _beta = {0.5, 0.5};
             break;
-        case Method::Midpoint:
-            alpha = {0.0, 0.0, 1.0};
-            beta = {0.0, 2.0};
+        case Midpoint:
+            _alpha = {0.0, 0.0, 1.0};
+            _beta = {0.0, 2.0};
             break;
         default:
             break;
@@ -88,8 +93,8 @@ namespace mtk
 
     inline void LMM::setMethod(const std::vector<Real> &alpha, const std::vector<Real> &beta)
     {
-        this->alpha = alpha;
-        this->beta = beta;
+        this->_alpha = alpha;
+        this->_beta = beta;
         return;
     }
 
@@ -112,7 +117,7 @@ namespace mtk
         while (t < end)
         {
             std::function<const Real(const Vector<Real> &)> F =
-                [&res = res, &k, &t, &alpha = alpha, &beta = beta, &f = f](const Vector<Real> &u) -> Real
+                [&res = res, &k, &t, &alpha = _alpha, &beta = _beta, &f = f](const Vector<Real> &u) -> Real
             {
                 size_t n = res.size();
                 Vector<Real> e = u;
@@ -134,24 +139,41 @@ namespace mtk
         return;
     }
 
+    inline LMM &LMM::operator=(const LMM &lmm)
+    {
+        if (this != &lmm)
+        {
+            this->_f = lmm.f;
+            this->_res = lmm.res;
+            this->_opt = lmm.opt;
+            this->_alpha = lmm.alpha;
+            this->_beta = lmm.beta;
+        }
+        return (*this);
+    }
+
+    inline RK::RK() : IVP(), a(_a), b(_b), c(_c) {}
+
+    inline RK::RK(const RK &rk) : IVP(rk), a(_a), b(_b), c(_c), _a(rk.a), _b(rk.b), _c(rk.c) {}
+
     inline void RK::setMethod(const size_t &name)
     {
         switch (name)
         {
-        case Method::HeunThirdOrder:
-            a = Trait<Matrix<Real>>::make({{0, 0, 0},
-                                           {1.0 / 3.0, 0.0, 0.0},
-                                           {0.0, 2.0 / 3.0, 0.0}});
-            b = Trait<Vector<Real>>::make({1.0 / 4.0, 0.0, 3.0 / 4.0});
-            c = Trait<Vector<Real>>::make({0.0, 1.0 / 3.0, 2.0 / 3.0});
+        case HeunThirdOrder:
+            _a = Trait<Matrix<Real>>::make({{0, 0, 0},
+                                            {1.0 / 3.0, 0.0, 0.0},
+                                            {0.0, 2.0 / 3.0, 0.0}});
+            _b = Trait<Vector<Real>>::make({1.0 / 4.0, 0.0, 3.0 / 4.0});
+            _c = Trait<Vector<Real>>::make({0.0, 1.0 / 3.0, 2.0 / 3.0});
             break;
-        case Method::ClassicalFourthOrder:
-            a = Trait<Matrix<Real>>::make({{0.0, 0.0, 0.0, 0.0},
-                                           {0.5, 0.0, 0.0, 0.0},
-                                           {0.0, 0.5, 0.0, 0.0},
-                                           {0.0, 0.0, 1.0, 0.0}});
-            b = Trait<Vector<Real>>::make({1.0 / 6.0, 1.0 / 3.0, 1.0 / 3.0, 1.0 / 6.0});
-            c = Trait<Vector<Real>>::make({0.0, 1.0 / 2.0, 1.0 / 2.0, 1.0});
+        case ClassicalFourthOrder:
+            _a = Trait<Matrix<Real>>::make({{0.0, 0.0, 0.0, 0.0},
+                                            {0.5, 0.0, 0.0, 0.0},
+                                            {0.0, 0.5, 0.0, 0.0},
+                                            {0.0, 0.0, 1.0, 0.0}});
+            _b = Trait<Vector<Real>>::make({1.0 / 6.0, 1.0 / 3.0, 1.0 / 3.0, 1.0 / 6.0});
+            _c = Trait<Vector<Real>>::make({0.0, 1.0 / 2.0, 1.0 / 2.0, 1.0});
             break;
         default:
             break;
@@ -161,9 +183,9 @@ namespace mtk
 
     inline void RK::setMethod(const Matrix<Real> &a, const Vector<Real> &b, const Vector<Real> &c)
     {
-        this->a = a;
-        this->b = b;
-        this->c = c;
+        this->_a = a;
+        this->_b = b;
+        this->_c = c;
         return;
     }
 
@@ -183,14 +205,14 @@ namespace mtk
                 exit(0);
             }
         }
-        const size_t n = b.rows();
+        const size_t n = _b.rows();
         const size_t m = res.back().first.rows();
         while (t < end)
         {
             Vector<Real> u = Vector<Real>::Zero((n + 1) * m);
             u.tail(m) = res.back().first;
             std::function<const Real(const Vector<Real> &)> F =
-                [&v = res.back().first, &t, &a = a, &b = b, &c = c, &f = f, &k, &n, &m](const Vector<Real> &u) -> Real
+                [&v = res.back().first, &t, &a = _a, &b = _b, &c = _c, &f = f, &k, &n, &m](const Vector<Real> &u) -> Real
             {
                 Real error = 0.0;
                 Vector<Real> y = u.tail(m);
@@ -217,6 +239,20 @@ namespace mtk
             t += k;
         }
         return;
+    }
+
+    inline RK &RK::operator=(const RK &rk)
+    {
+        if (this != &rk)
+        {
+            this->_f = rk.f;
+            this->_res = rk.res;
+            this->_opt = rk.opt;
+            this->_a = rk.a;
+            this->_b = rk.b;
+            this->_c = rk.c;
+        }
+        return (*this);
     }
 };
 

@@ -138,9 +138,9 @@ namespace mtk
         return (*this);
     }
 
-    inline GaussianIntegrator::GaussianIntegrator(const OrthogonalPolynomial &op)
+    inline GaussianIntegrator::GaussianIntegrator(const OrthogonalPolynomial &op) : range(_range), coefs(_coefs)
     {
-        range = op.range;
+        _range = op.range;
         std::vector<Real> root = op.poly.back().root();
         const size_t n = root.size();
         Matrix<Real> A = Matrix<Real>::Zero(n, n);
@@ -156,19 +156,35 @@ namespace mtk
         Vector<Real> x = A.fullPivHouseholderQr().solve(b);
         for (size_t i = 0; i < n; i++)
         {
-            coefs.push_back(std::make_pair(x(i), root[i]));
+            _coefs.push_back(std::make_pair(x(i), root[i]));
         }
+    }
+
+    inline GaussianIntegrator::GaussianIntegrator(const GaussianIntegrator &integrator) : range(_range), coefs(_coefs)
+    {
+        _range = integrator.range;
+        _coefs = integrator.coefs;
     }
 
     template <typename ResType>
     inline const ResType GaussianIntegrator::operator()(const std::function<const ResType(const Real &)> &f) const
     {
         ResType res = Trait<ResType>::zero();
-        for (size_t i = 0; i < coefs.size(); i++)
+        for (size_t i = 0; i < _coefs.size(); i++)
         {
-            res += (coefs[i].first * f(coefs[i].second));
+            res += (_coefs[i].first * f(_coefs[i].second));
         }
         return res;
+    }
+
+    inline GaussianIntegrator &GaussianIntegrator::operator=(const GaussianIntegrator &integrator)
+    {
+        if (this != &integrator)
+        {
+            _range = integrator.range;
+            _coefs = integrator.coefs;
+        }
+        return (*this);
     }
 };
 

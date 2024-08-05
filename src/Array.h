@@ -53,10 +53,11 @@ namespace mtk
         static_assert(std::is_floating_point_v<Type> || std::is_integral_v<Type>);
 
     private:
-        std::vector<Type> data;
+        std::vector<Type> _data;
         std::vector<size_t> _shape;
 
     public:
+        const std::vector<Type> &data;
         const std::vector<size_t> &shape;
 
     public:

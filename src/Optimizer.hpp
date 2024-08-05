@@ -316,6 +316,9 @@ namespace mtk
         this->_trivial_step = opt.trivial_step;
         this->_line_search = opt.line_search;
         this->_method = opt.method;
+        this->_f = opt.f;
+        this->_g = opt.g;
+        this->_G = opt.G;
     }
 
     template <typename Real>
@@ -467,6 +470,25 @@ namespace mtk
         }
         printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
         exit(0);
+    }
+
+    template <typename Real>
+    inline Optimizer<Real> &Optimizer<Real>::operator=(const Optimizer<Real> &opt)
+    {
+        if (this != &opt)
+        {
+            this->_max_loop_num = opt.max_loop_num;
+            this->_epsilon = opt.epsilon;
+            this->_step = opt.step;
+            this->_delta = opt.delta;
+            this->_trivial_step = opt.trivial_step;
+            this->_line_search = opt.line_search;
+            this->_method = opt.method;
+            this->_f = opt.f;
+            this->_g = opt.g;
+            this->_G = opt.G;
+        }
+        return (*this);
     }
 };
 

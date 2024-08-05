@@ -7,24 +7,21 @@
 
 namespace mtk
 {
-    inline Random::Random()
+    inline Random::Random() : random_engine(_random_engine)
     {
         this->seed((size_t)std::chrono::system_clock::now().time_since_epoch().count());
     }
 
-    inline Random::Random(const size_t &seed)
+    inline Random::Random(const size_t &seed) : random_engine(_random_engine)
     {
         this->seed(seed);
     }
 
-    inline Random::Random(const Random &random)
-    {
-        random_engine = random.random_engine;
-    }
+    inline Random::Random(const Random &random) : random_engine(_random_engine), _random_engine(random.random_engine) {}
 
     inline void Random::seed(const size_t &seed)
     {
-        random_engine.seed((size_t)seed);
+        _random_engine.seed((size_t)seed);
     }
 
     template <typename Type>
@@ -33,48 +30,48 @@ namespace mtk
         static_assert(std::is_integral_v<Type> || std::is_floating_point_v<Type>);
         if constexpr (std::is_integral_v<Type>)
         {
-            return std::uniform_int_distribution<Type>(min, max)(random_engine);
+            return std::uniform_int_distribution<Type>(min, max)(_random_engine);
         }
         if constexpr (std::is_floating_point_v<Type>)
         {
-            return std::uniform_real_distribution<Type>(min, max)(random_engine);
+            return std::uniform_real_distribution<Type>(min, max)(_random_engine);
         }
     }
 
     template <typename Real>
     inline const Real Random::normal(const Real &expectation, const Real &variance)
     {
-        return std::normal_distribution<Real>(expectation, variance)(random_engine);
+        return std::normal_distribution<Real>(expectation, variance)(_random_engine);
     }
 
     template <typename Real>
     inline const bool Random::bernoulli(const Real &p)
     {
-        return std::bernoulli_distribution((double)p)(random_engine);
+        return std::bernoulli_distribution((double)p)(_random_engine);
     }
 
     template <typename Real>
     inline const size_t Random::binomial(const size_t &n, const Real &p)
     {
-        return std::binomial_distribution<size_t>(n, (double)p)(random_engine);
+        return std::binomial_distribution<size_t>(n, (double)p)(_random_engine);
     }
 
     template <typename Real>
     inline const size_t Random::geometric(const Real &p)
     {
-        return std::geometric_distribution<size_t>((double)p)(random_engine);
+        return std::geometric_distribution<size_t>((double)p)(_random_engine);
     }
 
     template <typename Real>
     inline const Real Random::exponential(const Real &lambda)
     {
-        return std::exponential_distribution<Real>(lambda)(random_engine);
+        return std::exponential_distribution<Real>(lambda)(_random_engine);
     }
 
     template <typename Real>
     inline const size_t Random::poisson(const Real &lambda)
     {
-        return std::poisson_distribution<size_t>((double)lambda)(random_engine);
+        return std::poisson_distribution<size_t>((double)lambda)(_random_engine);
     }
 
     template <typename OutputType, typename Real>
@@ -164,6 +161,15 @@ namespace mtk
             exit(0);
         }
         return m;
+    }
+
+    inline Random &Random::operator=(const Random &random)
+    {
+        if (this != &random)
+        {
+            this->_random_engine = random.random_engine;
+        }
+        return (*this);
     }
 };
 

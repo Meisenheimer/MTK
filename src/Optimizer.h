@@ -87,6 +87,8 @@ namespace mtk
 
         const Vector<Real> lineSearch(const Vector<Real> &x, const Vector<Real> &p) const;
         const Vector<Real> solve(const Vector<Real> &x);
+
+        Optimizer &operator=(const Optimizer &opt);
     };
 };
 
