@@ -28,7 +28,7 @@ namespace mtk
         virtual ~AbstractLayer();
 
         virtual void load(std::istream &stream) = 0;
-        virtual Array<Real> operator()(const Array<Real> &x) const = 0;
+        virtual const Array<Real> operator()(const Array<Real> &x) const = 0;
     };
 
     class Activation : public AbstractLayer
@@ -52,13 +52,13 @@ namespace mtk
     public:
         LeakyReLU(const Real &negative_slope = Trait<Real>::zero());
 
-        virtual Array<Real> operator()(const Array<Real> &t) const override;
+        virtual const Array<Real> operator()(const Array<Real> &t) const override;
     };
 
     class Sigmoid : public Activation
     {
     public:
-        virtual Array<Real> operator()(const Array<Real> &t) const override;
+        virtual const Array<Real> operator()(const Array<Real> &t) const override;
     };
 
     class Linear : public Layer
@@ -79,7 +79,7 @@ namespace mtk
 
         virtual void load(std::istream &stream) override;
 
-        virtual Array<Real> operator()(const Array<Real> &t) const override;
+        virtual const Array<Real> operator()(const Array<Real> &t) const override;
     };
 
     class NeuralNetwork
@@ -94,7 +94,7 @@ namespace mtk
         void load(const std::string &filename);
         void push_back(AbstractLayer *p);
 
-        Array<Real> operator()(const Array<Real> &x) const;
+        const Array<Real> operator()(const Array<Real> &x) const;
     };
 };
 

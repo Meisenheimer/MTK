@@ -155,8 +155,8 @@ namespace mtk
 
     template <typename Type>
     template <typename... IndexTypes>
-    inline Array<Type>::Array(size_t firstIndex, IndexTypes... otherIndices)
-        : Array(std::vector<size_t>({firstIndex, otherIndices...})) {}
+    inline Array<Type>::Array(const size_t &firstIndex, const IndexTypes &...otherIndices)
+        : Array(std::vector<size_t>({(size_t)firstIndex, (size_t)otherIndices...})) {}
 
     template <typename Type>
     inline Array<Type>::Array(const Array &array) : Array(array.shape)
@@ -175,7 +175,7 @@ namespace mtk
     }
 
     template <typename Type>
-    inline size_t Array<Type>::size() const
+    inline const size_t Array<Type>::size() const
     {
         size_t s = 1;
         for (size_t i = 0; i < shape.size(); i++)
@@ -204,9 +204,9 @@ namespace mtk
 
     template <typename Type>
     template <typename... IndexTypes>
-    inline void Array<Type>::reshape(size_t firstIndex, IndexTypes... otherIndices)
+    inline void Array<Type>::reshape(const size_t &firstIndex, const IndexTypes &...otherIndices)
     {
-        reshape(std::vector<size_t>({firstIndex, otherIndices...}));
+        reshape(std::vector<size_t>({(size_t)firstIndex, (size_t)otherIndices...}));
         return;
     }
 
@@ -252,14 +252,14 @@ namespace mtk
 
     template <typename Type>
     template <typename... IndexTypes>
-    inline const Type &Array<Type>::operator()(size_t firstIndex, IndexTypes... otherIndices) const
+    inline const Type &Array<Type>::operator()(const size_t &firstIndex, const IndexTypes &...otherIndices) const
     {
         if (sizeof...(otherIndices) + 1 != shape.size())
         {
             printf("Error At: %s %d.\n", __FILE__, __LINE__);
             exit(0);
         }
-        return this->operator()(std::vector<size_t>({firstIndex, otherIndices...}));
+        return this->operator()(std::vector<size_t>({(size_t)firstIndex, (size_t)otherIndices...}));
     }
 
     template <typename Type>
@@ -282,14 +282,14 @@ namespace mtk
 
     template <typename Type>
     template <typename... IndexTypes>
-    inline Type &Array<Type>::operator()(size_t firstIndex, IndexTypes... otherIndices)
+    inline Type &Array<Type>::operator()(const size_t &firstIndex, const IndexTypes &...otherIndices)
     {
         if (sizeof...(otherIndices) + 1 != shape.size())
         {
             printf("Error At: %s %d.\n", __FILE__, __LINE__);
             exit(0);
         }
-        return this->operator()(std::vector<size_t>({firstIndex, otherIndices...}));
+        return this->operator()(std::vector<size_t>({(size_t)firstIndex, (size_t)otherIndices...}));
     }
 
     template <typename Type>

@@ -20,7 +20,7 @@ namespace mtk
         this->negative_slope = negative_slope;
     }
 
-    inline Array<Real> LeakyReLU::operator()(const Array<Real> &t) const
+    inline const Array<Real> LeakyReLU::operator()(const Array<Real> &t) const
     {
         Array<Real> res(t);
         for (Int i = 0; i < res.size(); i++)
@@ -30,7 +30,7 @@ namespace mtk
         return res;
     }
 
-    inline Array<Real> Sigmoid::operator()(const Array<Real> &t) const
+    inline const Array<Real> Sigmoid::operator()(const Array<Real> &t) const
     {
         Array<Real> res(t);
         for (Int i = 0; i < t.size(); i++)
@@ -77,7 +77,7 @@ namespace mtk
         return;
     }
 
-    inline Array<Real> Linear::operator()(const Array<Real> &t) const
+    inline const Array<Real> Linear::operator()(const Array<Real> &t) const
     {
         Int h = A.shape[0];
         Int w = A.shape[1];
@@ -124,7 +124,7 @@ namespace mtk
         return;
     }
 
-    inline Array<Real> NeuralNetwork::operator()(const Array<Real> &x) const
+    inline const Array<Real> NeuralNetwork::operator()(const Array<Real> &x) const
     {
         Array<Real> res = x;
         for (Int i = 0; i < (Int)layer.size(); i++)

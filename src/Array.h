@@ -63,26 +63,26 @@ namespace mtk
         Array();
         Array(const std::vector<size_t> &shape);
         template <typename... IndexTypes>
-        Array(size_t firstIndex, IndexTypes... otherIndices);
+        Array(const size_t &firstIndex, const IndexTypes &...otherIndices);
         Array(const Array &array);
 
         void fill(const Type &value);
 
-        size_t size() const;
+        const size_t size() const;
         void reshape(const std::vector<size_t> &shape);
         template <typename... IndexTypes>
-        void reshape(size_t firstIndex, IndexTypes... otherIndices);
+        void reshape(const size_t &firstIndex, const IndexTypes &...otherIndices);
 
         const Type &operator[](const size_t &index) const;
         Type &operator[](const size_t &index);
 
         const Type &operator()(const std::vector<size_t> &index) const;
         template <typename... IndexTypes>
-        const Type &operator()(size_t firstIndex, IndexTypes... otherIndices) const;
+        const Type &operator()(const size_t &firstIndex, const IndexTypes &...otherIndices) const;
 
         Type &operator()(const std::vector<size_t> &index);
         template <typename... IndexTypes>
-        Type &operator()(size_t firstIndex, IndexTypes... otherIndices);
+        Type &operator()(const size_t &firstIndex, const IndexTypes &...otherIndices);
 
         Array &operator=(const Array &array);
         Array &operator+=(const Array &array);
