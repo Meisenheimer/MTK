@@ -3,6 +3,8 @@
 
 using namespace mtk;
 
+using Real = long double;
+
 constexpr bool PASS = true;
 constexpr bool FAIL = !PASS;
 constexpr Real DELTA = std::numeric_limits<float>::epsilon();

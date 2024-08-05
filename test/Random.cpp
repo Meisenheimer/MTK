@@ -8,9 +8,11 @@
 
 using namespace mtk;
 
+using Real = long double;
+
 constexpr bool PASS = true;
 constexpr bool FAIL = !PASS;
-constexpr double DELTA = std::numeric_limits<float>::epsilon();
+constexpr Real DELTA = std::numeric_limits<float>::epsilon();
 
 int main()
 {

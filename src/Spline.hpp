@@ -7,10 +7,10 @@
 
 namespace mtk
 {
-    inline Spline fitSpline(const Int &degree, const ConditionList &c, const bool &periodic)
+    inline Spline fitSpline(const size_t &degree, const ConditionList &c, const bool &periodic)
     {
         std::vector<Real> factor = {1.0, 1.0};
-        for (Int i = 2; i <= degree; i++)
+        for (size_t i = 2; i <= degree; i++)
         {
             factor.push_back(factor.back() * i);
         }
@@ -37,35 +37,35 @@ namespace mtk
         knot.push_back(m);
         std::sort(knot.begin(), knot.end());
         knot.erase(std::unique(knot.begin(), knot.end()), knot.end());
-        for (Int i = 1; i < knot.size(); i++)
+        for (size_t i = 1; i < knot.size(); i++)
         {
             poly.push_back(Polynomial(degree));
         }
-        const Int N = c.list.size() + (knot.size() - 2) * degree + (periodic ? degree : 0) + smooth.size();
+        const size_t N = c.list.size() + (knot.size() - 2) * degree + (periodic ? degree : 0) + smooth.size();
         Matrix<Real> A = Matrix<Real>::Zero(N, (degree + 1) * poly.size());
         Vector<Real> b = Vector<Real>::Zero(N);
-        Int k = 0, i = 0;
+        size_t k = 0, i = 0;
         for (auto it = c.list.begin(); it != c.list.end(); it++, i++, k++)
         {
             const Real x = it->first;
-            const std::map<Int, Real> y = it->second.y;
-            const Int index = s.find(x);
+            const std::map<size_t, Real> y = it->second.y;
+            const size_t index = s.find(x);
             for (auto jt = y.begin(); jt != y.end(); jt++)
             {
-                Int order = jt->first;
-                for (Int j = order; j <= degree; j++)
+                size_t order = jt->first;
+                for (size_t j = order; j <= degree; j++)
                 {
                     A(k, index * (degree + 1) + j) = factor[j] * std::pow(x, j - order) / factor[j - order];
                 }
                 b(k) = jt->second;
             }
         }
-        for (Int i = 1; i < knot.size() - 1; i++)
+        for (size_t i = 1; i < knot.size() - 1; i++)
         {
             Real x = knot[i];
-            for (Int order = 0; order < degree; order++, k++)
+            for (size_t order = 0; order < degree; order++, k++)
             {
-                for (Int j = order; j <= degree; j++)
+                for (size_t j = order; j <= degree; j++)
                 {
                     A(k, (i - 1) * (degree + 1) + j) = factor[j] * std::pow(x, j - order) / factor[j - order];
                     A(k, i * (degree + 1) + j) = -factor[j] * std::pow(x, j - order) / factor[j - order];
@@ -82,9 +82,9 @@ namespace mtk
         {
             Real x1 = knot.front();
             Real x2 = knot.back();
-            for (Int order = 0; order < degree; order++, k++)
+            for (size_t order = 0; order < degree; order++, k++)
             {
-                for (Int j = order; j <= degree; j++)
+                for (size_t j = order; j <= degree; j++)
                 {
                     A(k, j) = factor[j] * std::pow(x1, j - order) / factor[j - order];
                     A(k, (poly.size() - 1) * (degree + 1) + j) = -factor[j] * std::pow(x2, j - order) / factor[j - order];
@@ -98,9 +98,9 @@ namespace mtk
             }
         }
         Vector<Real> x = A.fullPivHouseholderQr().solve(b);
-        for (Int i = 0; i < poly.size(); i++)
+        for (size_t i = 0; i < poly.size(); i++)
         {
-            for (Int j = 0; j <= degree; j++)
+            for (size_t j = 0; j <= degree; j++)
             {
                 poly[i][j] = x(i * (degree + 1) + j);
             }
@@ -108,10 +108,10 @@ namespace mtk
         return s;
     }
 
-    inline const Int Spline::find(const Real &x) const
+    inline const size_t Spline::find(const Real &x) const
     {
-        const Int n = poly.size();
-        for (Int i = 0; i < n; i++)
+        const size_t n = poly.size();
+        for (size_t i = 0; i < n; i++)
         {
             if ((knot[i]) <= x && x <= knot[i + 1])
             {
@@ -122,7 +122,7 @@ namespace mtk
         exit(0);
     }
 
-    inline Spline::Spline(const Int &degree) : degree(degree), poly(_poly), knot(_knot) {}
+    inline Spline::Spline(const size_t &degree) : degree(degree), poly(_poly), knot(_knot) {}
 
     inline Spline::Spline(const Spline &s) : degree(s.degree), poly(_poly), knot(_knot)
     {
@@ -132,7 +132,7 @@ namespace mtk
 
     inline const Real Spline::operator()(const Real &x) const
     {
-        const Int i = find(x);
+        const size_t i = find(x);
         if (i < 0 || i >= poly.size())
         {
             printf("Error at: file %s line %d.", __FILE__, __LINE__);

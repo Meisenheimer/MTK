@@ -20,7 +20,7 @@ Vector<Real> f(const Vector<Real> &u, const Real &t)
 int main()
 {
     bool flag;
-    Int t;
+    size_t t;
     LMM lmm;
     RK rk;
     lmm.setRHS(f);

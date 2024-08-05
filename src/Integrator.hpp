@@ -128,19 +128,19 @@ namespace mtk
     {
         range = op.range;
         std::vector<Real> root = op.poly.back().root();
-        const Int n = root.size();
+        const size_t n = root.size();
         Matrix<Real> A = Matrix<Real>::Zero(n, n);
         Vector<Real> b = Vector<Real>::Zero(n);
         b(0) = 1.0;
-        for (Int i = 0; i < n; i++)
+        for (size_t i = 0; i < n; i++)
         {
-            for (Int j = 0; j < n; j++)
+            for (size_t j = 0; j < n; j++)
             {
                 A(i, j) = op.poly[i](root[j]);
             }
         }
         Vector<Real> x = A.fullPivHouseholderQr().solve(b);
-        for (Int i = 0; i < n; i++)
+        for (size_t i = 0; i < n; i++)
         {
             coefs.push_back(std::make_pair(x(i), root[i]));
         }
@@ -150,7 +150,7 @@ namespace mtk
     inline const ResType GaussianIntegrator::operator()(const std::function<const ResType(const Real &)> &f) const
     {
         ResType res = Trait<ResType>::zero();
-        for (Int i = 0; i < (Int)coefs.size(); i++)
+        for (size_t i = 0; i < coefs.size(); i++)
         {
             res += (coefs[i].first * f(coefs[i].second));
         }

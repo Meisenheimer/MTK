@@ -33,7 +33,7 @@ namespace mtk
 
     inline const Vector<Real> IVP::operator()(const Real &t) const
     {
-        Int n = res.size();
+        const size_t n = res.size();
         if (n <= 0)
         {
             printf("Error at: file %s line %d.", __FILE__, __LINE__);
@@ -47,7 +47,7 @@ namespace mtk
             exit(0);
         }
         std::pair<Vector<Real>, Real> l = res.front(), r = res.back();
-        for (Int i = 0; i < n; i++)
+        for (size_t i = 0; i < n; i++)
         {
             if (res[i].second <= t && res[i + 1].second >= t)
             {
@@ -60,7 +60,7 @@ namespace mtk
         return (k * l.first + ((Real)1.0 - k) * r.first);
     }
 
-    inline void LMM::setMethod(const Int &name)
+    inline void LMM::setMethod(const size_t &name)
     {
         switch (name)
         {
@@ -101,7 +101,7 @@ namespace mtk
             printf("Error at: file %s line %d.", __FILE__, __LINE__);
             exit(0);
         }
-        for (Int i = 1; i < (Int)res.size(); i++)
+        for (size_t i = 1; i < res.size(); i++)
         {
             if (std::abs(k - (res[i].second - res[i - 1].second) > std::sqrt(Trait<float>::epsilon())))
             {
@@ -114,14 +114,14 @@ namespace mtk
             std::function<const Real(const Vector<Real> &)> F =
                 [&res = res, &k, &t, &alpha = alpha, &beta = beta, &f = f](const Vector<Real> &u) -> Real
             {
-                Int n = res.size();
+                size_t n = res.size();
                 Vector<Real> e = u;
-                for (Int i = 1; i < (Int)alpha.size(); i++)
+                for (size_t i = 1; i < alpha.size(); i++)
                 {
                     e -= (alpha[i] * res[n - i].first);
                 }
                 e -= (k * beta[0] * f(u, t + k));
-                for (Int i = 1; i < (Int)beta.size(); i++)
+                for (size_t i = 1; i < beta.size(); i++)
                 {
                     e -= (k * beta[i] * f(res[n - i].first, res[n - i].second));
                 }
@@ -134,7 +134,7 @@ namespace mtk
         return;
     }
 
-    inline void RK::setMethod(const Int &name)
+    inline void RK::setMethod(const size_t &name)
     {
         switch (name)
         {
@@ -175,7 +175,7 @@ namespace mtk
             printf("Error at: file %s line %d.", __FILE__, __LINE__);
             exit(0);
         }
-        for (Int i = 1; i < (Int)res.size(); i++)
+        for (size_t i = 1; i < res.size(); i++)
         {
             if ((std::abs(k - (res[i].second - res[i - 1].second) > std::sqrt(Trait<float>::epsilon()))))
             {
@@ -183,8 +183,8 @@ namespace mtk
                 exit(0);
             }
         }
-        Int n = b.rows();
-        Int m = res.back().first.rows();
+        const size_t n = b.rows();
+        const size_t m = res.back().first.rows();
         while (t < end)
         {
             Vector<Real> u = Vector<Real>::Zero((n + 1) * m);
@@ -195,15 +195,15 @@ namespace mtk
                 Real error = 0.0;
                 Vector<Real> y = u.tail(m);
                 y -= v;
-                for (Int i = 0; i < n; i++)
+                for (size_t i = 0; i < n; i++)
                 {
                     y -= (k * b(i) * u.segment(i * m, m));
                 }
                 error += y.dot(y);
-                for (Int i = 0; i < n; i++)
+                for (size_t i = 0; i < n; i++)
                 {
                     y = v;
-                    for (Int j = 0; j < n; j++)
+                    for (size_t j = 0; j < n; j++)
                     {
                         y += k * a(i, j) * u.segment(j * m, m);
                     }

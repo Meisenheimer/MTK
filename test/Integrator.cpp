@@ -4,6 +4,8 @@
 
 using namespace mtk;
 
+using Real = long double;
+
 constexpr bool PASS = true;
 constexpr bool FAIL = !PASS;
 constexpr Real DELTA = 1e-4;
@@ -25,9 +27,9 @@ int main()
 {
     Random random;
     bool flag = PASS;
-    int t;
+    size_t t;
     std::vector<Real> res;
-    NewtonCotesIntegrator<long double> nc;
+    NewtonCotesIntegrator<Real> nc;
     nc.setRange(-1, 1);
     nc.setStep(2000000);
 

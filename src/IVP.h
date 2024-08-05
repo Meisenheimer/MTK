@@ -7,7 +7,6 @@ static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
 {
-    using Int = long long int;
     using Real = long double;
 
     class IVP;
@@ -46,10 +45,10 @@ namespace mtk
     public:
         struct Method : IVP::Method
         {
-            static constexpr Int ForwardEuler = 11;
-            static constexpr Int BackwardEuler = 21;
-            static constexpr Int Trapezoidal = 31;
-            static constexpr Int Midpoint = 41;
+            static constexpr size_t ForwardEuler = 11;
+            static constexpr size_t BackwardEuler = 21;
+            static constexpr size_t Trapezoidal = 31;
+            static constexpr size_t Midpoint = 41;
         };
 
     private:
@@ -57,7 +56,7 @@ namespace mtk
         std::vector<Real> beta;
 
     public:
-        void setMethod(const Int &name);
+        void setMethod(const size_t &name);
         void setMethod(const std::vector<Real> &alpha, const std::vector<Real> &beta);
         void solve(const Real &end, const Real &k);
     };
@@ -67,8 +66,8 @@ namespace mtk
     public:
         struct Method : IVP::Method
         {
-            static constexpr Int HeunThirdOrder = 12;
-            static constexpr Int ClassicalFourthOrder = 22;
+            static constexpr size_t HeunThirdOrder = 12;
+            static constexpr size_t ClassicalFourthOrder = 22;
         };
 
     private:
@@ -77,7 +76,7 @@ namespace mtk
         Vector<Real> c;
 
     public:
-        void setMethod(const Int &name);
+        void setMethod(const size_t &name);
         void setMethod(const Matrix<Real> &a, const Vector<Real> &b, const Vector<Real> &c);
         void solve(const Real &end, const Real &k);
     };
