@@ -9,48 +9,34 @@ static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 namespace mtk
 {
     template <typename Real>
-    inline const std::function<const Real(const Real &)> TRIVIAL_WEIGHT = [](const Real &x) -> Real
-    { return Trait<Real>::identity(); };
-
-    template <typename ResType, typename Real>
-    const ResType trapezoidal(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f,
-                              const Int &step = Trait<char>::max());
-    template <typename ResType, typename Real>
-    const ResType midpoint(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f,
-                           const Int &step = Trait<char>::max());
-    template <typename ResType, typename Real>
-    const ResType simpson(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f,
-                          const Int &step = Trait<char>::max());
-
     class NewtonCotesIntegrator;
     class GaussianIntegrator;
 
+    template <typename Real>
     class NewtonCotesIntegrator
     {
     private:
         Real _min;
         Real _max;
         Real _delta;
-        Int _step;
-        std::function<const Real(const Real &)> _weight;
+        size_t _step;
 
     public:
         const Real &min;
         const Real &max;
         const Real &delta;
-        const Int &step;
-        const std::function<const Real(const Real &)> &weight;
+        const size_t &step;
 
     private:
         void check();
 
     public:
         NewtonCotesIntegrator(const Real &min = -Trait<Real>::identity(), const Real &max = Trait<Real>::identity());
+        NewtonCotesIntegrator(const NewtonCotesIntegrator &integrator);
 
         void setRange(const Real &min, const Real &max);
         void setDelta(const Real &delta);
-        void setStep(const Int &step);
-        void setWeight(const std::function<const Real(const Real &)> &weight);
+        void setStep(const size_t &step);
 
         template <typename ResType>
         const ResType trapezoidal(const std::function<const ResType(const Real &)> &f) const;

@@ -27,46 +27,9 @@ int main()
     bool flag = PASS;
     int t;
     std::vector<Real> res;
-    NewtonCotesIntegrator nc;
+    NewtonCotesIntegrator<long double> nc;
     nc.setRange(-1, 1);
     nc.setStep(2000000);
-
-    timer();
-    flag = PASS;
-    if (std::abs(trapezoidal<Real, Real>(-1.0, 1.0, f, 2000000) - (F(1) - F(-1))) > DELTA)
-    {
-        printf("Error at: file %s line %d.", __FILE__, __LINE__);
-        flag = FAIL;
-    }
-    t = timer();
-    if (flag == PASS)
-    {
-        printf("PASS Time: %6d(ms). Integrator::trapezoidal.\n", t);
-    }
-    timer();
-    flag = PASS;
-    if (std::abs(midpoint<Real, Real>(-1.0, 1.0, f, 2000000) - (F(1) - F(-1))) > DELTA)
-    {
-        printf("Error at: file %s line %d.", __FILE__, __LINE__);
-        flag = FAIL;
-    }
-    t = timer();
-    if (flag == PASS)
-    {
-        printf("PASS Time: %6d(ms). Integrator::midpoint.\n", t);
-    }
-    timer();
-    flag = PASS;
-    if (std::abs(simpson<Real, Real>(-1.0, 1.0, f, 2000000) - (F(1) - F(-1))) > DELTA)
-    {
-        printf("Error at: file %s line %d.", __FILE__, __LINE__);
-        flag = FAIL;
-    }
-    t = timer();
-    if (flag == PASS)
-    {
-        printf("PASS Time: %6d(ms). Integrator::simpson.\n", t);
-    }
 
     timer();
     flag = PASS;

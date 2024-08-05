@@ -6,50 +6,8 @@
 
 namespace mtk
 {
-    template <typename ResType, typename Real>
-    const ResType trapezoidal(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f, const Int &step)
-    {
-        const Real k = (max - min) / (Real)step;
-        ResType s = Trait<ResType>::zero();
-        ResType fr = f(min);
-        for (Int i = 1; i <= step; i++)
-        {
-            ResType fl = fr;
-            fr = f(min + i * k);
-            s += k * (fl + fr) / 2.0;
-        }
-        return s;
-    }
-
-    template <typename ResType, typename Real>
-    const ResType midpoint(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f, const Int &step)
-    {
-        const Real k = (max - min) / (Real)step;
-        ResType s = Trait<ResType>::zero();
-        for (Int i = 0; i < step; i++)
-        {
-            s += k * f(min + i * k + k / 2.0);
-        }
-        return s;
-    }
-
-    template <typename ResType, typename Real>
-    const ResType simpson(const Real &min, const Real &max, const std::function<const ResType(const Real &)> &f, const Int &step)
-    {
-        const Real k = (max - min) / step;
-        ResType s = Trait<ResType>::zero();
-        ResType fr = f(min);
-        for (Int i = 1; i <= step; i++)
-        {
-            ResType fl = fr;
-            ResType fm = f(min + i * k - k / 2.0);
-            fr = f(min + i * k);
-            s += k * (fl + 4.0 * fm + fr) / 6.0;
-        }
-        return s;
-    }
-
-    inline void NewtonCotesIntegrator::check()
+    template <typename Real>
+    inline void NewtonCotesIntegrator<Real>::check()
     {
         const Real k = std::abs((max - min) / step);
         if (_delta >= k)
@@ -59,18 +17,28 @@ namespace mtk
         return;
     }
 
-    inline NewtonCotesIntegrator::NewtonCotesIntegrator(const Real &min, const Real &max)
-        : min(_min), max(_max), delta(_delta), step(_step), weight(_weight)
+    template <typename Real>
+    inline NewtonCotesIntegrator<Real>::NewtonCotesIntegrator(const Real &min, const Real &max)
+        : min(_min), max(_max), delta(_delta), step(_step)
     {
         this->_min = min;
         this->_max = max;
         this->_step = Trait<short>::max();
         this->_delta = Trait<float>::epsilon();
-        this->_weight = TRIVIAL_WEIGHT<Real>;
         check();
     }
 
-    inline void NewtonCotesIntegrator::setRange(const Real &min, const Real &max)
+    template <typename Real>
+    inline NewtonCotesIntegrator<Real>::NewtonCotesIntegrator(const NewtonCotesIntegrator<Real> &integrator)
+        : NewtonCotesIntegrator<Real>(integrator.min, integrator.max)
+    {
+        this->_step = integrator.step;
+        this->_delta = integrator.delta;
+        check();
+    }
+
+    template <typename Real>
+    inline void NewtonCotesIntegrator<Real>::setRange(const Real &min, const Real &max)
     {
         this->_min = min;
         this->_max = max;
@@ -78,55 +46,46 @@ namespace mtk
         return;
     }
 
-    inline void NewtonCotesIntegrator::setDelta(const Real &delta)
+    template <typename Real>
+    inline void NewtonCotesIntegrator<Real>::setDelta(const Real &delta)
     {
         this->_delta = std::abs(delta);
         check();
         return;
     }
 
-    inline void NewtonCotesIntegrator::setStep(const Int &step)
+    template <typename Real>
+    inline void NewtonCotesIntegrator<Real>::setStep(const size_t &step)
     {
         this->_step = step;
         check();
         return;
     }
 
-    inline void NewtonCotesIntegrator::setWeight(const std::function<const Real(const Real &)> &weight)
-    {
-        if (weight == nullptr)
-        {
-            this->_weight = TRIVIAL_WEIGHT<Real>;
-        }
-        else
-        {
-            this->_weight = weight;
-        }
-        return;
-    }
-
+    template <typename Real>
     template <typename ResType>
-    inline const ResType NewtonCotesIntegrator::trapezoidal(const std::function<const ResType(const Real &)> &f) const
+    inline const ResType NewtonCotesIntegrator<Real>::trapezoidal(const std::function<const ResType(const Real &)> &f) const
     {
         const Real k = (max - min) / step;
         ResType s = Trait<ResType>::zero();
         Real x = min;
         Real y = min + k;
-        ResType fx = weight(x) * f(x);
-        ResType fy = weight(y) * f(y);
+        ResType fx = f(x);
+        ResType fy = f(y);
         while (std::abs(x - max) >= delta)
         {
             s += k * (fx + fy) / 2.0;
             x = y;
             fx = fy;
             y += k;
-            fy = weight(y) * f(y);
+            fy = f(y);
         }
         return s;
     }
 
+    template <typename Real>
     template <typename ResType>
-    inline const ResType NewtonCotesIntegrator::midpoint(const std::function<const ResType(const Real &)> &f) const
+    inline const ResType NewtonCotesIntegrator<Real>::midpoint(const std::function<const ResType(const Real &)> &f) const
     {
         const Real k = (max - min) / step;
         ResType s = Trait<ResType>::zero();
@@ -134,23 +93,24 @@ namespace mtk
         while (std::abs(x - max) >= delta)
         {
             Real m = x + k / 2.0;
-            s += k * weight(m) * f(m);
+            s += k * f(m);
             x += k;
         }
         return s;
     }
 
+    template <typename Real>
     template <typename ResType>
-    inline const ResType NewtonCotesIntegrator::simpson(const std::function<const ResType(const Real &)> &f) const
+    inline const ResType NewtonCotesIntegrator<Real>::simpson(const std::function<const ResType(const Real &)> &f) const
     {
         const Real k = (max - min) / step;
         ResType s = Trait<ResType>::zero();
         Real x = min;
         Real m = min + k / 2.0;
         Real y = min + k;
-        ResType fx = weight(x) * f(x);
-        ResType fy = weight(y) * f(y);
-        ResType fm = weight(m) * f(m);
+        ResType fx = f(x);
+        ResType fy = f(y);
+        ResType fm = f(m);
         while (std::abs(x - max) >= delta)
         {
             s += k * (fx + 4.0 * fm + fy) / 6.0;
@@ -158,8 +118,8 @@ namespace mtk
             y += k;
             m = x + k / 2.0;
             fx = fy;
-            fm = weight(m) * f(m);
-            fy = weight(y) * f(y);
+            fm = f(m);
+            fy = f(y);
         }
         return s;
     }
