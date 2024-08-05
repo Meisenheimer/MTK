@@ -3,6 +3,8 @@
 
 using namespace mtk;
 
+using Real = long double;
+
 constexpr bool PASS = true;
 constexpr bool FAIL = !PASS;
 constexpr Real DELTA = 1e-4;
@@ -28,25 +30,25 @@ const Matrix<Real> G(const Vector<Real> &x)
     return m;
 }
 
-const std::vector<std::pair<Optimizer::Method, Optimizer::LineSearch>> method =
+const std::vector<std::pair<OptimizeMethod, LineSearch>> method =
     {
-        {Optimizer::Method::GradientDescent, Optimizer::LineSearch::Bisection},
-        {Optimizer::Method::GradientDescent, Optimizer::LineSearch::Fibonacci},
-        {Optimizer::Method::GradientDescent, Optimizer::LineSearch::Newton},
-        {Optimizer::Method::GradientDescent, Optimizer::LineSearch::Trivial},
-        {Optimizer::Method::Newton, Optimizer::LineSearch::Bisection},
-        {Optimizer::Method::Newton, Optimizer::LineSearch::Fibonacci},
-        {Optimizer::Method::Newton, Optimizer::LineSearch::Newton},
-        {Optimizer::Method::Newton, Optimizer::LineSearch::Trivial},
-        {Optimizer::Method::QuasiNewton, Optimizer::LineSearch::Bisection},
-        {Optimizer::Method::QuasiNewton, Optimizer::LineSearch::Fibonacci},
-        {Optimizer::Method::QuasiNewton, Optimizer::LineSearch::Newton},
-        {Optimizer::Method::QuasiNewton, Optimizer::LineSearch::Trivial},
+        {OptimizeMethod::GradientDescent, LineSearch::Bisection},
+        {OptimizeMethod::GradientDescent, LineSearch::Fibonacci},
+        {OptimizeMethod::GradientDescent, LineSearch::Newton},
+        {OptimizeMethod::GradientDescent, LineSearch::Trivial},
+        {OptimizeMethod::Newton, LineSearch::Bisection},
+        {OptimizeMethod::Newton, LineSearch::Fibonacci},
+        {OptimizeMethod::Newton, LineSearch::Newton},
+        {OptimizeMethod::Newton, LineSearch::Trivial},
+        {OptimizeMethod::QuasiNewton, LineSearch::Bisection},
+        {OptimizeMethod::QuasiNewton, LineSearch::Fibonacci},
+        {OptimizeMethod::QuasiNewton, LineSearch::Newton},
+        {OptimizeMethod::QuasiNewton, LineSearch::Trivial},
 };
 
 int main()
 {
-    Int t;
+    size_t t;
     bool flag = PASS;
     Vector<Real> x0(2);
     x0(0) = 1;
@@ -54,17 +56,17 @@ int main()
     Vector<Real> r(2);
     r(0) = -0.5;
     r(1) = -0.25;
-    Optimizer solver;
+    Optimizer<Real> solver;
     solver.setFunction(f, g, G);
     std::vector<Vector<Real>> res;
 
     timer();
-    for (Int i = 0; i < (Int)method.size(); i++)
+    for (size_t i = 0; i < method.size(); i++)
     {
         solver.setMethod(method[i].first, method[i].second);
         if ((solver.solve(x0) - r).lpNorm<2>() > DELTA)
         {
-            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
             flag = FAIL;
         }
     }

@@ -5,7 +5,8 @@
 
 namespace mtk
 {
-    inline const std::pair<Real, Real> Optimizer::advanceAndRetreat(const Vector<Real> &x, const Vector<Real> &p) const
+    template <typename Real>
+    inline const std::pair<Real, Real> Optimizer<Real>::advanceAndRetreat(const Vector<Real> &x, const Vector<Real> &p) const
     {
         const Real t = 2.0;
         Real r = 0.0;
@@ -39,17 +40,19 @@ namespace mtk
         return std::make_pair(l, r);
     }
 
-    inline const Vector<Real> Optimizer::trivial(const Vector<Real> &x, const Vector<Real> &p) const
+    template <typename Real>
+    inline const Vector<Real> Optimizer<Real>::trivial(const Vector<Real> &x, const Vector<Real> &p) const
     {
         return (x + 0.1 * p);
     }
 
-    inline const Vector<Real> Optimizer::goldenSection(const Vector<Real> &x, const Vector<Real> &p) const
+    template <typename Real>
+    inline const Vector<Real> Optimizer<Real>::goldenSection(const Vector<Real> &x, const Vector<Real> &p) const
     {
         const Vector<Real> d = p.normalized();
         const Real rate = (std::sqrt(5.0) - 1.0) / 2.0;
         std::pair<Real, Real> interval = advanceAndRetreat(x, d);
-        Int k = 0;
+        size_t k = 0;
         Real l = interval.first;
         Real r = interval.second;
         Real a = r + rate * (l - r);
@@ -88,18 +91,19 @@ namespace mtk
         }
         if (k == max_loop_num)
         {
-            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
             exit(0);
         }
         return res;
     }
 
-    inline const Vector<Real> Optimizer::fibonacci(const Vector<Real> &x, const Vector<Real> &p) const
+    template <typename Real>
+    inline const Vector<Real> Optimizer<Real>::fibonacci(const Vector<Real> &x, const Vector<Real> &p) const
     {
         const Vector<Real> d = p.normalized();
         Real rate = 0.6;
         std::pair<Real, Real> interval = advanceAndRetreat(x, d);
-        Int k = 0;
+        size_t k = 0;
         Real l = interval.first;
         Real r = interval.second;
         Real a = r + rate * (l - r);
@@ -139,16 +143,17 @@ namespace mtk
         }
         if (k == max_loop_num)
         {
-            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
             exit(0);
         }
         return res;
     }
 
-    inline const Vector<Real> Optimizer::newton(const Vector<Real> &x, const Vector<Real> &p) const
+    template <typename Real>
+    inline const Vector<Real> Optimizer<Real>::newton(const Vector<Real> &x, const Vector<Real> &p) const
     {
         const Vector<Real> d = p.normalized();
-        Int k = 0;
+        size_t k = 0;
         Real t = 0.0;
         Vector<Real> res;
         for (k = 0; k < max_loop_num; k++)
@@ -156,7 +161,7 @@ namespace mtk
             Vector<Real> grad = g(x + t * d);
             Real gt = grad.dot(d);
             Real Gt = (G(x + t * d) * d).dot(d);
-            if (std::abs(gt) < epsilon || grad.lpNorm<2>() < epsilon)
+            if (std::abs(gt) < epsilon || grad.template lpNorm<2>() < epsilon)
             {
                 res = x + t * d;
                 break;
@@ -165,17 +170,18 @@ namespace mtk
         }
         if (k == max_loop_num)
         {
-            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
             exit(0);
         }
         return res;
     }
 
-    inline const Vector<Real> Optimizer::bisection(const Vector<Real> &x, const Vector<Real> &p) const
+    template <typename Real>
+    inline const Vector<Real> Optimizer<Real>::bisection(const Vector<Real> &x, const Vector<Real> &p) const
     {
         const Vector<Real> d = p.normalized();
         std::pair<Real, Real> interval = advanceAndRetreat(x, d);
-        Int k = 0;
+        size_t k = 0;
         Real l = interval.first;
         Real r = interval.second;
         Real m = (l + r) / 2.0;
@@ -203,20 +209,21 @@ namespace mtk
         }
         if (k == max_loop_num)
         {
-            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
             exit(0);
         }
         return res;
     }
 
-    inline const Vector<Real> Optimizer::gradientDescent(const Vector<Real> &x, const LineSearch &line_search) const
+    template <typename Real>
+    inline const Vector<Real> Optimizer<Real>::gradientDescent(const Vector<Real> &x, const LineSearch &line_search) const
     {
-        Int k;
+        size_t k;
         Vector<Real> t = x;
         for (k = 0; k < max_loop_num; k++)
         {
             Vector<Real> grad(g(t));
-            if (grad.lpNorm<2>() <= epsilon)
+            if (grad.template lpNorm<2>() <= epsilon)
             {
                 break;
             }
@@ -224,20 +231,21 @@ namespace mtk
         }
         if (k == max_loop_num)
         {
-            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
             exit(0);
         }
         return t;
     }
 
-    inline const Vector<Real> Optimizer::newton(const Vector<Real> &x, const LineSearch &line_search) const
+    template <typename Real>
+    inline const Vector<Real> Optimizer<Real>::newton(const Vector<Real> &x, const LineSearch &line_search) const
     {
         Vector<Real> t = x;
-        Int k = 0;
+        size_t k = 0;
         for (k = 0; k < max_loop_num; k++)
         {
             Vector<Real> grad(g(t));
-            if (grad.lpNorm<2>() <= epsilon)
+            if (grad.template lpNorm<2>() <= epsilon)
             {
                 break;
             }
@@ -246,23 +254,24 @@ namespace mtk
         }
         if (k == max_loop_num)
         {
-            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
             exit(0);
         }
         return t;
     }
 
-    inline const Vector<Real> Optimizer::quasiNewton(const Vector<Real> &x, const LineSearch &line_search) const
+    template <typename Real>
+    inline const Vector<Real> Optimizer<Real>::quasiNewton(const Vector<Real> &x, const LineSearch &line_search) const
     {
-        const Int n = x.rows();
-        Int k = 0;
+        const size_t n = x.rows();
+        size_t k = 0;
         Vector<Real> t(x);
         Vector<Real> new_grad(g(t));
         Matrix<Real> H(Matrix<Real>::Identity(n, n));
         for (k = 0; k < max_loop_num; k++)
         {
             Vector<Real> grad(new_grad);
-            if (grad.lpNorm<2>() <= epsilon)
+            if (grad.template lpNorm<2>() <= epsilon)
             {
                 break;
             }
@@ -277,15 +286,16 @@ namespace mtk
         }
         if (k == max_loop_num)
         {
-            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
             exit(0);
         }
         return t;
     }
 
-    inline Optimizer::Optimizer() : max_loop_num(_max_loop_num), epsilon(_epsilon), step(_step), delta(_delta),
-                                    trivial_step(_trivial_step), line_search(_line_search), method(_method),
-                                    f(_f), g(_g), G(_G)
+    template <typename Real>
+    inline Optimizer<Real>::Optimizer() : max_loop_num(_max_loop_num), epsilon(_epsilon), step(_step), delta(_delta),
+                                          trivial_step(_trivial_step), line_search(_line_search), method(_method),
+                                          f(_f), g(_g), G(_G)
     {
         this->_max_loop_num = Trait<short>::max();
         this->_epsilon = Trait<float>::epsilon();
@@ -293,42 +303,60 @@ namespace mtk
         this->_delta = Trait<float>::epsilon();
         this->_trivial_step = 1.0 / Trait<char>::max();
         this->_line_search = LineSearch::Fibonacci;
-        this->_method = Method::QuasiNewton;
+        this->_method = OptimizeMethod::QuasiNewton;
     }
 
-    inline void Optimizer::setMaxLoopNum(const Int &max_loop_num)
+    template <typename Real>
+    inline Optimizer<Real>::Optimizer(const Optimizer<Real> &opt) : Optimizer()
+    {
+        this->_max_loop_num = opt.max_loop_num;
+        this->_epsilon = opt.epsilon;
+        this->_step = opt.step;
+        this->_delta = opt.delta;
+        this->_trivial_step = opt.trivial_step;
+        this->_line_search = opt.line_search;
+        this->_method = opt.method;
+    }
+
+    template <typename Real>
+    inline void Optimizer<Real>::setMaxLoopNum(const size_t &max_loop_num)
     {
         this->_max_loop_num = max_loop_num;
         return;
     }
 
-    inline void Optimizer::setEpsilon(const Real &epsilon)
+    template <typename Real>
+    inline void Optimizer<Real>::setEpsilon(const Real &epsilon)
     {
         this->_epsilon = epsilon;
         return;
     }
 
-    inline void Optimizer::setStep(const Real &step)
+    template <typename Real>
+    inline void Optimizer<Real>::setStep(const Real &step)
     {
         this->_step = step;
         return;
     }
 
-    inline void Optimizer::setDelta(const Real &delta)
+    template <typename Real>
+    inline void Optimizer<Real>::setDelta(const Real &delta)
     {
         this->_delta = delta;
         return;
     }
 
-    inline void Optimizer::setTrivialStep(const Real &trivial_step)
+    template <typename Real>
+    inline void Optimizer<Real>::setTrivialStep(const Real &trivial_step)
     {
         this->_trivial_step = trivial_step;
         return;
     }
 
-    inline void Optimizer::setFunction(const std::function<const Real(const Vector<Real> &)> &f,
-                                       const std::function<const Vector<Real>(const Vector<Real> &)> &g,
-                                       const std::function<const Matrix<Real>(const Vector<Real> &)> &G)
+    template <typename Real>
+    inline void Optimizer<Real>::setFunction(const std::function<const Real(const Vector<Real> &)> &f,
+                                             const std::function<const Vector<Real>(const Vector<Real> &)> &g,
+                                             const std::function<const Matrix<Real>(const Vector<Real> &)> &G)
     {
         this->_f = f;
         if (g != nullptr)
@@ -339,10 +367,10 @@ namespace mtk
         {
             this->_g = [&f = this->f, &step = this->step](const Vector<Real> &x) -> Vector<Real>
             {
-                const Int n = x.rows();
+                const size_t n = x.rows();
                 Vector<Real> g(n);
                 Vector<Real> u = x;
-                for (Int i = 0; i < n; i++)
+                for (size_t i = 0; i < n; i++)
                 {
                     u(i) += step;
                     g(i) = f(u);
@@ -362,10 +390,10 @@ namespace mtk
         {
             this->_G = [&g = this->g, &step = this->step](const Vector<Real> &x) -> Matrix<Real>
             {
-                const Int n = x.rows();
+                const size_t n = x.rows();
                 Matrix<Real> G(n, n);
                 Vector<Real> u = x;
-                for (Int i = 0; i < n; i++)
+                for (size_t i = 0; i < n; i++)
                 {
                     u(i) += step;
                     G.col(i) = g(u);
@@ -379,26 +407,30 @@ namespace mtk
         }
     }
 
-    inline void Optimizer::setLineSearch(const LineSearch &line_search)
+    template <typename Real>
+    inline void Optimizer<Real>::setLineSearch(const LineSearch &line_search)
     {
         this->_line_search = line_search;
         return;
     }
 
-    inline void Optimizer::setMethod(const Method &method)
+    template <typename Real>
+    inline void Optimizer<Real>::setMethod(const OptimizeMethod &method)
     {
         this->_method = method;
         return;
     }
 
-    inline void Optimizer::setMethod(const Method &method, const LineSearch &line_search)
+    template <typename Real>
+    inline void Optimizer<Real>::setMethod(const OptimizeMethod &method, const LineSearch &line_search)
     {
         this->_line_search = line_search;
         this->_method = method;
         return;
     }
 
-    inline const Vector<Real> Optimizer::lineSearch(const Vector<Real> &x, const Vector<Real> &p) const
+    template <typename Real>
+    inline const Vector<Real> Optimizer<Real>::lineSearch(const Vector<Real> &x, const Vector<Real> &p) const
     {
         switch (line_search)
         {
@@ -415,24 +447,25 @@ namespace mtk
         default:
             break;
         }
-        printf("Error at: file %s line %d.", __FILE__, __LINE__);
+        printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
         exit(0);
     }
 
-    inline const Vector<Real> Optimizer::solve(const Vector<Real> &x)
+    template <typename Real>
+    inline const Vector<Real> Optimizer<Real>::solve(const Vector<Real> &x)
     {
         switch (method)
         {
-        case Method::GradientDescent:
+        case OptimizeMethod::GradientDescent:
             return gradientDescent(x, line_search);
-        case Method::Newton:
+        case OptimizeMethod::Newton:
             return newton(x, line_search);
-        case Method::QuasiNewton:
+        case OptimizeMethod::QuasiNewton:
             return quasiNewton(x, line_search);
         default:
             break;
         }
-        printf("Error at: file %s line %d.", __FILE__, __LINE__);
+        printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
         exit(0);
     }
 };

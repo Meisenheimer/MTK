@@ -9,51 +9,49 @@ static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
 {
-    using Int = long long int;
-    using Real = long double;
-
+    template <typename Real>
     class Optimizer;
 
+    enum class LineSearch
+    {
+        Trivial,
+        GoldenSection,
+        Fibonacci,
+        Newton,
+        Bisection,
+    };
+
+    enum class OptimizeMethod
+    {
+        GradientDescent,
+        Newton,
+        QuasiNewton,
+    };
+
+    template <typename Real>
     class Optimizer
     {
-    public:
-        enum class LineSearch
-        {
-            Trivial,
-            GoldenSection,
-            Fibonacci,
-            Newton,
-            Bisection,
-        };
-
-        enum class Method
-        {
-            GradientDescent,
-            Newton,
-            QuasiNewton,
-        };
-
     private:
-        Int _max_loop_num;
+        size_t _max_loop_num;
         Real _epsilon;
         Real _step;
         Real _delta;
         Real _trivial_step;
         LineSearch _line_search;
-        Method _method;
+        OptimizeMethod _method;
 
         std::function<const Real(const Vector<Real> &)> _f;
         std::function<const Vector<Real>(const Vector<Real> &)> _g;
         std::function<const Matrix<Real>(const Vector<Real> &)> _G;
 
     public:
-        const Int &max_loop_num;
+        const size_t &max_loop_num;
         const Real &epsilon;
         const Real &step;
         const Real &delta;
         const Real &trivial_step;
         const LineSearch &line_search;
-        const Method &method;
+        const OptimizeMethod &method;
 
         const std::function<const Real(const Vector<Real> &)> &f;
         const std::function<const Vector<Real>(const Vector<Real> &)> &g;
@@ -73,8 +71,9 @@ namespace mtk
 
     public:
         Optimizer();
+        Optimizer(const Optimizer &opt);
 
-        void setMaxLoopNum(const Int &max_loop_num);
+        void setMaxLoopNum(const size_t &max_loop_num);
         void setEpsilon(const Real &epsilon);
         void setStep(const Real &step);
         void setDelta(const Real &delta);
@@ -83,8 +82,8 @@ namespace mtk
                          const std::function<const Vector<Real>(const Vector<Real> &)> &g = nullptr,
                          const std::function<const Matrix<Real>(const Vector<Real> &)> &G = nullptr);
         void setLineSearch(const LineSearch &line_search);
-        void setMethod(const Method &method);
-        void setMethod(const Method &method, const LineSearch &line_search);
+        void setMethod(const OptimizeMethod &method);
+        void setMethod(const OptimizeMethod &method, const LineSearch &line_search);
 
         const Vector<Real> lineSearch(const Vector<Real> &x, const Vector<Real> &p) const;
         const Vector<Real> solve(const Vector<Real> &x);
