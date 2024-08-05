@@ -44,6 +44,8 @@ namespace mtk
         const ResType midpoint(const std::function<const ResType(const Real &)> &f) const;
         template <typename ResType>
         const ResType simpson(const std::function<const ResType(const Real &)> &f) const;
+
+        NewtonCotesIntegrator &operator=(const NewtonCotesIntegrator &integrator);
     };
 
     class GaussianIntegrator

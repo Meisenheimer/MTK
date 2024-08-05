@@ -124,6 +124,20 @@ namespace mtk
         return s;
     }
 
+    template <typename Real>
+    NewtonCotesIntegrator<Real> &NewtonCotesIntegrator<Real>::operator=(const NewtonCotesIntegrator<Real> &integrator)
+    {
+        if (this != &integrator)
+        {
+            this->_min = min;
+            this->_max = max;
+            this->_step = Trait<short>::max();
+            this->_delta = Trait<float>::epsilon();
+            check();
+        }
+        return (*this);
+    }
+
     inline GaussianIntegrator::GaussianIntegrator(const OrthogonalPolynomial &op)
     {
         range = op.range;
