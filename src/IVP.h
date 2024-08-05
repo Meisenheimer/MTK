@@ -22,7 +22,7 @@ namespace mtk
     protected:
         std::function<const Vector<Real>(const Vector<Real> &, const Real &)> _f;
         std::vector<std::pair<Vector<Real>, Real>> _res;
-        Optimizer _opt;
+        Optimizer<Real> _opt;
 
     public:
         const std::function<const Vector<Real>(const Vector<Real> &, const Real &)> &f;
@@ -31,8 +31,8 @@ namespace mtk
     public:
         IVP();
 
-        Optimizer &opt();
-        const Optimizer &opt() const;
+        Optimizer<Real> &opt();
+        const Optimizer<Real> &opt() const;
         void setRHS(const std::function<const Vector<Real>(const Vector<Real> &, const Real &)> &f);
         void setInitValue(const std::vector<std::pair<Vector<Real>, Real>> &init_value);
 

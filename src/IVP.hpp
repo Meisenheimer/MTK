@@ -9,12 +9,12 @@ namespace mtk
     {
     }
 
-    inline Optimizer &IVP::opt()
+    inline Optimizer<Real> &IVP::opt()
     {
         return this->_opt;
     }
 
-    inline const Optimizer &IVP::opt() const
+    inline const Optimizer<Real> &IVP::opt() const
     {
         return this->_opt;
     }
