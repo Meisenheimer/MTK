@@ -13,11 +13,6 @@ namespace mtk
 
     class IVP
     {
-    public:
-        struct Method
-        {
-        };
-
     protected:
         std::function<const Vector<Real>(const Vector<Real> &, const Real &)> _f;
         std::vector<std::pair<Vector<Real>, Real>> _res;
