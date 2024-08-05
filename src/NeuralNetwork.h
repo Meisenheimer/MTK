@@ -8,20 +8,25 @@ static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
 {
-    using Int = long long int;
-    using Real = long double;
-
+    template <typename Real>
     class AbstractLayer;
+    template <typename Real>
     class Activation;
+    template <typename Real>
     class Layer;
 
+    template <typename Real>
     class LeakyReLU;
+    template <typename Real>
     class Sigmoid;
 
+    template <typename Real>
     class Linear;
 
+    template <typename Real>
     class NeuralNetwork;
 
+    template <typename Real>
     class AbstractLayer
     {
     public:
@@ -31,20 +36,23 @@ namespace mtk
         virtual const Array<Real> operator()(const Array<Real> &x) const = 0;
     };
 
-    class Activation : public AbstractLayer
+    template <typename Real>
+    class Activation : public AbstractLayer<Real>
     {
     public:
         virtual ~Activation();
         virtual void load(std::istream &stream) final;
     };
 
-    class Layer : public AbstractLayer
+    template <typename Real>
+    class Layer : public AbstractLayer<Real>
     {
     public:
         virtual ~Layer();
     };
 
-    class LeakyReLU : public Activation
+    template <typename Real>
+    class LeakyReLU : public Activation<Real>
     {
     protected:
         Real negative_slope;
@@ -55,13 +63,15 @@ namespace mtk
         virtual const Array<Real> operator()(const Array<Real> &t) const override;
     };
 
-    class Sigmoid : public Activation
+    template <typename Real>
+    class Sigmoid : public Activation<Real>
     {
     public:
         virtual const Array<Real> operator()(const Array<Real> &t) const override;
     };
 
-    class Linear : public Layer
+    template <typename Real>
+    class Linear : public Layer<Real>
     {
     protected:
         bool bias;
@@ -69,7 +79,7 @@ namespace mtk
         Array<Real> b;
 
     public:
-        Linear(const Int &input, const Int &output, const bool &bias = true);
+        Linear(const size_t &input, const size_t &output, const bool &bias = true);
 
         void setWeight(const Array<Real> &A);
         void setBias(const Array<Real> &b);
@@ -82,17 +92,18 @@ namespace mtk
         virtual const Array<Real> operator()(const Array<Real> &t) const override;
     };
 
+    template <typename Real>
     class NeuralNetwork
     {
     protected:
-        std::vector<AbstractLayer *> layer;
+        std::vector<AbstractLayer<Real> *> layer;
 
     public:
         NeuralNetwork();
         ~NeuralNetwork();
 
         void load(const std::string &filename);
-        void push_back(AbstractLayer *p);
+        void push_back(AbstractLayer<Real> *p);
 
         const Array<Real> operator()(const Array<Real> &x) const;
     };

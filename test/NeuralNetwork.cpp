@@ -3,17 +3,19 @@
 
 using namespace mtk;
 
+using Real = long double;
+
 constexpr bool PASS = true;
 constexpr bool FAIL = !PASS;
 constexpr Real DELTA = 1e-4;
 
 int main()
 {
-    Int t;
+    size_t t;
     bool flag = PASS;
 
-    NeuralNetwork model;
-    model.push_back(new Linear(2, 3));
+    NeuralNetwork<Real> model;
+    model.push_back(new Linear<Real>(2, 3));
     model.load("test/model");
     Array<Real> x(2);
     Array<Real> res(3);

@@ -7,67 +7,80 @@
 
 namespace mtk
 {
-    inline AbstractLayer::~AbstractLayer() {}
+    template <typename Real>
+    inline AbstractLayer<Real>::~AbstractLayer() {}
 
-    inline Activation::~Activation() {}
+    template <typename Real>
+    inline Activation<Real>::~Activation() {}
 
-    inline void Activation::load(std::istream &stream) { return; }
+    template <typename Real>
+    inline void Activation<Real>::load(std::istream &stream) { return; }
 
-    inline Layer::~Layer() {}
+    template <typename Real>
+    inline Layer<Real>::~Layer() {}
 
-    inline LeakyReLU::LeakyReLU(const Real &negative_slope)
+    template <typename Real>
+    inline LeakyReLU<Real>::LeakyReLU(const Real &negative_slope)
     {
         this->negative_slope = negative_slope;
     }
 
-    inline const Array<Real> LeakyReLU::operator()(const Array<Real> &t) const
+    template <typename Real>
+    inline const Array<Real> LeakyReLU<Real>::operator()(const Array<Real> &t) const
     {
         Array<Real> res(t);
-        for (Int i = 0; i < res.size(); i++)
+        for (size_t i = 0; i < res.size(); i++)
         {
             res[i] = res[i] >= Trait<Real>::zero() ? res[i] : negative_slope * res[i];
         }
         return res;
     }
 
-    inline const Array<Real> Sigmoid::operator()(const Array<Real> &t) const
+    template <typename Real>
+    inline const Array<Real> Sigmoid<Real>::operator()(const Array<Real> &t) const
     {
         Array<Real> res(t);
-        for (Int i = 0; i < t.size(); i++)
+        for (size_t i = 0; i < t.size(); i++)
         {
             res[i] = Trait<Real>::identity() / (Trait<Real>::identity() + std::exp(-res[i]));
         }
         return res;
     }
 
-    inline Linear::Linear(const Int &input, const Int &output, const bool &bias) : A(output, input), b(output)
+    template <typename Real>
+    inline Linear<Real>::Linear(const size_t &input, const size_t &output, const bool &bias) : A(output, input), b(output)
     {
         this->bias = bias;
     }
 
-    inline void Linear::setWeight(const Array<Real> &A)
+    template <typename Real>
+    inline void Linear<Real>::setWeight(const Array<Real> &A)
     {
         this->A = A;
         return;
     }
 
-    inline void Linear::setBias(const Array<Real> &b)
+    template <typename Real>
+    inline void Linear<Real>::setBias(const Array<Real> &b)
     {
         this->b = b;
         return;
     }
 
-    inline const Array<Real> Linear::getWeight() const
+    template <typename Real>
+    inline const Array<Real> Linear<Real>::getWeight() const
     {
         return A;
     }
 
-    inline const Array<Real> Linear::getBias() const
+    template <typename Real>
+    inline const Array<Real> Linear<Real>::getBias() const
     {
         return b;
     }
 
-    inline void Linear::load(std::istream &stream)
+    template <typename Real>
+    inline void Linear<Real>::load(std::istream &stream)
     {
         stream >> A;
         if (bias)
@@ -77,15 +90,16 @@ namespace mtk
         return;
     }
 
-    inline const Array<Real> Linear::operator()(const Array<Real> &t) const
+    template <typename Real>
+    inline const Array<Real> Linear<Real>::operator()(const Array<Real> &t) const
     {
-        Int h = A.shape[0];
-        Int w = A.shape[1];
+        size_t h = A.shape[0];
+        size_t w = A.shape[1];
         Array<Real> res(h);
-        for (Int i = 0; i < h; i++)
+        for (size_t i = 0; i < h; i++)
         {
             res(i) = bias ? b(i) : Trait<Real>::zero();
-            for (Int j = 0; j < w; j++)
+            for (size_t j = 0; j < w; j++)
             {
                 res(i) = res(i) + A(i, j) * t(j);
             }
@@ -93,17 +107,20 @@ namespace mtk
         return res;
     }
 
-    inline NeuralNetwork::NeuralNetwork() {}
+    template <typename Real>
+    inline NeuralNetwork<Real>::NeuralNetwork() {}
 
-    inline NeuralNetwork::~NeuralNetwork()
+    template <typename Real>
+    inline NeuralNetwork<Real>::~NeuralNetwork()
     {
-        for (Int i = 0; i < (Int)layer.size(); i++)
+        for (size_t i = 0; i < layer.size(); i++)
         {
             delete layer[i];
         }
     }
 
-    inline void NeuralNetwork::load(const std::string &filename)
+    template <typename Real>
+    inline void NeuralNetwork<Real>::load(const std::string &filename)
     {
         std::ifstream fp(filename, std::ios::in);
         if (!fp.is_open())
@@ -111,23 +128,25 @@ namespace mtk
             printf("Error at: file %s line %d.", __FILE__, __LINE__);
             exit(0);
         }
-        for (Int i = 0; i < (Int)layer.size(); i++)
+        for (size_t i = 0; i < layer.size(); i++)
         {
             layer[i]->load(fp);
         }
         return;
     }
 
-    inline void NeuralNetwork::push_back(AbstractLayer *p)
+    template <typename Real>
+    inline void NeuralNetwork<Real>::push_back(AbstractLayer<Real> *p)
     {
         layer.push_back(p);
         return;
     }
 
-    inline const Array<Real> NeuralNetwork::operator()(const Array<Real> &x) const
+    template <typename Real>
+    inline const Array<Real> NeuralNetwork<Real>::operator()(const Array<Real> &x) const
     {
         Array<Real> res = x;
-        for (Int i = 0; i < (Int)layer.size(); i++)
+        for (size_t i = 0; i < layer.size(); i++)
         {
             res = layer[i]->operator()(res);
         }
