@@ -10,7 +10,7 @@ constexpr Real DELTA = std::numeric_limits<float>::epsilon();
 int main()
 {
     bool flag = PASS;
-    Int t;
+    size_t t;
     timer();
     Polynomial p1({1.0, 2.0, 1.0});
     Polynomial p2({-1.0, 0.0, 1.0});

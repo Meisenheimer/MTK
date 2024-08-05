@@ -7,7 +7,6 @@ static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
 {
-    using Int = long long int;
     using Real = long double;
 
     class ConditionList;
@@ -39,7 +38,7 @@ namespace mtk
 
     const std::vector<Polynomial> fundamentalPolynomial(const std::vector<Real> &x);
     const Polynomial newtonFormula(const std::vector<Real> &x, const std::vector<Real> &y);
-    const Polynomial fitPolynomial(const Int &degree, const ConditionList &cond);
+    const Polynomial fitPolynomial(const size_t &degree, const ConditionList &cond);
     const Polynomial differential(const Polynomial &p);
     const Polynomial integral(const Polynomial &p, const Real &x);
 
@@ -48,14 +47,14 @@ namespace mtk
     public:
         struct Condition
         {
-            std::map<Int, Real> y;
+            std::map<size_t, Real> y;
             bool knot;
             bool smooth;
 
             Condition();
             // Condition(const Condition &c);
             Condition(const bool &is_knot, const bool &is_smooth);
-            Condition(const std::map<Int, Real> &y, const bool &is_knot = true, const bool &is_smooth = false);
+            Condition(const std::map<size_t, Real> &y, const bool &is_knot = true, const bool &is_smooth = false);
         };
 
     private:
@@ -68,7 +67,7 @@ namespace mtk
         ConditionList();
         ConditionList(const std::map<Real, Condition> &init_list);
 
-        void setCondition(const Real &x, const Real &y, const Int &order = 0);
+        void setCondition(const Real &x, const Real &y, const size_t &order = 0);
         void setKnot(const Real &x, const bool &is_knot = true);
         void setSmooth(const Real &x, const bool &is_smooth = true);
 
@@ -79,13 +78,13 @@ namespace mtk
     {
     private:
         std::vector<Real> coefs;
-        Int _degree;
+        size_t _degree;
 
     public:
-        const Int &degree;
+        const size_t &degree;
 
     public:
-        Polynomial(const Int &n = 0);
+        Polynomial(const size_t &n = 0);
         Polynomial(const Polynomial &p);
         Polynomial(const std::vector<Real> &coefs);
 
@@ -111,8 +110,8 @@ namespace mtk
         Polynomial &operator%=(const Polynomial &p);
 
         const Real operator()(const Real &x) const;
-        const Real operator[](const Int &degree) const;
-        Real &operator[](const Int &degree);
+        const Real operator[](const size_t &degree) const;
+        Real &operator[](const size_t &degree);
     };
 
     template <>
@@ -149,7 +148,7 @@ namespace mtk
 
         OrthogonalPolynomial(const Type &type);
 
-        const Polynomial &operator()(const Int &index);
+        const Polynomial &operator()(const size_t &index);
     };
 };
 
