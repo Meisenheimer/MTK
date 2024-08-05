@@ -54,7 +54,7 @@ namespace mtk
         return b;
     }
 
-    inline bool isPrime(const size_t &x)
+    inline const bool isPrime(const size_t &x)
     {
         static Random random;
         if (x == 2)
@@ -126,7 +126,7 @@ namespace mtk
         }
     }
 
-    inline size_t Prime::index(const size_t &x) const
+    inline const size_t Prime::index(const size_t &x) const
     {
         size_t l = 0, r = num.size() - 1;
         while (l <= r)
@@ -148,7 +148,7 @@ namespace mtk
         return -1;
     }
 
-    inline bool Prime::operator()(const size_t &n)
+    inline const bool Prime::operator()(const size_t &n)
     {
         if (n <= max)
         {
@@ -168,7 +168,7 @@ namespace mtk
         return isPrime(n);
     }
 
-    inline std::vector<size_t> Prime::factorization(const size_t &x)
+    inline const std::vector<size_t> Prime::factorization(const size_t &x)
     {
         size_t u = x;
         std::vector<size_t> res;

@@ -15,7 +15,7 @@ namespace mtk
     template <typename Type>
     constexpr Type gcd(const Type &x, const Type &y);
 
-    bool isPrime(const size_t &x);
+    const bool isPrime(const size_t &x);
 
     class Prime
     {
@@ -26,9 +26,9 @@ namespace mtk
     public:
         Prime(const size_t &m);
 
-        size_t index(const size_t &x) const;
-        bool operator()(const size_t &n);
-        std::vector<size_t> factorization(const size_t &x);
+        const size_t index(const size_t &x) const;
+        const bool operator()(const size_t &n);
+        const std::vector<size_t> factorization(const size_t &x);
     };
 };
 
