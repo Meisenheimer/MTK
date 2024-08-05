@@ -90,8 +90,8 @@ namespace mtk
         }
         for (k = 0; k < max_loop_num; k++)
         {
-            res = Random::uniform<size_t>(size_t(0), size_t(p.size() - 1));
-            if (Random::uniform<Real>(Real(0.0), Real(1.0)) <= p.at(res).second)
+            res = uniform<size_t>(size_t(0), size_t(p.size() - 1));
+            if (uniform<Real>(Real(0.0), Real(1.0)) <= p.at(res).second)
             {
                 break;
             }
@@ -111,7 +111,7 @@ namespace mtk
     {
         Real s = 0.0;
         Real x = min;
-        Real y = Random::uniform<Real>(Real(0.0), Real(1.0));
+        Real y = uniform<Real>(Real(0.0), Real(1.0));
         while (x < max)
         {
             s = s + step * (p(x) + p(x + step)) / 2;
@@ -126,7 +126,7 @@ namespace mtk
             printf("Error at: file %s line %d.", __FILE__, __LINE__);
             exit(0);
         }
-        return Random::uniform<Real>(x, x + step);
+        return uniform<Real>(x, x + step);
     }
 
     template <typename Real>
@@ -138,7 +138,7 @@ namespace mtk
         Real l = min;
         Real r = max;
         Real h = (r - l) / 2;
-        Real y = Random::uniform<Real>(Real(0.0), Real(1.0));
+        Real y = uniform<Real>(Real(0.0), Real(1.0));
         Real m = l + h;
         for (k = 0; k < max_loop_num; k++)
         {

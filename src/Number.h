@@ -11,9 +11,9 @@ namespace mtk
     class Prime;
 
     template <typename Type>
-    const Type pow(const Type &x, const size_t &n, const Type &mod);
+    constexpr Type pow(const Type &x, const size_t &n, const Type &mod);
     template <typename Type>
-    const Type gcd(const Type &x, const Type &y);
+    constexpr Type gcd(const Type &x, const Type &y);
 
     bool isPrime(const size_t &x);
 

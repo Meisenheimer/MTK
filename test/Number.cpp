@@ -8,6 +8,8 @@ constexpr bool FAIL = !PASS;
 
 int main()
 {
+    Random random;
+
     size_t t;
     bool flag = PASS;
     Prime p(25);
@@ -17,8 +19,8 @@ int main()
     flag = PASS;
     for (size_t i = 0; i < Trait<unsigned short>::max(); i++)
     {
-        double x = Random::uniform<double>(0, 8);
-        size_t n = Random::uniform<size_t>(0, 8);
+        double x = random.uniform<double>(0, 8);
+        size_t n = random.uniform<size_t>(0, 8);
         if (std::pow(x, n) != pow(x, n))
         {
 
@@ -36,9 +38,9 @@ int main()
     flag = PASS;
     for (size_t i = 0; i < Trait<unsigned short>::max(); i++)
     {
-        size_t x = Random::uniform<size_t>(0, 8);
-        size_t n = Random::uniform<size_t>(0, 8);
-        size_t m = Random::uniform<size_t>(1, 128);
+        size_t x = random.uniform<size_t>(0, 8);
+        size_t n = random.uniform<size_t>(0, 8);
+        size_t m = random.uniform<size_t>(1, 128);
         if (((size_t)std::pow(x, n) % m) != pow(x, n, m))
         {
 
@@ -56,8 +58,8 @@ int main()
     flag = PASS;
     for (size_t i = 0; i < Trait<unsigned short>::max(); i++)
     {
-        size_t x = Random::uniform<size_t>(0, Trait<size_t>::max());
-        size_t y = Random::uniform<size_t>(0, Trait<size_t>::max());
+        size_t x = random.uniform<size_t>(0, Trait<size_t>::max());
+        size_t y = random.uniform<size_t>(0, Trait<size_t>::max());
         if (std::gcd(x, y) != gcd(x, y))
         {
 

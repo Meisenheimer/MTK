@@ -10,7 +10,7 @@
 namespace mtk
 {
     template <typename Type>
-    inline const Type pow(const Type &x, const size_t &n, const Type &mod)
+    inline constexpr Type pow(const Type &x, const size_t &n, const Type &mod)
     {
         size_t m = n;
         Type a = x;
@@ -36,7 +36,7 @@ namespace mtk
     }
 
     template <typename Type>
-    inline const Type gcd(const Type &x, const Type &y)
+    inline constexpr Type gcd(const Type &x, const Type &y)
     {
         if (x == Trait<Type>::zero(x) || Trait<Type>::zero(y))
         {
@@ -56,6 +56,7 @@ namespace mtk
 
     inline bool isPrime(const size_t &x)
     {
+        static Random random;
         if (x == 2)
         {
             return true;
@@ -64,11 +65,10 @@ namespace mtk
         {
             return false;
         }
-        static Random random;
         std::set<size_t> list = {2, 7, 61, 325, 9375, 28178, 450775, 9780504, 1795265022};
         while (list.size() < 20)
         {
-            list.insert(Random::uniform<size_t>(3, INT_MAX));
+            list.insert(random.uniform<size_t>(3, INT_MAX));
         }
         size_t u = x - 1, t = 0;
         while (u % 2 == 0)
