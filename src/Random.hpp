@@ -7,8 +7,20 @@
 
 namespace mtk
 {
-    inline size_t Random::max_loop_num = std::numeric_limits<short>::max();
-    inline std::default_random_engine Random::random_engine((size_t)std::chrono::system_clock::now().time_since_epoch().count());
+    inline Random::Random()
+    {
+        this->seed((size_t)std::chrono::system_clock::now().time_since_epoch().count());
+    }
+
+    inline Random::Random(const size_t &seed)
+    {
+        this->seed(seed);
+    }
+
+    inline Random::Random(const Random &random)
+    {
+        random_engine = random.random_engine;
+    }
 
     inline void Random::seed(const size_t &seed)
     {
@@ -66,7 +78,8 @@ namespace mtk
     }
 
     template <typename OutputType, typename Real>
-    inline const OutputType Random::discreteProbability(const std::vector<std::pair<OutputType, Real>> &p)
+    inline const OutputType Random::discreteProbability(const std::vector<std::pair<OutputType, Real>> &p,
+                                                        const size_t &max_loop_num)
     {
         size_t k = 0;
         size_t res = 0;
@@ -94,7 +107,7 @@ namespace mtk
     template <typename Real>
     inline const Real Random::continuousProbability(const Real &min, const Real &max,
                                                     const std::function<const Real(const Real &)> &p,
-                                                    const Real &step)
+                                                    const Real &step, const size_t &max_loop_num)
     {
         Real s = 0.0;
         Real x = min;
@@ -119,7 +132,7 @@ namespace mtk
     template <typename Real>
     inline const Real Random::continuousDistribution(const Real &min, const Real &max,
                                                      const std::function<const Real(const Real &)> &f,
-                                                     const Real &epsilon, const Real &delta)
+                                                     const Real &epsilon, const Real &delta, const size_t &max_loop_num)
     {
         size_t k = 0;
         Real l = min;
