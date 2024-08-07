@@ -9,25 +9,9 @@ constexpr bool PASS = true;
 constexpr bool FAIL = !PASS;
 constexpr Real DELTA = 1e-4;
 
-const Real f(const Vector<Real> &x)
+const Var<Real> f(const Vector<Var<Real>> &x)
 {
     return x(0) * x(0) + 2 * x(1) * x(1) + x(0) + x(1);
-}
-
-const Vector<Real> g(const Vector<Real> &x)
-{
-    Vector<Real> v(2);
-    v(0) = 2 * x(0) + 1;
-    v(1) = 4 * x(1) + 1;
-    return v;
-}
-
-const Matrix<Real> G(const Vector<Real> &x)
-{
-    Matrix<Real> m = Matrix<Real>::Zero(2, 2);
-    m(0, 0) = 2;
-    m(1, 1) = 4;
-    return m;
 }
 
 const std::vector<std::pair<OptimizeMethod, LineSearch>> method =
@@ -57,7 +41,7 @@ int main()
     r(0) = -0.5;
     r(1) = -0.25;
     Optimizer<Real> solver;
-    solver.setFunction(f, g, G);
+    solver.setFunction(f);
     std::vector<Vector<Real>> res;
 
     timer();

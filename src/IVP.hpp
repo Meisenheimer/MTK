@@ -12,7 +12,7 @@ namespace mtk
     inline IVP<Real>::IVP(const IVP<Real> &ivp) : f(_f), res(_res), opt(_opt), _f(ivp.f), _res(ivp.res), _opt(ivp.opt) {}
 
     template <typename Real>
-    inline void IVP<Real>::setRHS(const std::function<const Vector<Real>(const Vector<Real> &, const Real &)> &f)
+    inline void IVP<Real>::setRHS(const std::function<const Vector<Var<Real>>(const Vector<Var<Real>> &, const Real &)> &f)
     {
         this->_f = f;
         return;
@@ -23,6 +23,12 @@ namespace mtk
     {
         this->_res.assign(init_value.begin(), init_value.end());
         return;
+    }
+
+    template <typename Real>
+    inline Optimizer<Real> &IVP<Real>::getOpt()
+    {
+        return _opt;
     }
 
     template <typename Real>
@@ -128,11 +134,11 @@ namespace mtk
         }
         while (t < end)
         {
-            std::function<const Real(const Vector<Real> &)> F =
-                [&res = this->res, &k, &t, &alpha = alpha, &beta = beta, &f = this->f](const Vector<Real> &u) -> Real
+            std::function<const Var<Real>(const Vector<Var<Real>> &)> F =
+                [&res = this->res, &k, &t, &alpha = alpha, &beta = beta, &f = this->f](const Vector<Var<Real>> &u) -> Var<Real>
             {
                 size_t n = res.size();
-                Vector<Real> e = u;
+                Vector<Var<Real>> e = u;
                 for (size_t i = 1; i < alpha.size(); i++)
                 {
                     e -= (alpha[i] * res[n - i].first);
@@ -230,11 +236,11 @@ namespace mtk
         {
             Vector<Real> u = Vector<Real>::Zero((n + 1) * m);
             u.tail(m) = this->res.back().first;
-            std::function<const Real(const Vector<Real> &)> F =
-                [&v = this->res.back().first, &t, &a = _a, &b = _b, &c = _c, &f = this->f, &k, &n, &m](const Vector<Real> &u) -> Real
+            std::function<const Var<Real>(const Vector<Var<Real>> &)> F =
+                [&v = this->res.back().first, &t, &a = _a, &b = _b, &c = _c, &f = this->f, &k, &n, &m](const Vector<Var<Real>> &u) -> Var<Real>
             {
-                Real error = 0.0;
-                Vector<Real> y = u.tail(m);
+                Var<Real> error = 0.0;
+                Vector<Var<Real>> y = u.tail(m);
                 y -= v;
                 for (size_t i = 0; i < n; i++)
                 {

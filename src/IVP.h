@@ -22,12 +22,12 @@ namespace mtk
     class IVP
     {
     protected:
-        std::function<const Vector<Real>(const Vector<Real> &, const Real &)> _f;
+        std::function<const Vector<Var<Real>>(const Vector<Var<Real>> &, const Real &)> _f;
         std::vector<std::pair<Vector<Real>, Real>> _res;
         Optimizer<Real> _opt;
 
     public:
-        const std::function<const Vector<Real>(const Vector<Real> &, const Real &)> &f;
+        const std::function<const Vector<Var<Real>>(const Vector<Var<Real>> &, const Real &)> &f;
         const std::vector<std::pair<Vector<Real>, Real>> &res;
         const Optimizer<Real> &opt;
 
@@ -35,8 +35,10 @@ namespace mtk
         IVP();
         IVP(const IVP &ivp);
 
-        void setRHS(const std::function<const Vector<Real>(const Vector<Real> &, const Real &)> &f);
+        void setRHS(const std::function<const Vector<Var<Real>>(const Vector<Var<Real>> &, const Real &)> &f);
         void setInitValue(const std::vector<std::pair<Vector<Real>, Real>> &init_value);
+
+        Optimizer<Real> &getOpt();
 
         const Vector<Real> operator()(const Real &t) const;
 

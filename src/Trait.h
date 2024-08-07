@@ -18,7 +18,7 @@ namespace mtk
     template <typename Real>
     using Vector = Eigen::Vector<Real, Eigen::Dynamic>;
     template <typename Real>
-    using Variable = autodiff::Variable<Real>;
+    using Var = autodiff::Variable<Real>;
 
     template <typename Type>
     class Trait
@@ -43,7 +43,6 @@ namespace mtk
         static const Matrix<Real> zero(const Matrix<Real> &x);
         static const Matrix<Real> identity(const Matrix<Real> &x);
         static const Matrix<Real> make(const std::vector<std::vector<Real>> &m);
-        static const Matrix<Variable<Real>> variable(const Matrix<Real> &x);
     };
 
     template <typename Real>
@@ -55,25 +54,24 @@ namespace mtk
         static const Vector<Real> zero(const Vector<Real> &x);
         static const Vector<Real> identity(const Vector<Real> &x);
         static const Vector<Real> make(const std::vector<Real> &v);
-        static const Vector<Variable<Real>> variable(const Vector<Real> &x);
     };
 
     template <typename Real>
-    class Trait<Vector<Variable<Real>>>
+    class Trait<Vector<Var<Real>>>
     {
     public:
         Trait() = delete;
 
-        static const Vector<Real> vector(const Vector<Variable<Real>> &x);
+        static const Vector<Real> vector(const Vector<Var<Real>> &x);
     };
 
     template <typename Real>
-    class Trait<Matrix<Variable<Real>>>
+    class Trait<Matrix<Var<Real>>>
     {
     public:
         Trait() = delete;
 
-        static const Matrix<Real> matrix(const Matrix<Variable<Real>> &x);
+        static const Matrix<Real> matrix(const Matrix<Var<Real>> &x);
     };
 };
 

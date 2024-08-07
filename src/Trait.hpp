@@ -69,20 +69,6 @@ namespace mtk
     }
 
     template <typename Real>
-    inline const Matrix<Variable<Real>> variable(const Matrix<Real> &x)
-    {
-        Matrix<Variable<Real>> res(x.rows(), x.cols());
-        for (size_t i = 0; i < x.rows(); i++)
-        {
-            for (size_t j = 0; j < x.cols(); j++)
-            {
-                res(i, j) = x(i, j);
-            }
-        }
-        return res;
-    }
-
-    template <typename Real>
     inline const Vector<Real> Trait<Vector<Real>>::zero(const Vector<Real> &x)
     {
         return Vector<Real>::Zero(x.rows(), x.cols());
@@ -107,36 +93,25 @@ namespace mtk
     }
 
     template <typename Real>
-    inline const Vector<Variable<Real>> variable(const Vector<Real> &x)
-    {
-        Vector<Variable<Real>> res(x.rows());
-        for (size_t i = 0; i < x.rows(); i++)
-        {
-            res(i) = x(i);
-        }
-        return res;
-    }
-
-    template <typename Real>
-    inline const Vector<Real> vector(const Vector<Variable<Real>> &x)
+    inline const Vector<Real> Trait<Vector<Var<Real>>>::vector(const Vector<Var<Real>> &x)
     {
         Vector<Real> res(x.rows());
         for (size_t i = 0; i < x.rows(); i++)
         {
-            res(i) = x(i);
+            res(i) = Real(x(i));
         }
         return res;
     }
 
     template <typename Real>
-    inline const Matrix<Real> matrix(const Matrix<Variable<Real>> &x)
+    inline const Matrix<Real> Trait<Matrix<Var<Real>>>::matrix(const Matrix<Var<Real>> &x)
     {
         Matrix<Real> res(x.rows(), x.cols());
         for (size_t i = 0; i < x.rows(); i++)
         {
             for (size_t j = 0; j < x.cols(); j++)
             {
-                res(i, j) = x(i, j);
+                res(i, j) = Real(x(i, j));
             }
         }
         return res;

@@ -14,7 +14,7 @@ Vector<Real> u(const Real &t)
     return Vector<Real>::Ones(1) * (-t - 1);
 }
 
-Vector<Real> f(const Vector<Real> &u, const Real &t)
+Vector<Var<Real>> f(const Vector<Var<Real>> &u, const Real &t)
 {
     return u + Vector<Real>::Ones(u.rows()) * t;
 }
@@ -26,7 +26,11 @@ int main()
     LMM<Real> lmm;
     RK<Real> rk;
     lmm.setRHS(f);
+    lmm.getOpt().setLineSearch(LineSearch::Newton);
+    lmm.getOpt().setMethod(OptimizeMethod::Newton);
     rk.setRHS(f);
+    rk.getOpt().setLineSearch(LineSearch::Newton);
+    rk.getOpt().setMethod(OptimizeMethod::Newton);
     std::vector<std::pair<Vector<Real>, Real>> init = {{u(0), 0.0}, {u(0.005), 0.005}};
 
     timer();
