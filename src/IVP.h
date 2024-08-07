@@ -42,6 +42,8 @@ namespace mtk
 
         const Vector<Real> operator()(const Real &t) const;
 
+        virtual bool isExplicit() const = 0;
+        virtual bool isImplicit() const = 0;
         virtual void solve(const Real &end, const Real &k = 0.0) = 0;
 
         IVP &operator=(const IVP &ivp);
@@ -64,7 +66,9 @@ namespace mtk
 
         void setMethod(const size_t &name);
         void setMethod(const std::vector<Real> &alpha, const std::vector<Real> &beta);
-        void solve(const Real &end, const Real &k);
+        bool isExplicit() const override;
+        bool isImplicit() const override;
+        void solve(const Real &end, const Real &k) override;
 
         LMM &operator=(const LMM &lmm);
     };
@@ -88,7 +92,9 @@ namespace mtk
 
         void setMethod(const size_t &name);
         void setMethod(const Matrix<Real> &a, const Vector<Real> &b, const Vector<Real> &c);
-        void solve(const Real &end, const Real &k);
+        bool isExplicit() const override;
+        bool isImplicit() const override;
+        void solve(const Real &end, const Real &k) override;
 
         RK &operator=(const RK &rk);
     };

@@ -116,6 +116,18 @@ namespace mtk
     }
 
     template <typename Real>
+    inline bool LMM<Real>::isExplicit() const
+    {
+        return std::abs(beta.front()) < std::numeric_limits<float>::epsilon();
+    }
+
+    template <typename Real>
+    inline bool LMM<Real>::isImplicit() const
+    {
+        return !isExplicit();
+    }
+
+    template <typename Real>
     inline void LMM<Real>::solve(const Real &end, const Real &k)
     {
         Real t = this->res.back().second;
@@ -132,27 +144,48 @@ namespace mtk
                 exit(0);
             }
         }
-        while (t < end)
+        if (isExplicit())
         {
-            std::function<const Var<Real>(const Vector<Var<Real>> &)> F =
-                [&res = this->res, &k, &t, &alpha = alpha, &beta = beta, &f = this->f](const Vector<Var<Real>> &u) -> Var<Real>
+            while (t < end)
             {
-                size_t n = res.size();
-                Vector<Var<Real>> e = u;
+                const size_t n = this->res.size();
+                Vector<Real> u = Vector<Real>::Zero(this->res.back().first.rows());
                 for (size_t i = 1; i < alpha.size(); i++)
                 {
-                    e -= (alpha[i] * res[n - i].first);
+                    u += (alpha[i] * this->res[n - i].first);
                 }
-                e -= (k * beta[0] * f(u, t + k));
                 for (size_t i = 1; i < beta.size(); i++)
                 {
-                    e -= (k * beta[i] * f(res[n - i].first, res[n - i].second));
+                    u += (k * beta[i] * Trait<Vector<Var<Real>>>::vector(this->f(this->res[n - i].first, this->res[n - i].second)));
                 }
-                return e.dot(e);
-            };
-            this->_opt.setFunction(F);
-            this->_res.push_back(std::make_pair(this->_opt.solve(this->res.back().first), t + k));
-            t += k;
+                this->_res.push_back(std::make_pair(u, t + k));
+                t += k;
+            }
+        }
+        else
+        {
+            while (t < end)
+            {
+                std::function<const Var<Real>(const Vector<Var<Real>> &)> F =
+                    [&res = this->res, &k, &t, &alpha = alpha, &beta = beta, &f = this->f](const Vector<Var<Real>> &u) -> Var<Real>
+                {
+                    const size_t n = res.size();
+                    Vector<Var<Real>> e = u;
+                    for (size_t i = 1; i < alpha.size(); i++)
+                    {
+                        e -= (alpha[i] * res[n - i].first);
+                    }
+                    e -= (k * beta[0] * f(u, t + k));
+                    for (size_t i = 1; i < beta.size(); i++)
+                    {
+                        e -= (k * beta[i] * f(res[n - i].first, res[n - i].second));
+                    }
+                    return e.dot(e);
+                };
+                this->_opt.setFunction(F);
+                this->_res.push_back(std::make_pair(this->_opt.solve(this->res.back().first), t + k));
+                t += k;
+            }
         }
         return;
     }
@@ -214,6 +247,34 @@ namespace mtk
     }
 
     template <typename Real>
+    inline bool RK<Real>::isExplicit() const
+    {
+        if (std::abs(c(0)) > std::numeric_limits<float>::epsilon())
+        {
+            return false;
+        }
+        const size_t n = _b.rows();
+        for (size_t i = 0; i < n; i++)
+        {
+            for (size_t j = i + 1; j < n; j++)
+            {
+                if (std::abs(a(i, j)) > std::numeric_limits<float>::epsilon())
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+        // TODO.
+    }
+
+    template <typename Real>
+    inline bool RK<Real>::isImplicit() const
+    {
+        return !isExplicit();
+    }
+
+    template <typename Real>
     inline void RK<Real>::solve(const Real &end, const Real &k)
     {
         Real t = this->res.back().second;
@@ -232,36 +293,68 @@ namespace mtk
         }
         const size_t n = _b.rows();
         const size_t m = this->res.back().first.rows();
-        while (t < end)
+        if (isExplicit())
         {
-            Vector<Real> u = Vector<Real>::Zero((n + 1) * m);
-            u.tail(m) = this->res.back().first;
-            std::function<const Var<Real>(const Vector<Var<Real>> &)> F =
-                [&v = this->res.back().first, &t, &a = _a, &b = _b, &c = _c, &f = this->f, &k, &n, &m](const Vector<Var<Real>> &u) -> Var<Real>
+            while (t < end)
             {
-                Var<Real> error = 0.0;
-                Vector<Var<Real>> y = u.tail(m);
-                y -= v;
+                Vector<Real> u = Vector<Real>::Zero((n + 1) * m);
+                u.tail(m) = this->res.back().first;
+
+                Vector<Real> y;
                 for (size_t i = 0; i < n; i++)
                 {
-                    y -= (k * b(i) * u.segment(i * m, m));
-                }
-                error += y.dot(y);
-                for (size_t i = 0; i < n; i++)
-                {
-                    y = v;
-                    for (size_t j = 0; j < n; j++)
+                    y = this->res.back().first;
+                    for (size_t j = 0; j < i; j++)
                     {
                         y += k * a(i, j) * u.segment(j * m, m);
                     }
-                    y = f(y, t + c(i) * k) - u.segment(i * m, m);
-                    error += y.dot(y);
+                    u.segment(i * m, m) = Trait<Vector<Var<Real>>>::vector(this->f(y, t + c(i) * k));
                 }
-                return error;
-            };
-            this->_opt.setFunction(F);
-            this->_res.push_back(std::make_pair(this->_opt.solve(u).tail(m), t + k));
-            t += k;
+
+                y = this->res.back().first;
+                for (size_t i = 0; i < n; i++)
+                {
+                    y += (k * b(i) * u.segment(i * m, m));
+                }
+                u.tail(m) = y;
+
+                this->_res.push_back(std::make_pair(u.tail(m), t + k));
+                t += k;
+            }
+        }
+        else
+        {
+            while (t < end)
+            {
+                Vector<Real> u = Vector<Real>::Zero((n + 1) * m);
+                u.tail(m) = this->res.back().first;
+                std::function<const Var<Real>(const Vector<Var<Real>> &)> F =
+                    [&v = this->res.back().first, &t, &a = _a, &b = _b, &c = _c, &f = this->f, &k, &n, &m](const Vector<Var<Real>> &u) -> Var<Real>
+                {
+                    Var<Real> error = 0.0;
+                    Vector<Var<Real>> y = u.tail(m);
+                    y -= v;
+                    for (size_t i = 0; i < n; i++)
+                    {
+                        y -= (k * b(i) * u.segment(i * m, m));
+                    }
+                    error += y.dot(y);
+                    for (size_t i = 0; i < n; i++)
+                    {
+                        y = v;
+                        for (size_t j = 0; j < n; j++)
+                        {
+                            y += k * a(i, j) * u.segment(j * m, m);
+                        }
+                        y = f(y, t + c(i) * k) - u.segment(i * m, m);
+                        error += y.dot(y);
+                    }
+                    return error;
+                };
+                this->_opt.setFunction(F);
+                this->_res.push_back(std::make_pair(this->_opt.solve(u).tail(m), t + k));
+                t += k;
+            }
         }
         return;
     }
