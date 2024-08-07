@@ -7,10 +7,18 @@ static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
 {
-    using Real = long double;
+    constexpr size_t ForwardEuler = 11;
+    constexpr size_t BackwardEuler = 21;
+    constexpr size_t Trapezoidal = 31;
+    constexpr size_t Midpoint = 41;
 
+    constexpr size_t HeunThirdOrder = 12;
+    constexpr size_t ClassicalFourthOrder = 22;
+
+    template <typename Real>
     class IVP;
 
+    template <typename Real>
     class IVP
     {
     protected:
@@ -37,14 +45,9 @@ namespace mtk
         IVP &operator=(const IVP &ivp);
     };
 
-    class LMM : public IVP
+    template <typename Real>
+    class LMM : public IVP<Real>
     {
-    public:
-        static constexpr size_t ForwardEuler = 11;
-        static constexpr size_t BackwardEuler = 21;
-        static constexpr size_t Trapezoidal = 31;
-        static constexpr size_t Midpoint = 41;
-
     private:
         std::vector<Real> _alpha;
         std::vector<Real> _beta;
@@ -64,12 +67,9 @@ namespace mtk
         LMM &operator=(const LMM &lmm);
     };
 
-    class RK : public IVP
+    template <typename Real>
+    class RK : public IVP<Real>
     {
-    public:
-        static constexpr size_t HeunThirdOrder = 12;
-        static constexpr size_t ClassicalFourthOrder = 22;
-
     private:
         Matrix<Real> _a;
         Vector<Real> _b;

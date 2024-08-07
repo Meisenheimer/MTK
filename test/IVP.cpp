@@ -3,6 +3,8 @@
 
 using namespace mtk;
 
+using Real = long double;
+
 constexpr bool PASS = true;
 constexpr bool FAIL = !PASS;
 constexpr Real DELTA = 1e-4;
@@ -21,8 +23,8 @@ int main()
 {
     bool flag;
     size_t t;
-    LMM lmm;
-    RK rk;
+    LMM<Real> lmm;
+    RK<Real> rk;
     lmm.setRHS(f);
     rk.setRHS(f);
     std::vector<std::pair<Vector<Real>, Real>> init = {{u(0), 0.0}, {u(0.005), 0.005}};
@@ -30,7 +32,7 @@ int main()
     timer();
     flag = PASS;
     lmm.setInitValue(init);
-    lmm.setMethod(LMM::ForwardEuler);
+    lmm.setMethod(ForwardEuler);
     lmm.solve(0.5, 0.005);
     if ((lmm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
@@ -45,7 +47,7 @@ int main()
 
     timer();
     lmm.setInitValue(init);
-    lmm.setMethod(LMM::Trapezoidal);
+    lmm.setMethod(Trapezoidal);
     lmm.solve(0.5, 0.005);
     if ((lmm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
@@ -60,7 +62,7 @@ int main()
 
     timer();
     lmm.setInitValue(init);
-    lmm.setMethod(LMM::BackwardEuler);
+    lmm.setMethod(BackwardEuler);
     lmm.solve(0.5, 0.005);
     if ((lmm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
@@ -75,7 +77,7 @@ int main()
 
     timer();
     lmm.setInitValue(init);
-    lmm.setMethod(LMM::Midpoint);
+    lmm.setMethod(Midpoint);
     lmm.solve(0.5, 0.005);
     if ((lmm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
@@ -90,7 +92,7 @@ int main()
 
     timer();
     rk.setInitValue(init);
-    rk.setMethod(RK::HeunThirdOrder);
+    rk.setMethod(HeunThirdOrder);
     rk.solve(0.5, 0.005);
     if ((rk(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
@@ -105,7 +107,7 @@ int main()
 
     timer();
     rk.setInitValue(init);
-    rk.setMethod(RK::ClassicalFourthOrder);
+    rk.setMethod(ClassicalFourthOrder);
     rk.solve(0.5, 0.005);
     if ((rk(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {

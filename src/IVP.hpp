@@ -5,35 +5,40 @@
 
 namespace mtk
 {
-    inline IVP::IVP() : f(_f), res(_res), opt(_opt) {}
+    template <typename Real>
+    inline IVP<Real>::IVP() : f(_f), res(_res), opt(_opt) {}
 
-    inline IVP::IVP(const IVP &ivp) : f(_f), res(_res), opt(_opt), _f(ivp.f), _res(ivp.res), _opt(ivp.opt) {}
+    template <typename Real>
+    inline IVP<Real>::IVP(const IVP<Real> &ivp) : f(_f), res(_res), opt(_opt), _f(ivp.f), _res(ivp.res), _opt(ivp.opt) {}
 
-    inline void IVP::setRHS(const std::function<const Vector<Real>(const Vector<Real> &, const Real &)> &f)
+    template <typename Real>
+    inline void IVP<Real>::setRHS(const std::function<const Vector<Real>(const Vector<Real> &, const Real &)> &f)
     {
         this->_f = f;
         return;
     }
 
-    inline void IVP::setInitValue(const std::vector<std::pair<Vector<Real>, Real>> &init_value)
+    template <typename Real>
+    inline void IVP<Real>::setInitValue(const std::vector<std::pair<Vector<Real>, Real>> &init_value)
     {
         this->_res.assign(init_value.begin(), init_value.end());
         return;
     }
 
-    inline const Vector<Real> IVP::operator()(const Real &t) const
+    template <typename Real>
+    inline const Vector<Real> IVP<Real>::operator()(const Real &t) const
     {
         const size_t n = res.size();
         if (n <= 0)
         {
-            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
             exit(0);
         }
         Real begin = res.front().second;
         Real end = res.back().second;
         if (t < begin || t > end)
         {
-            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
             exit(0);
         }
         std::pair<Vector<Real>, Real> l = res.front(), r = res.back();
@@ -50,7 +55,8 @@ namespace mtk
         return (k * l.first + ((Real)1.0 - k) * r.first);
     }
 
-    inline IVP &IVP::operator=(const IVP &ivp)
+    template <typename Real>
+    inline IVP<Real> &IVP<Real>::operator=(const IVP &ivp)
     {
         if (this != &ivp)
         {
@@ -61,11 +67,14 @@ namespace mtk
         return (*this);
     }
 
-    inline LMM::LMM() : IVP(), alpha(_alpha), beta(_beta) {}
+    template <typename Real>
+    inline LMM<Real>::LMM() : IVP<Real>(), alpha(_alpha), beta(_beta) {}
 
-    inline LMM::LMM(const LMM &lmm) : IVP(lmm), alpha(_alpha), beta(_beta), _alpha(lmm.alpha), _beta(lmm.beta) {}
+    template <typename Real>
+    inline LMM<Real>::LMM(const LMM &lmm) : IVP<Real>(lmm), alpha(_alpha), beta(_beta), _alpha(lmm.alpha), _beta(lmm.beta) {}
 
-    inline void LMM::setMethod(const size_t &name)
+    template <typename Real>
+    inline void LMM<Real>::setMethod(const size_t &name)
     {
         switch (name)
         {
@@ -86,38 +95,41 @@ namespace mtk
             _beta = {0.0, 2.0};
             break;
         default:
-            break;
+            printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
+            exit(0);
         }
         return;
     }
 
-    inline void LMM::setMethod(const std::vector<Real> &alpha, const std::vector<Real> &beta)
+    template <typename Real>
+    inline void LMM<Real>::setMethod(const std::vector<Real> &alpha, const std::vector<Real> &beta)
     {
         this->_alpha = alpha;
         this->_beta = beta;
         return;
     }
 
-    inline void LMM::solve(const Real &end, const Real &k)
+    template <typename Real>
+    inline void LMM<Real>::solve(const Real &end, const Real &k)
     {
-        Real t = res.back().second;
-        if (k <= 0.0 || res.size() <= 0)
+        Real t = this->res.back().second;
+        if (k <= 0.0 || this->res.size() <= 0)
         {
-            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
             exit(0);
         }
-        for (size_t i = 1; i < res.size(); i++)
+        for (size_t i = 1; i < this->res.size(); i++)
         {
-            if (std::abs(k - (res[i].second - res[i - 1].second) > std::sqrt(Trait<float>::epsilon())))
+            if (std::abs(k - (this->res[i].second - this->res[i - 1].second) > std::sqrt(Trait<float>::epsilon())))
             {
-                printf("Error at: file %s line %d.", __FILE__, __LINE__);
+                printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
                 exit(0);
             }
         }
         while (t < end)
         {
             std::function<const Real(const Vector<Real> &)> F =
-                [&res = res, &k, &t, &alpha = _alpha, &beta = _beta, &f = f](const Vector<Real> &u) -> Real
+                [&res = this->res, &k, &t, &alpha = alpha, &beta = beta, &f = this->f](const Vector<Real> &u) -> Real
             {
                 size_t n = res.size();
                 Vector<Real> e = u;
@@ -132,14 +144,15 @@ namespace mtk
                 }
                 return e.dot(e);
             };
-            _opt.setFunction(F);
-            _res.push_back(std::make_pair(_opt.solve(res.back().first), t + k));
+            this->_opt.setFunction(F);
+            this->_res.push_back(std::make_pair(this->_opt.solve(this->res.back().first), t + k));
             t += k;
         }
         return;
     }
 
-    inline LMM &LMM::operator=(const LMM &lmm)
+    template <typename Real>
+    inline LMM<Real> &LMM<Real>::operator=(const LMM &lmm)
     {
         if (this != &lmm)
         {
@@ -152,11 +165,14 @@ namespace mtk
         return (*this);
     }
 
-    inline RK::RK() : IVP(), a(_a), b(_b), c(_c) {}
+    template <typename Real>
+    inline RK<Real>::RK() : IVP<Real>(), a(_a), b(_b), c(_c) {}
 
-    inline RK::RK(const RK &rk) : IVP(rk), a(_a), b(_b), c(_c), _a(rk.a), _b(rk.b), _c(rk.c) {}
+    template <typename Real>
+    inline RK<Real>::RK(const RK &rk) : IVP<Real>(rk), a(_a), b(_b), c(_c), _a(rk.a), _b(rk.b), _c(rk.c) {}
 
-    inline void RK::setMethod(const size_t &name)
+    template <typename Real>
+    inline void RK<Real>::setMethod(const size_t &name)
     {
         switch (name)
         {
@@ -176,12 +192,14 @@ namespace mtk
             _c = Trait<Vector<Real>>::make({0.0, 1.0 / 2.0, 1.0 / 2.0, 1.0});
             break;
         default:
-            break;
+            printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
+            exit(0);
         }
         return;
     }
 
-    inline void RK::setMethod(const Matrix<Real> &a, const Vector<Real> &b, const Vector<Real> &c)
+    template <typename Real>
+    inline void RK<Real>::setMethod(const Matrix<Real> &a, const Vector<Real> &b, const Vector<Real> &c)
     {
         this->_a = a;
         this->_b = b;
@@ -189,30 +207,31 @@ namespace mtk
         return;
     }
 
-    inline void RK::solve(const Real &end, const Real &k)
+    template <typename Real>
+    inline void RK<Real>::solve(const Real &end, const Real &k)
     {
-        Real t = res.back().second;
-        if (k <= 0.0 && res.size() <= 0)
+        Real t = this->res.back().second;
+        if (k <= 0.0 && this->res.size() <= 0)
         {
-            printf("Error at: file %s line %d.", __FILE__, __LINE__);
+            printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
             exit(0);
         }
-        for (size_t i = 1; i < res.size(); i++)
+        for (size_t i = 1; i < this->res.size(); i++)
         {
-            if ((std::abs(k - (res[i].second - res[i - 1].second) > std::sqrt(Trait<float>::epsilon()))))
+            if ((std::abs(k - (this->res[i].second - this->res[i - 1].second) > std::sqrt(Trait<float>::epsilon()))))
             {
-                printf("Error at: file %s line %d.", __FILE__, __LINE__);
+                printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
                 exit(0);
             }
         }
         const size_t n = _b.rows();
-        const size_t m = res.back().first.rows();
+        const size_t m = this->res.back().first.rows();
         while (t < end)
         {
             Vector<Real> u = Vector<Real>::Zero((n + 1) * m);
-            u.tail(m) = res.back().first;
+            u.tail(m) = this->res.back().first;
             std::function<const Real(const Vector<Real> &)> F =
-                [&v = res.back().first, &t, &a = _a, &b = _b, &c = _c, &f = f, &k, &n, &m](const Vector<Real> &u) -> Real
+                [&v = this->res.back().first, &t, &a = _a, &b = _b, &c = _c, &f = this->f, &k, &n, &m](const Vector<Real> &u) -> Real
             {
                 Real error = 0.0;
                 Vector<Real> y = u.tail(m);
@@ -234,14 +253,15 @@ namespace mtk
                 }
                 return error;
             };
-            _opt.setFunction(F);
-            _res.push_back(std::make_pair(_opt.solve(u).tail(m), t + k));
+            this->_opt.setFunction(F);
+            this->_res.push_back(std::make_pair(this->_opt.solve(u).tail(m), t + k));
             t += k;
         }
         return;
     }
 
-    inline RK &RK::operator=(const RK &rk)
+    template <typename Real>
+    inline RK<Real> &RK<Real>::operator=(const RK &rk)
     {
         if (this != &rk)
         {
