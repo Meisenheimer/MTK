@@ -1,0 +1,26 @@
+./Integrator.exe
+PASS Time:   1109(ms). Integrator::NewtonCotesIntegrator.
+./IVP.exe
+PASS Time:      5(ms). IVP::LMM::ForwardEuler.
+PASS Time:      4(ms). IVP::LMM::Trapezoidal.
+PASS Time:      4(ms). IVP::LMM::BackwardEuler.
+PASS Time:      6(ms). IVP::LMM::Midpoint.
+PASS Time:     12(ms). IVP::RK::HeunThirdOrder.
+PASS Time:     19(ms). IVP::RK::ClassicalFourthOrder.
+./Optimizer.exe
+PASS Time:      0(ms). Optimizer.
+./Polynomial.exe
+PASS Time:      0(ms). Optimizer.
+./Number.exe
+PASS Time:      4(ms). Number::pow.
+PASS Time:      3(ms). Number::pow(mod).
+PASS Time:     26(ms). Number::gcd.
+PASS Time:      0(ms). Number::Prime.
+PASS Time:      0(ms). Number::Prime.
+PASS Time:      0(ms). Number::Prime.
+./Random.exe
+PASS Time:      0(ms). Random.
+./Spline.exe
+PASS Time:      0(ms). Optimizer.
+./NeuralNetwork.exe
+PASS Time:      0(ms). NeuralNetwork::NeuralNetwork.
