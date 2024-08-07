@@ -3,6 +3,9 @@
 
 #include <Eigen/Eigen>
 
+#include <autodiff/reverse/var.hpp>
+#include <autodiff/reverse/var/eigen.hpp>
+
 static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
@@ -14,6 +17,8 @@ namespace mtk
     using Matrix = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>;
     template <typename Real>
     using Vector = Eigen::Vector<Real, Eigen::Dynamic>;
+    template <typename Real>
+    using Variable = autodiff::Variable<Real>;
 
     template <typename Type>
     class Trait
