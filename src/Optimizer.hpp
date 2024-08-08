@@ -273,12 +273,13 @@ namespace mtk
         for (k = 0; k < max_loop_num; k++)
         {
             Vector<Var<Real>> tmp = t;
-            Vector<Real> grad = Trait<Vector<Var<Real>>>::vector(gradient(f(tmp), tmp));
+            Vector<Real> grad;
+            Matrix<Real> Grad = Trait<Matrix<Var<Real>>>::matrix(hessian(f(tmp), tmp, grad));
+            // Vector<Real> grad = Trait<Vector<Var<Real>>>::vector(gradient(f(tmp), tmp));
             if (grad.template lpNorm<2>() <= epsilon)
             {
                 break;
             }
-            Matrix<Real> Grad = Trait<Matrix<Var<Real>>>::matrix(hessian(f(tmp), tmp));
             t = lineSearch(t, Grad.fullPivHouseholderQr().solve(-grad));
         }
         if (k == max_loop_num)
