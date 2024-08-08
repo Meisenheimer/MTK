@@ -74,29 +74,29 @@ namespace mtk
     }
 
     template <typename Real>
-    inline LMM<Real>::LMM() : IVP<Real>(), alpha(_alpha), beta(_beta) {}
+    inline LM<Real>::LM() : IVP<Real>(), alpha(_alpha), beta(_beta) {}
 
     template <typename Real>
-    inline LMM<Real>::LMM(const LMM &lmm) : IVP<Real>(lmm), alpha(_alpha), beta(_beta), _alpha(lmm.alpha), _beta(lmm.beta) {}
+    inline LM<Real>::LM(const LM &lmm) : IVP<Real>(lmm), alpha(_alpha), beta(_beta), _alpha(lmm.alpha), _beta(lmm.beta) {}
 
     template <typename Real>
-    inline void LMM<Real>::setMethod(const size_t &name)
+    inline void LM<Real>::setMethod(const LMM &name)
     {
         switch (name)
         {
-        case ForwardEuler:
+        case LMM::ForwardEuler:
             _alpha = {0.0, 1.0};
             _beta = {0.0, 1.0};
             break;
-        case BackwardEuler:
+        case LMM::BackwardEuler:
             _alpha = {0.0, 1.0};
             _beta = {1.0};
             break;
-        case Trapezoidal:
+        case LMM::Trapezoidal:
             _alpha = {0.0, 1.0};
             _beta = {0.5, 0.5};
             break;
-        case Midpoint:
+        case LMM::Midpoint:
             _alpha = {0.0, 0.0, 1.0};
             _beta = {0.0, 2.0};
             break;
@@ -108,7 +108,7 @@ namespace mtk
     }
 
     template <typename Real>
-    inline void LMM<Real>::setMethod(const std::vector<Real> &alpha, const std::vector<Real> &beta)
+    inline void LM<Real>::setMethod(const std::vector<Real> &alpha, const std::vector<Real> &beta)
     {
         this->_alpha = alpha;
         this->_beta = beta;
@@ -116,19 +116,19 @@ namespace mtk
     }
 
     template <typename Real>
-    inline bool LMM<Real>::isExplicit() const
+    inline bool LM<Real>::isExplicit() const
     {
         return std::abs(beta.front()) < std::numeric_limits<float>::epsilon();
     }
 
     template <typename Real>
-    inline bool LMM<Real>::isImplicit() const
+    inline bool LM<Real>::isImplicit() const
     {
         return !isExplicit();
     }
 
     template <typename Real>
-    inline void LMM<Real>::solve(const Real &end, const Real &k)
+    inline void LM<Real>::solve(const Real &end, const Real &k)
     {
         Real t = this->res.back().second;
         if (k <= 0.0 || this->res.size() <= 0)
@@ -191,7 +191,7 @@ namespace mtk
     }
 
     template <typename Real>
-    inline LMM<Real> &LMM<Real>::operator=(const LMM &lmm)
+    inline LM<Real> &LM<Real>::operator=(const LM &lmm)
     {
         if (this != &lmm)
         {
@@ -211,18 +211,18 @@ namespace mtk
     inline RK<Real>::RK(const RK &rk) : IVP<Real>(rk), a(_a), b(_b), c(_c), _a(rk.a), _b(rk.b), _c(rk.c) {}
 
     template <typename Real>
-    inline void RK<Real>::setMethod(const size_t &name)
+    inline void RK<Real>::setMethod(const RKM &name)
     {
         switch (name)
         {
-        case HeunThirdOrder:
+        case RKM::HeunThirdOrder:
             _a = Trait<Matrix<Real>>::make({{0, 0, 0},
                                             {1.0 / 3.0, 0.0, 0.0},
                                             {0.0, 2.0 / 3.0, 0.0}});
             _b = Trait<Vector<Real>>::make({1.0 / 4.0, 0.0, 3.0 / 4.0});
             _c = Trait<Vector<Real>>::make({0.0, 1.0 / 3.0, 2.0 / 3.0});
             break;
-        case ClassicalFourthOrder:
+        case RKM::ClassicalFourthOrder:
             _a = Trait<Matrix<Real>>::make({{0.0, 0.0, 0.0, 0.0},
                                             {0.5, 0.0, 0.0, 0.0},
                                             {0.0, 0.5, 0.0, 0.0},

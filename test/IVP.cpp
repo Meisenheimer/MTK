@@ -23,11 +23,11 @@ int main()
 {
     bool flag;
     size_t t;
-    LMM<Real> lmm;
+    LM<Real> lm;
     RK<Real> rk;
-    lmm.setRHS(f);
-    lmm.getOpt().setLineSearch(LineSearch::Newton);
-    lmm.getOpt().setMethod(OptimizeMethod::Newton);
+    lm.setRHS(f);
+    lm.getOpt().setLineSearch(LineSearch::Newton);
+    lm.getOpt().setMethod(OptimizeMethod::Newton);
     rk.setRHS(f);
     rk.getOpt().setLineSearch(LineSearch::Newton);
     rk.getOpt().setMethod(OptimizeMethod::Newton);
@@ -35,10 +35,10 @@ int main()
 
     timer();
     flag = PASS;
-    lmm.setInitValue(init);
-    lmm.setMethod(ForwardEuler);
-    lmm.solve(0.5, 0.005);
-    if ((lmm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
+    lm.setInitValue(init);
+    lm.setMethod(LMM::ForwardEuler);
+    lm.solve(0.5, 0.005);
+    if ((lm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
         printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
@@ -50,10 +50,10 @@ int main()
     }
 
     timer();
-    lmm.setInitValue(init);
-    lmm.setMethod(Trapezoidal);
-    lmm.solve(0.5, 0.005);
-    if ((lmm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
+    lm.setInitValue(init);
+    lm.setMethod(LMM::Trapezoidal);
+    lm.solve(0.5, 0.005);
+    if ((lm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
         printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
@@ -65,10 +65,10 @@ int main()
     }
 
     timer();
-    lmm.setInitValue(init);
-    lmm.setMethod(BackwardEuler);
-    lmm.solve(0.5, 0.005);
-    if ((lmm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
+    lm.setInitValue(init);
+    lm.setMethod(LMM::BackwardEuler);
+    lm.solve(0.5, 0.005);
+    if ((lm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
         printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
@@ -80,10 +80,10 @@ int main()
     }
 
     timer();
-    lmm.setInitValue(init);
-    lmm.setMethod(Midpoint);
-    lmm.solve(0.5, 0.005);
-    if ((lmm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
+    lm.setInitValue(init);
+    lm.setMethod(LMM::Midpoint);
+    lm.solve(0.5, 0.005);
+    if ((lm(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
         printf("Error at: file %s line %d.", __FILE__, __LINE__);
         flag = FAIL;
@@ -96,7 +96,7 @@ int main()
 
     timer();
     rk.setInitValue(init);
-    rk.setMethod(HeunThirdOrder);
+    rk.setMethod(RKM::HeunThirdOrder);
     rk.solve(0.5, 0.005);
     if ((rk(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {
@@ -111,7 +111,7 @@ int main()
 
     timer();
     rk.setInitValue(init);
-    rk.setMethod(ClassicalFourthOrder);
+    rk.setMethod(RKM::ClassicalFourthOrder);
     rk.solve(0.5, 0.005);
     if ((rk(0.5) - u(0.5)).lpNorm<2>() > DELTA)
     {

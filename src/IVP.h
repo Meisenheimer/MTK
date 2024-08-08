@@ -7,13 +7,19 @@ static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
 {
-    constexpr size_t ForwardEuler = 11;
-    constexpr size_t BackwardEuler = 21;
-    constexpr size_t Trapezoidal = 31;
-    constexpr size_t Midpoint = 41;
+    enum class LMM
+    {
+        ForwardEuler = 11,
+        BackwardEuler = 21,
+        Trapezoidal = 31,
+        Midpoint = 41,
+    };
 
-    constexpr size_t HeunThirdOrder = 12;
-    constexpr size_t ClassicalFourthOrder = 22;
+    enum class RKM
+    {
+        HeunThirdOrder = 12,
+        ClassicalFourthOrder = 22,
+    };
 
     template <typename Real>
     class IVP;
@@ -50,7 +56,7 @@ namespace mtk
     };
 
     template <typename Real>
-    class LMM : public IVP<Real>
+    class LM : public IVP<Real>
     {
     private:
         std::vector<Real> _alpha;
@@ -61,16 +67,16 @@ namespace mtk
         const std::vector<Real> &beta;
 
     public:
-        LMM();
-        LMM(const LMM &lmm);
+        LM();
+        LM(const LM &lmm);
 
-        void setMethod(const size_t &name);
+        void setMethod(const LMM &name);
         void setMethod(const std::vector<Real> &alpha, const std::vector<Real> &beta);
         bool isExplicit() const override;
         bool isImplicit() const override;
         void solve(const Real &end, const Real &k) override;
 
-        LMM &operator=(const LMM &lmm);
+        LM &operator=(const LM &lmm);
     };
 
     template <typename Real>
@@ -90,7 +96,7 @@ namespace mtk
         RK();
         RK(const RK &rk);
 
-        void setMethod(const size_t &name);
+        void setMethod(const RKM &name);
         void setMethod(const Matrix<Real> &a, const Vector<Real> &b, const Vector<Real> &c);
         bool isExplicit() const override;
         bool isImplicit() const override;
