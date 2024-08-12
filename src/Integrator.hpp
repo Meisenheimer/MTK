@@ -138,7 +138,8 @@ namespace mtk
         return (*this);
     }
 
-    inline GaussianIntegrator::GaussianIntegrator(const OrthogonalPolynomial &op) : range(_range), coefs(_coefs)
+    template <typename Real>
+    inline GaussianIntegrator<Real>::GaussianIntegrator(const OrthogonalPolynomial<Real> &op) : range(_range), coefs(_coefs)
     {
         _range = op.range;
         std::vector<Real> root = op.poly.back().root();
@@ -160,14 +161,16 @@ namespace mtk
         }
     }
 
-    inline GaussianIntegrator::GaussianIntegrator(const GaussianIntegrator &integrator) : range(_range), coefs(_coefs)
+    template <typename Real>
+    inline GaussianIntegrator<Real>::GaussianIntegrator(const GaussianIntegrator<Real> &integrator) : range(_range), coefs(_coefs)
     {
         _range = integrator.range;
         _coefs = integrator.coefs;
     }
 
+    template <typename Real>
     template <typename ResType>
-    inline const ResType GaussianIntegrator::operator()(const std::function<const ResType(const Real &)> &f) const
+    inline const ResType GaussianIntegrator<Real>::operator()(const std::function<const ResType(const Real &)> &f) const
     {
         ResType res = Trait<ResType>::zero();
         for (size_t i = 0; i < _coefs.size(); i++)
@@ -177,7 +180,8 @@ namespace mtk
         return res;
     }
 
-    inline GaussianIntegrator &GaussianIntegrator::operator=(const GaussianIntegrator &integrator)
+    template <typename Real>
+    inline GaussianIntegrator<Real> &GaussianIntegrator<Real>::operator=(const GaussianIntegrator<Real> &integrator)
     {
         if (this != &integrator)
         {

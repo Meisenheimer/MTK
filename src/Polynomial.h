@@ -7,41 +7,65 @@ static_assert(__cplusplus >= 201700, "C++17 or higher is required.");
 
 namespace mtk
 {
-    using Real = long double;
-
+    template <typename Real>
     class ConditionList;
+    template <typename Real>
     class Polynomial;
-    template <>
-    class Trait<Polynomial>;
+    template <typename Real>
+    class Trait<Polynomial<Real>>;
+    template <typename Real>
     class OrthonormalPolynomial;
 
-    const Polynomial operator-(const Polynomial &p);
-    const Polynomial operator+(const Polynomial &p);
-    const Polynomial operator+(const Polynomial &p1, const Polynomial &p2);
-    const Polynomial operator+(const Polynomial &p, const Real &k);
-    const Polynomial operator+(const Real &k, const Polynomial &p);
-    const Polynomial operator-(const Polynomial &p1, const Polynomial &p2);
-    const Polynomial operator-(const Polynomial &p, const Real &k);
-    const Polynomial operator*(const Polynomial &p1, const Polynomial &p2);
-    const Polynomial operator*(const Real &k, const Polynomial &p);
-    const Polynomial operator*(const Polynomial &p, const Real &k);
-    const Polynomial operator/(const Polynomial &p, const Real &k);
-    const Polynomial operator/(const Polynomial &p1, const Polynomial &p2);
-    const Polynomial operator%(const Polynomial &p1, const Polynomial &p2);
+    template <typename Real>
+    const Polynomial<Real> operator-(const Polynomial<Real> &p);
+    template <typename Real>
+    const Polynomial<Real> operator+(const Polynomial<Real> &p);
+    template <typename Real1, typename Real2>
+    const Polynomial<std::common_type_t<Real1, Real2>> operator+(const Polynomial<Real1> &p1, const Polynomial<Real2> &p2);
+    template <typename Real, typename Type>
+    const Polynomial<Real> operator+(const Polynomial<Real> &p, const Type &k);
+    template <typename Real, typename Type>
+    const Polynomial<Real> operator+(const Type &k, const Polynomial<Real> &p);
+    template <typename Real1, typename Real2>
+    const Polynomial<std::common_type_t<Real1, Real2>> operator-(const Polynomial<Real1> &p1, const Polynomial<Real2> &p2);
+    template <typename Real, typename Type>
+    const Polynomial<Real> operator-(const Polynomial<Real> &p, const Type &k);
+    template <typename Real1, typename Real2>
+    const Polynomial<std::common_type_t<Real1, Real2>> operator*(const Polynomial<Real1> &p1, const Polynomial<Real2> &p2);
+    template <typename Real, typename Type>
+    const Polynomial<Real> operator*(const Type &k, const Polynomial<Real> &p);
+    template <typename Real, typename Type>
+    const Polynomial<Real> operator*(const Polynomial<Real> &p, const Type &k);
+    template <typename Real, typename Type>
+    const Polynomial<Real> operator/(const Polynomial<Real> &p, const Type &k);
+    template <typename Real1, typename Real2>
+    const Polynomial<std::common_type_t<Real1, Real2>> operator/(const Polynomial<Real1> &p1, const Polynomial<Real2> &p2);
+    template <typename Real1, typename Real2>
+    const Polynomial<std::common_type_t<Real1, Real2>> operator%(const Polynomial<Real1> &p1, const Polynomial<Real2> &p2);
 
-    const bool isEqual(const Polynomial &p1, const Polynomial &p2, const Real &delta = Trait<Real>::epsilon());
+    template <typename Real>
+    const bool isEqual(const Polynomial<Real> &p1, const Polynomial<Real> &p2, const Real &delta = Trait<Real>::epsilon());
 
-    const bool operator==(const Polynomial &p1, const Polynomial &p2);
-    const bool operator!=(const Polynomial &p1, const Polynomial &p2);
+    template <typename Real>
+    const bool operator==(const Polynomial<Real> &p1, const Polynomial<Real> &p2);
+    template <typename Real>
+    const bool operator!=(const Polynomial<Real> &p1, const Polynomial<Real> &p2);
 
-    std::ostream &operator<<(std::ostream &stream, const Polynomial &p);
+    template <typename Real>
+    std::ostream &operator<<(std::ostream &stream, const Polynomial<Real> &p);
 
-    const std::vector<Polynomial> fundamentalPolynomial(const std::vector<Real> &x);
-    const Polynomial newtonFormula(const std::vector<Real> &x, const std::vector<Real> &y);
-    const Polynomial fitPolynomial(const size_t &degree, const ConditionList &cond);
-    const Polynomial differential(const Polynomial &p);
-    const Polynomial integral(const Polynomial &p, const Real &x);
+    template <typename Real>
+    const std::vector<Polynomial<Real>> fundamentalPolynomial(const std::vector<Real> &x);
+    template <typename Real>
+    const Polynomial<Real> newtonFormula(const std::vector<Real> &x, const std::vector<Real> &y);
+    template <typename Real>
+    const Polynomial<Real> fitPolynomial(const size_t &degree, const ConditionList<Real> &cond);
+    template <typename Real>
+    const Polynomial<Real> differential(const Polynomial<Real> &p);
+    template <typename Real>
+    const Polynomial<Real> integral(const Polynomial<Real> &p, const Real &x);
 
+    template <typename Real>
     class ConditionList
     {
     public:
@@ -74,6 +98,7 @@ namespace mtk
         const Condition &operator()(const Real &x) const;
     };
 
+    template <typename Real>
     class Polynomial
     {
     private:
@@ -115,17 +140,18 @@ namespace mtk
         Real &operator[](const size_t &degree);
     };
 
-    template <>
-    class Trait<Polynomial>
+    template <typename Real>
+    class Trait<Polynomial<Real>>
     {
     public:
         Trait() = delete;
 
-        static const Polynomial zero();
-        static const Polynomial identity();
-        static const Polynomial basis(const size_t &n);
+        static const Polynomial<Real> zero();
+        static const Polynomial<Real> identity();
+        static const Polynomial<Real> basis(const size_t &n);
     };
 
+    template <typename Real>
     class OrthogonalPolynomial
     {
     public:
@@ -139,23 +165,23 @@ namespace mtk
         };
 
     private:
-        std::function<const Polynomial(const std::vector<Polynomial> &)> next;
+        std::function<const Polynomial<Real>(const std::vector<Polynomial<Real>> &)> next;
 
     private:
         std::function<const Real(const Real &)> _weight;
-        std::vector<Polynomial> _poly;
+        std::vector<Polynomial<Real>> _poly;
         std::pair<Real, Real> _range;
 
     public:
         const std::function<const Real(const Real &)> &weight;
-        const std::vector<Polynomial> &poly;
+        const std::vector<Polynomial<Real>> &poly;
         const std::pair<Real, Real> &range;
 
     public:
         OrthogonalPolynomial(const Type &type);
         OrthogonalPolynomial(const OrthogonalPolynomial &op);
 
-        const Polynomial &operator()(const size_t &index);
+        const Polynomial<Real> &operator()(const size_t &index);
 
         OrthogonalPolynomial &operator=(const OrthogonalPolynomial &op);
     };

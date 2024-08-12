@@ -18,11 +18,11 @@ int main()
     bool flag = PASS;
     timer();
     Spline s = fitSpline(3,
-                         ConditionList({{-2.0, ConditionList::Condition({{0, -1.0}})},
-                                        {-1.0, ConditionList::Condition({{0, 0.0}})},
-                                        {0.0, ConditionList::Condition({{0, 1.0}})},
-                                        {1.0, ConditionList::Condition({{0, 0.0}})},
-                                        {2.0, ConditionList::Condition({{0, -1.0}})}}),
+                         ConditionList<Real>({{-2.0, ConditionList<Real>::Condition({{0, -1.0}})},
+                                              {-1.0, ConditionList<Real>::Condition({{0, 0.0}})},
+                                              {0.0, ConditionList<Real>::Condition({{0, 1.0}})},
+                                              {1.0, ConditionList<Real>::Condition({{0, 0.0}})},
+                                              {2.0, ConditionList<Real>::Condition({{0, -1.0}})}}),
                          true);
 
     if (std::abs(-1 - s(-2)) > Trait<float>::epsilon() ||
@@ -38,7 +38,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). Optimizer.\n", t);
+        printf("PASS Time: %6d(ms). Spline::Spline.\n", t);
     }
     return 0;
 }

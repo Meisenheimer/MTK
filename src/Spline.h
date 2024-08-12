@@ -11,18 +11,18 @@ namespace mtk
 
     class Spline;
 
-    Spline fitSpline(const size_t &degree, const ConditionList &c, const bool &periodic = false);
+    Spline fitSpline(const size_t &degree, const ConditionList<Real> &c, const bool &periodic = false);
 
     class Spline
     {
     private:
         size_t _degree;
-        std::vector<Polynomial> _poly;
+        std::vector<Polynomial<Real>> _poly;
         std::vector<Real> _knot;
 
     public:
         const size_t &degree;
-        const std::vector<Polynomial> &poly;
+        const std::vector<Polynomial<Real>> &poly;
         const std::vector<Real> &knot;
 
     private:
@@ -36,7 +36,7 @@ namespace mtk
 
         Spline &operator=(const Spline &s);
 
-        friend Spline fitSpline(const size_t &degree, const ConditionList &c, const bool &periodic);
+        friend Spline fitSpline(const size_t &degree, const ConditionList<Real> &c, const bool &periodic);
     };
 };
 

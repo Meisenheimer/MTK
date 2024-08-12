@@ -7,7 +7,7 @@
 
 namespace mtk
 {
-    inline Spline fitSpline(const size_t &degree, const ConditionList &c, const bool &periodic)
+    inline Spline fitSpline(const size_t &degree, const ConditionList<Real> &c, const bool &periodic)
     {
         std::vector<Real> factor = {1.0, 1.0};
         for (size_t i = 2; i <= degree; i++)
@@ -15,7 +15,7 @@ namespace mtk
             factor.push_back(factor.back() * i);
         }
         Spline s(degree);
-        std::vector<Polynomial> &poly = s._poly;
+        std::vector<Polynomial<Real>> &poly = s._poly;
         std::vector<Real> &knot = s._knot;
         Real M = -INFINITY, m = INFINITY;
         std::set<Real> smooth;
@@ -39,7 +39,7 @@ namespace mtk
         knot.erase(std::unique(knot.begin(), knot.end()), knot.end());
         for (size_t i = 1; i < knot.size(); i++)
         {
-            poly.push_back(Polynomial(degree));
+            poly.push_back(Polynomial<Real>(degree));
         }
         const size_t N = c.list.size() + (knot.size() - 2) * degree + (periodic ? degree : 0) + smooth.size();
         Matrix<Real> A = Matrix<Real>::Zero(N, (degree + 1) * poly.size());

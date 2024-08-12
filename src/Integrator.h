@@ -10,6 +10,7 @@ namespace mtk
 {
     template <typename Real>
     class NewtonCotesIntegrator;
+    template <typename Real>
     class GaussianIntegrator;
 
     template <typename Real>
@@ -48,6 +49,7 @@ namespace mtk
         NewtonCotesIntegrator &operator=(const NewtonCotesIntegrator &integrator);
     };
 
+    template <typename Real>
     class GaussianIntegrator
     {
     private:
@@ -59,7 +61,7 @@ namespace mtk
         const std::vector<std::pair<Real, Real>> &coefs;
 
     public:
-        GaussianIntegrator(const OrthogonalPolynomial &op);
+        GaussianIntegrator(const OrthogonalPolynomial<Real> &op);
         GaussianIntegrator(const GaussianIntegrator &integrator);
 
         template <typename ResType>

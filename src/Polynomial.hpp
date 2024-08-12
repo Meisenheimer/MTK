@@ -5,46 +5,55 @@
 
 namespace mtk
 {
-    inline ConditionList::Condition::Condition() : Condition(true, false) {};
+    template <typename Real>
+    inline ConditionList<Real>::Condition::Condition() : Condition(true, false){};
 
-    inline ConditionList::Condition::Condition(const bool &is_knot, const bool &is_smooth)
+    template <typename Real>
+    inline ConditionList<Real>::Condition::Condition(const bool &is_knot, const bool &is_smooth)
     {
         this->knot = is_knot;
         this->smooth = is_smooth;
     };
 
-    inline ConditionList::Condition::Condition(const std::map<size_t, Real> &y, const bool &is_knot, const bool &is_smooth)
+    template <typename Real>
+    inline ConditionList<Real>::Condition::Condition(const std::map<size_t, Real> &y, const bool &is_knot, const bool &is_smooth)
         : Condition(is_knot, is_smooth)
     {
         this->y = y;
     }
 
-    inline ConditionList::ConditionList() : list(_list) {}
+    template <typename Real>
+    inline ConditionList<Real>::ConditionList() : list(_list) {}
 
-    inline ConditionList::ConditionList(const std::map<Real, ConditionList::Condition> &init_list) : ConditionList()
+    template <typename Real>
+    inline ConditionList<Real>::ConditionList(const std::map<Real, ConditionList<Real>::Condition> &init_list) : ConditionList()
     {
         this->_list = init_list;
     }
 
-    inline void ConditionList::setCondition(const Real &x, const Real &y, const size_t &order)
+    template <typename Real>
+    inline void ConditionList<Real>::setCondition(const Real &x, const Real &y, const size_t &order)
     {
         _list[x].y[order] = y;
         return;
     }
 
-    inline void ConditionList::setKnot(const Real &x, const bool &is_knot)
+    template <typename Real>
+    inline void ConditionList<Real>::setKnot(const Real &x, const bool &is_knot)
     {
         _list[x].knot = is_knot;
         return;
     }
 
-    inline void ConditionList::setSmooth(const Real &x, const bool &is_smooth)
+    template <typename Real>
+    inline void ConditionList<Real>::setSmooth(const Real &x, const bool &is_smooth)
     {
         _list[x].smooth = is_smooth;
         return;
     }
 
-    inline const ConditionList::Condition &ConditionList::operator()(const Real &x) const
+    template <typename Real>
+    inline const ConditionList<Real>::Condition &ConditionList<Real>::operator()(const Real &x) const
     {
         auto it = list.find(x);
         if (it == list.end())
@@ -55,9 +64,10 @@ namespace mtk
         return it->second;
     }
 
-    inline const Polynomial operator-(const Polynomial &p)
+    template <typename Real>
+    inline const Polynomial<Real> operator-(const Polynomial<Real> &p)
     {
-        Polynomial res(p);
+        Polynomial<Real> res(p);
         for (size_t i = 0; i <= res.degree; i++)
         {
             res[i] = -res[i];
@@ -65,94 +75,113 @@ namespace mtk
         return res;
     }
 
-    inline const Polynomial operator+(const Polynomial &p)
+    template <typename Real>
+    inline const Polynomial<Real> operator+(const Polynomial<Real> &p)
     {
         return p;
     }
 
-    inline const Polynomial operator+(const Polynomial &p1, const Polynomial &p2)
+    template <typename Real1, typename Real2>
+    inline const Polynomial<std::common_type_t<Real1, Real2>> operator+(const Polynomial<Real1> &p1,
+                                                                        const Polynomial<Real2> &p2)
     {
-        Polynomial res = p1;
+        Polynomial<std::common_type_t<Real1, Real2>> res = p1;
         res += p2;
         return res;
     }
 
-    inline const Polynomial operator+(const Polynomial &p, const Real &k)
+    template <typename Real, typename Type>
+    inline const Polynomial<Real> operator+(const Polynomial<Real> &p, const Type &k)
     {
-        Polynomial res = p;
+        Polynomial<Real> res = p;
         res += k;
         return res;
     }
 
-    inline const Polynomial operator+(const Real &k, const Polynomial &p)
+    template <typename Real, typename Type>
+    inline const Polynomial<Real> operator+(const Type &k, const Polynomial<Real> &p)
     {
-        Polynomial res = p;
+        Polynomial<Real> res = p;
         res += k;
         return res;
     }
 
-    inline const Polynomial operator-(const Polynomial &p1, const Polynomial &p2)
+    template <typename Real1, typename Real2>
+    inline const Polynomial<std::common_type_t<Real1, Real2>> operator-(const Polynomial<Real1> &p1,
+                                                                        const Polynomial<Real2> &p2)
     {
-        Polynomial res = p1;
+        Polynomial<std::common_type_t<Real1, Real2>> res = p1;
         res -= p2;
         return res;
     }
 
-    inline const Polynomial operator-(const Polynomial &p, const Real &k)
+    template <typename Real, typename Type>
+    inline const Polynomial<Real> operator-(const Polynomial<Real> &p, const Type &k)
     {
-        Polynomial res = p;
+        Polynomial<Real> res = p;
         res -= k;
         return res;
     }
 
-    inline const Polynomial operator*(const Polynomial &p1, const Polynomial &p2)
+    template <typename Real1, typename Real2>
+    inline const Polynomial<std::common_type_t<Real1, Real2>> operator*(const Polynomial<Real1> &p1,
+                                                                        const Polynomial<Real2> &p2)
     {
-        Polynomial res = p1;
+        Polynomial<std::common_type_t<Real1, Real2>> res = p1;
         res *= p2;
         return res;
     }
 
-    inline const Polynomial operator*(const Real &k, const Polynomial &p)
+    template <typename Real, typename Type>
+    inline const Polynomial<Real> operator*(const Type &k, const Polynomial<Real> &p)
     {
-        Polynomial res = p;
+        Polynomial<Real> res = p;
         res *= k;
         return res;
     }
 
-    inline const Polynomial operator*(const Polynomial &p, const Real &k)
+    template <typename Real, typename Type>
+    inline const Polynomial<Real> operator*(const Polynomial<Real> &p, const Type &k)
     {
-        Polynomial res = p;
+        Polynomial<Real> res = p;
         res *= k;
         return res;
     }
 
-    inline const Polynomial operator/(const Polynomial &p, const Real &k)
+    template <typename Real, typename Type>
+    inline const Polynomial<Real> operator/(const Polynomial<Real> &p, const Type &k)
     {
-        Polynomial res = p;
+        Polynomial<Real> res = p;
         res /= k;
         return res;
     }
 
-    inline const Polynomial operator/(const Polynomial &p1, const Polynomial &p2)
+    template <typename Real1, typename Real2>
+    inline const Polynomial<std::common_type_t<Real1, Real2>> operator/(const Polynomial<Real1> &p1,
+                                                                        const Polynomial<Real2> &p2)
     {
-        Polynomial res = p1;
+        Polynomial<std::common_type_t<Real1, Real2>> res = p1;
         res /= p2;
         return res;
     }
 
-    inline const Polynomial operator%(const Polynomial &p1, const Polynomial &p2)
+    template <typename Real1, typename Real2>
+    inline const Polynomial<std::common_type_t<Real1, Real2>> operator%(const Polynomial<Real1> &p1,
+                                                                        const Polynomial<Real2> &p2)
     {
-        Polynomial res = p1;
+        Polynomial<std::common_type_t<Real1, Real2>> res = p1;
         res %= p2;
         return res;
     }
 
-    inline const bool isEqual(const Polynomial &p1, const Polynomial &p2, const Real &delta)
+    template <typename Real>
+    inline const bool isEqual(const Polynomial<Real> &p1, const Polynomial<Real> &p2, const Real &delta)
     {
         return p1.equal(p2, delta);
     }
 
-    inline const bool operator==(const Polynomial &p1, const Polynomial &p2)
+    template <typename Real>
+    inline const bool operator==(const Polynomial<Real> &p1, const Polynomial<Real> &p2)
     {
         size_t n = std::max(p1.degree, p2.degree);
         for (size_t i = 0; i <= n; i++)
@@ -166,26 +195,29 @@ namespace mtk
         return true;
     }
 
-    inline const bool operator!=(const Polynomial &p1, const Polynomial &p2)
+    template <typename Real>
+    inline const bool operator!=(const Polynomial<Real> &p1, const Polynomial<Real> &p2)
     {
         return !(p1 == p2);
     }
 
-    inline std::ostream &operator<<(std::ostream &stream, const Polynomial &p)
+    template <typename Real>
+    inline std::ostream &operator<<(std::ostream &stream, const Polynomial<Real> &p)
     {
         stream << p.print(Trait<float>::min());
         return stream;
     }
 
-    inline const std::vector<Polynomial> fundamentalPolynomial(const std::vector<Real> &x)
+    template <typename Real>
+    inline const std::vector<Polynomial<Real>> fundamentalPolynomial(const std::vector<Real> &x)
     {
-        std::vector<Polynomial> res;
+        std::vector<Polynomial<Real>> res;
         for (size_t k = 0; k < x.size(); k++)
         {
-            Polynomial p({1});
+            Polynomial<Real> p({1});
             for (size_t i = 0; i < x.size(); i++)
             {
-                Polynomial tmp({-x[i], 1});
+                Polynomial<Real> tmp({-x[i], 1});
                 tmp /= (x[k] - x[i]);
                 p *= tmp;
             }
@@ -194,7 +226,8 @@ namespace mtk
         return res;
     }
 
-    inline const Polynomial newtonFormula(const std::vector<Real> &x, const std::vector<Real> &y)
+    template <typename Real>
+    inline const Polynomial<Real> newtonFormula(const std::vector<Real> &x, const std::vector<Real> &y)
     {
         const size_t n = x.size();
         if (n != y.size())
@@ -212,17 +245,18 @@ namespace mtk
                 table[i][j] = (table[i][j - 1] - table[i - 1][j - 1]) / (x[i] - x[i - j]);
             }
         }
-        Polynomial s(0);
-        Polynomial tmp({1});
+        Polynomial<Real> s(0);
+        Polynomial<Real> tmp({1});
         for (size_t i = n; i > 0; i--)
         {
             s += table[i - 1][i] * tmp;
-            tmp *= Polynomial({-x[i - 1], 1});
+            tmp *= Polynomial<Real>({-x[i - 1], 1});
         }
         return s;
     }
 
-    inline const Polynomial fitPolynomial(const size_t &degree, const ConditionList &condition)
+    template <typename Real>
+    inline const Polynomial<Real> fitPolynomial(const size_t &degree, const ConditionList<Real> &condition)
     {
         const size_t n = condition.list.size();
         Matrix<Real> A = Matrix<Real>::Zero(n, degree + 1);
@@ -254,7 +288,7 @@ namespace mtk
             }
         }
         Vector<Real> x = A.fullPivHouseholderQr().solve(b);
-        Polynomial p(degree);
+        Polynomial<Real> p(degree);
         for (size_t i = 0; i <= degree; i++)
         {
             p[i] = x(i);
@@ -262,17 +296,20 @@ namespace mtk
         return p;
     }
 
-    inline const Polynomial differential(const Polynomial &p)
+    template <typename Real>
+    inline const Polynomial<Real> differential(const Polynomial<Real> &p)
     {
         return p.differential();
     }
 
-    inline const Polynomial integral(const Polynomial &p, const Real &x)
+    template <typename Real>
+    inline const Polynomial<Real> integral(const Polynomial<Real> &p, const Real &x)
     {
         return p.integral(x);
     }
 
-    inline Polynomial::Polynomial(const size_t &n) : coefs(_coefs), degree(_degree)
+    template <typename Real>
+    inline Polynomial<Real>::Polynomial(const size_t &n) : coefs(_coefs), degree(_degree)
     {
         if (n < 0)
         {
@@ -287,19 +324,22 @@ namespace mtk
         }
     }
 
-    inline Polynomial::Polynomial(const Polynomial &p) : coefs(_coefs), degree(_degree)
+    template <typename Real>
+    inline Polynomial<Real>::Polynomial(const Polynomial &p) : coefs(_coefs), degree(_degree)
     {
         _degree = p.degree;
         this->_coefs.assign(p.coefs.begin(), p.coefs.end());
     }
 
-    inline Polynomial::Polynomial(const std::vector<Real> &coefs) : coefs(_coefs), degree(_degree)
+    template <typename Real>
+    inline Polynomial<Real>::Polynomial(const std::vector<Real> &coefs) : coefs(_coefs), degree(_degree)
     {
         _degree = coefs.size() - 1;
         this->_coefs.assign(coefs.begin(), coefs.end());
     }
 
-    inline const Polynomial Polynomial::differential() const
+    template <typename Real>
+    inline const Polynomial<Real> Polynomial<Real>::differential() const
     {
         Polynomial res(degree - 1);
         for (size_t i = 1; i <= degree; i++)
@@ -309,7 +349,8 @@ namespace mtk
         return res;
     }
 
-    inline const Polynomial Polynomial::integral(const Real &x) const
+    template <typename Real>
+    inline const Polynomial<Real> Polynomial<Real>::integral(const Real &x) const
     {
         Polynomial res(degree + 1);
         for (size_t i = 1; i <= degree; i++)
@@ -320,7 +361,8 @@ namespace mtk
         return res;
     }
 
-    inline const std::vector<Real> Polynomial::root(const Real &delta) const
+    template <typename Real>
+    inline const std::vector<Real> Polynomial<Real>::root(const Real &delta) const
     {
         const size_t n = degree;
         Matrix<Real> A = Matrix<Real>::Zero(n, n);
@@ -346,12 +388,14 @@ namespace mtk
         return res;
     }
 
-    inline const bool Polynomial::isRoot(const Real &x, const Real &delta) const
+    template <typename Real>
+    inline const bool Polynomial<Real>::isRoot(const Real &x, const Real &delta) const
     {
         return std::abs(operator()(x)) < delta;
     }
 
-    inline const bool Polynomial::equal(const Polynomial &p, const Real &delta) const
+    template <typename Real>
+    inline const bool Polynomial<Real>::equal(const Polynomial &p, const Real &delta) const
     {
         int n = std::max(p.degree, degree);
         for (size_t i = 0; i <= n; i++)
@@ -364,7 +408,8 @@ namespace mtk
         return true;
     }
 
-    inline std::string Polynomial::print(const Real &precision) const
+    template <typename Real>
+    inline std::string Polynomial<Real>::print(const Real &precision) const
     {
         std::string s = "";
         bool flag = true;
@@ -388,7 +433,8 @@ namespace mtk
         return s;
     }
 
-    inline Polynomial &Polynomial::operator=(const Polynomial &p)
+    template <typename Real>
+    inline Polynomial<Real> &Polynomial<Real>::operator=(const Polynomial &p)
     {
         if (&p != this)
         {
@@ -398,7 +444,8 @@ namespace mtk
         return (*this);
     }
 
-    inline Polynomial &Polynomial::operator=(const Real &k)
+    template <typename Real>
+    inline Polynomial<Real> &Polynomial<Real>::operator=(const Real &k)
     {
         this->_degree = 0;
         this->_coefs.resize(1);
@@ -406,7 +453,8 @@ namespace mtk
         return (*this);
     }
 
-    inline Polynomial &Polynomial::operator+=(const Polynomial &p)
+    template <typename Real>
+    inline Polynomial<Real> &Polynomial<Real>::operator+=(const Polynomial &p)
     {
         _degree = (std::max(degree, p.degree));
         _coefs.resize(degree, Trait<Real>::zero());
@@ -417,13 +465,15 @@ namespace mtk
         return (*this);
     }
 
-    inline Polynomial &Polynomial::operator+=(const Real &k)
+    template <typename Real>
+    inline Polynomial<Real> &Polynomial<Real>::operator+=(const Real &k)
     {
         _coefs[0] += k;
         return (*this);
     }
 
-    inline Polynomial &Polynomial::operator-=(const Polynomial &p)
+    template <typename Real>
+    inline Polynomial<Real> &Polynomial<Real>::operator-=(const Polynomial &p)
     {
         _degree = (std::max(degree, p.degree));
         _coefs.resize(degree, Trait<Real>::zero());
@@ -434,13 +484,15 @@ namespace mtk
         return (*this);
     }
 
-    inline Polynomial &Polynomial::operator-=(const Real &k)
+    template <typename Real>
+    inline Polynomial<Real> &Polynomial<Real>::operator-=(const Real &k)
     {
         _coefs[0] -= k;
         return (*this);
     }
 
-    inline Polynomial &Polynomial::operator*=(const Polynomial &p)
+    template <typename Real>
+    inline Polynomial<Real> &Polynomial<Real>::operator*=(const Polynomial &p)
     {
         Polynomial tmp(degree + p.degree);
         for (size_t i = 0; i <= degree; i++)
@@ -454,7 +506,8 @@ namespace mtk
         return (*this);
     }
 
-    inline Polynomial &Polynomial::operator*=(const Real &k)
+    template <typename Real>
+    inline Polynomial<Real> &Polynomial<Real>::operator*=(const Real &k)
     {
         for (size_t i = 0; i <= degree; i++)
         {
@@ -463,7 +516,8 @@ namespace mtk
         return (*this);
     }
 
-    inline Polynomial &Polynomial::operator/=(const Real &k)
+    template <typename Real>
+    inline Polynomial<Real> &Polynomial<Real>::operator/=(const Real &k)
     {
         for (size_t i = 0; i <= degree; i++)
         {
@@ -472,7 +526,8 @@ namespace mtk
         return (*this);
     }
 
-    inline Polynomial &Polynomial::operator/=(const Polynomial &p)
+    template <typename Real>
+    inline Polynomial<Real> &Polynomial<Real>::operator/=(const Polynomial<Real> &p)
     {
         Polynomial res = Trait<Polynomial>::identity();
         while (_degree >= p.degree)
@@ -488,7 +543,8 @@ namespace mtk
         return (*this);
     }
 
-    inline Polynomial &Polynomial::operator%=(const Polynomial &p)
+    template <typename Real>
+    inline Polynomial<Real> &Polynomial<Real>::operator%=(const Polynomial<Real> &p)
     {
         Polynomial res = Trait<Polynomial>::identity();
         while (_degree >= p.degree)
@@ -503,7 +559,8 @@ namespace mtk
         return (*this);
     }
 
-    inline const Real Polynomial::operator()(const Real &x) const
+    template <typename Real>
+    inline const Real Polynomial<Real>::operator()(const Real &x) const
     {
         Real res = 0.0;
         Real k = 1.0;
@@ -514,7 +571,8 @@ namespace mtk
         return res;
     }
 
-    inline const Real Polynomial::operator[](const size_t &n) const
+    template <typename Real>
+    inline const Real Polynomial<Real>::operator[](const size_t &n) const
     {
         if (n > degree)
         {
@@ -523,7 +581,8 @@ namespace mtk
         return this->_coefs[n];
     }
 
-    inline Real &Polynomial::operator[](const size_t &n)
+    template <typename Real>
+    inline Real &Polynomial<Real>::operator[](const size_t &n)
     {
         if (n > degree)
         {
@@ -533,34 +592,38 @@ namespace mtk
         return this->_coefs[n];
     }
 
-    inline const Polynomial Trait<Polynomial>::zero()
+    template <typename Real>
+    inline const Polynomial<Real> Trait<Polynomial<Real>>::zero()
     {
-        return Polynomial(Trait<Real>::zero());
+        return Polynomial<Real>(Trait<Real>::zero());
     }
 
-    inline const Polynomial Trait<Polynomial>::identity()
+    template <typename Real>
+    inline const Polynomial<Real> Trait<Polynomial<Real>>::identity()
     {
-        return Polynomial(std::vector<Real>({Trait<Real>::identity()}));
+        return Polynomial<Real>(std::vector<Real>({Trait<Real>::identity()}));
     }
 
-    inline const Polynomial Trait<Polynomial>::basis(const size_t &n)
+    template <typename Real>
+    inline const Polynomial<Real> Trait<Polynomial<Real>>::basis(const size_t &n)
     {
-        Polynomial p(n);
+        Polynomial<Real> p(n);
         p[n] = Trait<Real>::identity();
         return p;
     }
 
-    inline OrthogonalPolynomial::OrthogonalPolynomial(const Type &type) : weight(_weight), poly(_poly), range(_range)
+    template <typename Real>
+    inline OrthogonalPolynomial<Real>::OrthogonalPolynomial(const Type &type) : weight(_weight), poly(_poly), range(_range)
     {
-        const Polynomial X = Polynomial(std::vector<Real>({0.0, 1.0}));
+        const Polynomial<Real> X = Polynomial<Real>(std::vector<Real>({0.0, 1.0}));
         switch (type)
         {
         case Type::Legendre:
             _weight = [](const Real &x) -> Real
             { return 1.0; };
-            _poly.push_back(Polynomial(std::vector<Real>({1.0})));
-            _poly.push_back(Polynomial(std::vector<Real>({0.0, 1.0})));
-            next = [&X = std::as_const(X)](const std::vector<Polynomial> &list) -> Polynomial
+            _poly.push_back(Polynomial<Real>(std::vector<Real>({1.0})));
+            _poly.push_back(Polynomial<Real>(std::vector<Real>({0.0, 1.0})));
+            next = [&X = std::as_const(X)](const std::vector<Polynomial<Real>> &list) -> Polynomial<Real>
             {
                 const size_t n = list.size() - 1;
                 return ((2 * n + 1) * X * list[n] - n * list[n - 1]) / (n + 1);
@@ -570,9 +633,9 @@ namespace mtk
         case Type::ChebyshevOfFirstClass:
             _weight = [](const Real &x) -> Real
             { return 1.0 / std::sqrt(1 - x * x); };
-            _poly.push_back(Polynomial(std::vector<Real>({1.0})));
-            _poly.push_back(Polynomial(std::vector<Real>({0.0, 1.0})));
-            next = [&X = std::as_const(X)](const std::vector<Polynomial> &list) -> Polynomial
+            _poly.push_back(Polynomial<Real>(std::vector<Real>({1.0})));
+            _poly.push_back(Polynomial<Real>(std::vector<Real>({0.0, 1.0})));
+            next = [&X = std::as_const(X)](const std::vector<Polynomial<Real>> &list) -> Polynomial<Real>
             {
                 const size_t n = list.size() - 1;
                 return 2 * X * list[n] - list[n - 1];
@@ -582,9 +645,9 @@ namespace mtk
         case Type::ChebyshevOfSecondClass:
             _weight = [](const Real &x) -> Real
             { return std::sqrt(1 - x * x); };
-            _poly.push_back(Polynomial(std::vector<Real>({1.0})));
-            _poly.push_back(Polynomial(std::vector<Real>({0.0, 2.0})));
-            next = [&X = std::as_const(X)](const std::vector<Polynomial> &list) -> Polynomial
+            _poly.push_back(Polynomial<Real>(std::vector<Real>({1.0})));
+            _poly.push_back(Polynomial<Real>(std::vector<Real>({0.0, 2.0})));
+            next = [&X = std::as_const(X)](const std::vector<Polynomial<Real>> &list) -> Polynomial<Real>
             {
                 const size_t n = list.size() - 1;
                 return 2 * X * list[n] - list[n - 1];
@@ -594,9 +657,9 @@ namespace mtk
         case Type::Laguerre:
             _weight = [](const Real &x) -> Real
             { return std::exp(-x); };
-            _poly.push_back(Polynomial(std::vector<Real>({1.0})));
-            _poly.push_back(Polynomial(std::vector<Real>({1.0, -1.0})));
-            next = [&X = std::as_const(X)](const std::vector<Polynomial> &list) -> Polynomial
+            _poly.push_back(Polynomial<Real>(std::vector<Real>({1.0})));
+            _poly.push_back(Polynomial<Real>(std::vector<Real>({1.0, -1.0})));
+            next = [&X = std::as_const(X)](const std::vector<Polynomial<Real>> &list) -> Polynomial<Real>
             {
                 const size_t n = list.size() - 1;
                 return ((2 * n + 1 - X) * list[n] - n * list[n - 1]) / (n + 1);
@@ -606,9 +669,9 @@ namespace mtk
         case Type::Hermite:
             _weight = [](const Real &x) -> Real
             { return std::exp(-x * x / 2) / std::sqrt(2 * std::numbers::pi); };
-            _poly.push_back(Polynomial(std::vector<Real>({1.0})));
-            _poly.push_back(Polynomial(std::vector<Real>({0.0, 1.0})));
-            next = [&X = std::as_const(X)](const std::vector<Polynomial> &list) -> Polynomial
+            _poly.push_back(Polynomial<Real>(std::vector<Real>({1.0})));
+            _poly.push_back(Polynomial<Real>(std::vector<Real>({0.0, 1.0})));
+            next = [&X = std::as_const(X)](const std::vector<Polynomial<Real>> &list) -> Polynomial<Real>
             {
                 const size_t n = list.size() - 1;
                 return X * list[n] - n * list[n - 1];
@@ -620,10 +683,12 @@ namespace mtk
         }
     }
 
-    inline OrthogonalPolynomial::OrthogonalPolynomial(const OrthogonalPolynomial &op)
+    template <typename Real>
+    inline OrthogonalPolynomial<Real>::OrthogonalPolynomial(const OrthogonalPolynomial &op)
         : weight(_weight), poly(_poly), range(_range), _weight(op.weight), _poly(op.poly), _range(op.range), next(op.next) {}
 
-    inline const Polynomial &OrthogonalPolynomial::operator()(const size_t &index)
+    template <typename Real>
+    inline const Polynomial<Real> &OrthogonalPolynomial<Real>::operator()(const size_t &index)
     {
         for (size_t i = poly.size(); i <= index; i++)
         {
@@ -632,7 +697,8 @@ namespace mtk
         return poly[index];
     }
 
-    inline OrthogonalPolynomial &OrthogonalPolynomial::operator=(const OrthogonalPolynomial &op)
+    template <typename Real>
+    inline OrthogonalPolynomial<Real> &OrthogonalPolynomial<Real>::operator=(const OrthogonalPolynomial<Real> &op)
     {
         if (this != &op)
         {
