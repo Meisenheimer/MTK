@@ -26,6 +26,7 @@ namespace mtk
         GradientDescent,
         Newton,
         QuasiNewton,
+        ConjugateGradient,
     };
 
     template <typename Real>
@@ -66,6 +67,7 @@ namespace mtk
         const Vector<Real> gradientDescent(const Vector<Real> &x, const LineSearch &line_search) const;
         const Vector<Real> newton(const Vector<Real> &x, const LineSearch &line_search) const;
         const Vector<Real> quasiNewton(const Vector<Real> &x, const LineSearch &line_search) const;
+        const Vector<Real> conjugateGradient(const Vector<Real> &x, const LineSearch &line_search) const;
 
     public:
         Optimizer();

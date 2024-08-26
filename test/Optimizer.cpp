@@ -28,6 +28,10 @@ const std::vector<std::pair<OptimizeMethod, LineSearch>> method =
         {OptimizeMethod::QuasiNewton, LineSearch::Fibonacci},
         {OptimizeMethod::QuasiNewton, LineSearch::Newton},
         {OptimizeMethod::QuasiNewton, LineSearch::Trivial},
+        {OptimizeMethod::ConjugateGradient, LineSearch::Bisection},
+        {OptimizeMethod::ConjugateGradient, LineSearch::Fibonacci},
+        {OptimizeMethod::ConjugateGradient, LineSearch::Newton},
+        {OptimizeMethod::ConjugateGradient, LineSearch::Trivial},
 };
 
 int main()

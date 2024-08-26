@@ -325,6 +325,42 @@ namespace mtk
     }
 
     template <typename Real>
+    inline const Vector<Real> Optimizer<Real>::conjugateGradient(const Vector<Real> &x, const LineSearch &line_search) const
+    {
+        const size_t N = x.rows();
+        size_t k;
+        Vector<Real> t = x;
+        for (k = 0; k < (max_loop_num / N); k++)
+        {
+            Vector<Var<Real>> tmp = t;
+            Vector<Real> grad = Trait<Vector<Var<Real>>>::vector(gradient(f(tmp), tmp));
+            if (grad.template lpNorm<2>() <= epsilon)
+            {
+                return t;
+            }
+            Vector<Real> d = -grad;
+            for (size_t i = 0; i < N; i++)
+            {
+                t = lineSearch(t, -grad);
+                tmp = t;
+                Vector<Real> old_grad = grad;
+                grad = Trait<Vector<Var<Real>>>::vector(gradient(f(tmp), tmp));
+                if (grad.template lpNorm<2>() <= epsilon)
+                {
+                    return t;
+                }
+                d = -grad + grad.dot(grad) / old_grad.dot(old_grad) * d;
+                if (d.dot(grad) > 0)
+                {
+                    break;
+                }
+            }
+        }
+        printf("Error at: file %s line %d.\n", __FILE__, __LINE__);
+        exit(0);
+    }
+
+    template <typename Real>
     inline Optimizer<Real>::Optimizer() : max_loop_num(_max_loop_num), epsilon(_epsilon), step(_step), delta(_delta),
                                           trivial_step(_trivial_step), line_search(_line_search), method(_method),
                                           f(_f)
@@ -433,6 +469,8 @@ namespace mtk
             return Trait<Vector<Var<Real>>>::vector(newton(x, line_search));
         case OptimizeMethod::QuasiNewton:
             return Trait<Vector<Var<Real>>>::vector(quasiNewton(x, line_search));
+        case OptimizeMethod::ConjugateGradient:
+            return Trait<Vector<Var<Real>>>::vector(conjugateGradient(x, line_search));
         default:
             break;
         }
