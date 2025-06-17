@@ -53,7 +53,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). Integrator::NewtonCotesIntegrator.\n", t);
+        printf("PASS Time: %6ld(ms). Integrator::NewtonCotesIntegrator.\n", t);
     }
 
     return 0;

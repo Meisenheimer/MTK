@@ -1,6 +1,8 @@
 #ifndef MTK_TRAIT_H
 #define MTK_TRAIT_H
 
+#include <utility>
+
 #include <Eigen/Eigen>
 
 #include <autodiff/reverse/var.hpp>

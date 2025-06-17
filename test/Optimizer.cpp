@@ -61,7 +61,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). Optimizer::Optimizer.\n", t);
+        printf("PASS Time: %6ld(ms). Optimizer::Optimizer.\n", t);
     }
     return 0;
 }

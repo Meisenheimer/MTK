@@ -23,7 +23,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). Random::Random.\n", t);
+        printf("PASS Time: %6ld(ms). Random::Random.\n", t);
     }
     return 0;
 }

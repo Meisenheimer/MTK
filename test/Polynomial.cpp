@@ -54,7 +54,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). Polynomial::Polynomial.\n", t);
+        printf("PASS Time: %6ld(ms). Polynomial::Polynomial.\n", t);
     }
     return 0;
 }

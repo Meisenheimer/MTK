@@ -1,3 +1,9 @@
+ifeq ($(OS), Windows_NT)
+	RM = del
+else
+	RM = rm
+endif
+
 run:
 	g++ test/Integrator.cpp -o Integrator.exe -O2 -fopenmp --std=c++20
 	g++ test/IVP.cpp -o IVP.exe -O2 -fopenmp --std=c++20
@@ -15,7 +21,7 @@ run:
 	./Random.exe
 	./Spline.exe
 	./NeuralNetwork.exe
-	del *.exe
+	$(RM) *.exe
 
 Integrator:
 	g++ test/Integrator.cpp -o Integrator.exe -O2 -fopenmp --std=c++20
@@ -50,4 +56,4 @@ NeuralNetwork:
 	./NeuralNetwork.exe
 
 clean:
-	del *.exe
+	$(RM) *.exe

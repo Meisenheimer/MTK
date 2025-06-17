@@ -44,7 +44,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). NeuralNetwork::NeuralNetwork.\n", t);
+        printf("PASS Time: %6ld(ms). NeuralNetwork::NeuralNetwork.\n", t);
     }
 
     return 0;

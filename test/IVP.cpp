@@ -46,7 +46,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). IVP::LMM::ForwardEuler.\n", t);
+        printf("PASS Time: %6ld(ms). IVP::LMM::ForwardEuler.\n", t);
     }
 
     timer();
@@ -61,7 +61,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). IVP::LMM::Trapezoidal.\n", t);
+        printf("PASS Time: %6ld(ms). IVP::LMM::Trapezoidal.\n", t);
     }
 
     timer();
@@ -76,7 +76,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). IVP::LMM::BackwardEuler.\n", t);
+        printf("PASS Time: %6ld(ms). IVP::LMM::BackwardEuler.\n", t);
     }
 
     timer();
@@ -91,7 +91,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). IVP::LMM::Midpoint.\n", t);
+        printf("PASS Time: %6ld(ms). IVP::LMM::Midpoint.\n", t);
     }
 
     timer();
@@ -106,7 +106,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). IVP::RK::HeunThirdOrder.\n", t);
+        printf("PASS Time: %6ld(ms). IVP::RK::HeunThirdOrder.\n", t);
     }
 
     timer();
@@ -121,7 +121,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). IVP::RK::ClassicalFourthOrder.\n", t);
+        printf("PASS Time: %6ld(ms). IVP::RK::ClassicalFourthOrder.\n", t);
     }
 
     return 0;

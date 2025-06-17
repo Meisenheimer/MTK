@@ -31,7 +31,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). Number::pow.\n", t);
+        printf("PASS Time: %6ld(ms). Number::pow.\n", t);
     }
 
     timer();
@@ -51,7 +51,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). Number::pow(mod).\n", t);
+        printf("PASS Time: %6ld(ms). Number::pow(mod).\n", t);
     }
 
     timer();
@@ -70,7 +70,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). Number::gcd.\n", t);
+        printf("PASS Time: %6ld(ms). Number::gcd.\n", t);
     }
 
     timer();
@@ -86,7 +86,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). Number::Prime.\n", t);
+        printf("PASS Time: %6ld(ms). Number::Prime.\n", t);
     }
 
     timer();
@@ -102,7 +102,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). Number::Prime.\n", t);
+        printf("PASS Time: %6ld(ms). Number::Prime.\n", t);
     }
 
     timer();
@@ -118,7 +118,7 @@ int main()
     t = timer();
     if (flag == PASS)
     {
-        printf("PASS Time: %6d(ms). Number::Prime.\n", t);
+        printf("PASS Time: %6ld(ms). Number::Prime.\n", t);
     }
     return 0;
 }
