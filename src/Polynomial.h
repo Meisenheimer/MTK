@@ -30,6 +30,8 @@ namespace mtk
     const Polynomial<std::common_type_t<Real1, Real2>> operator-(const Polynomial<Real1> &p1, const Polynomial<Real2> &p2);
     template <typename Real, typename Type>
     const Polynomial<Real> operator-(const Polynomial<Real> &p, const Type &k);
+    template <typename Real, typename Type>
+    const Polynomial<Real> operator-(const Type &k, const Polynomial<Real> &p);
     template <typename Real1, typename Real2>
     const Polynomial<std::common_type_t<Real1, Real2>> operator*(const Polynomial<Real1> &p1, const Polynomial<Real2> &p2);
     template <typename Real, typename Type>

@@ -123,6 +123,14 @@ namespace mtk
         return res;
     }
 
+    template <typename Real, typename Type>
+    inline const Polynomial<Real> operator-(const Type &k, const Polynomial<Real> &p)
+    {
+        Polynomial<Real> res = p;
+        res -= k;
+        return res;
+    }
+
     template <typename Real1, typename Real2>
     inline const Polynomial<std::common_type_t<Real1, Real2>> operator*(const Polynomial<Real1> &p1,
                                                                         const Polynomial<Real2> &p2)
