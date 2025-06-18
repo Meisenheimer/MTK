@@ -457,7 +457,7 @@ namespace mtk
     inline Polynomial<Real> &Polynomial<Real>::operator+=(const Polynomial &p)
     {
         _degree = (std::max(degree, p.degree));
-        _coefs.resize(degree + 1, Trait<Real>::zero());
+        _coefs.resize(_degree + 1, Trait<Real>::zero());
         for (size_t i = 0; i <= p.degree; i++)
         {
             _coefs[i] += p[i];
@@ -476,7 +476,7 @@ namespace mtk
     inline Polynomial<Real> &Polynomial<Real>::operator-=(const Polynomial &p)
     {
         _degree = (std::max(degree, p.degree));
-        _coefs.resize(degree + 1, Trait<Real>::zero());
+        _coefs.resize(_degree + 1, Trait<Real>::zero());
         for (size_t i = 0; i <= p.degree; i++)
         {
             _coefs[i] -= p[i];
