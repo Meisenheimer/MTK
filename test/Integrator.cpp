@@ -1,6 +1,6 @@
 #include "Timer.h"
-#include "../src/Integrator.h"
-#include "../src/Random.h"
+#include "../MTK/Integrator.h"
+#include "../MTK/Random.h"
 
 using namespace mtk;
 

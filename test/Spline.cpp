@@ -1,5 +1,5 @@
 #include "Timer.h"
-#include "../src/Spline.h"
+#include "../MTK/Spline.h"
 
 #include <chrono>
 #include <iostream>

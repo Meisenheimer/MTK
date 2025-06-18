@@ -1,5 +1,5 @@
 #include "Timer.h"
-#include "../src/Polynomial.h"
+#include "../MTK/Polynomial.h"
 
 using namespace mtk;
 

@@ -1,5 +1,5 @@
 #include "Timer.h"
-#include "../src/NeuralNetwork.h"
+#include "../MTK/NeuralNetwork.h"
 
 using namespace mtk;
 
