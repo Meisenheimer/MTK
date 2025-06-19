@@ -11,6 +11,8 @@ namespace mtk
     class Prime;
 
     template <typename Type>
+    constexpr Type pow(const Type &x, const size_t &n);
+    template <typename Type>
     constexpr Type pow(const Type &x, const size_t &n, const Type &mod);
     template <typename Type>
     constexpr Type gcd(const Type &x, const Type &y);

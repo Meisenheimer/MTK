@@ -10,6 +10,24 @@
 namespace mtk
 {
     template <typename Type>
+    inline constexpr Type pow(const Type &x, const size_t &n)
+    {
+        size_t m = n;
+        Type a = x;
+        Type res = Trait<Type>::identity(x);
+        while (m)
+        {
+            if (m & 1)
+            {
+                res = res * a;
+            }
+            a *= a;
+            m >>= 1;
+        }
+        return res;
+    }
+
+    template <typename Type>
     inline constexpr Type pow(const Type &x, const size_t &n, const Type &mod)
     {
         size_t m = n;
